@@ -1,32 +1,7 @@
 import { headers } from "next/headers";
+import { parseJwtPayload, type JwtPayload } from "@/lib/jwt";
 
 export const dynamic = "force-dynamic";
-
-interface JwtPayload {
-    email?: string;
-    sub?: string;
-    aud?: string | string[];
-    iss?: string;
-    iat?: number;
-    exp?: number;
-    name?: string;
-    groups?: string[];
-    country?: string;
-    [key: string]: unknown;
-}
-
-function parseJwtPayload(jwt: string): JwtPayload | null {
-    try {
-        const parts = jwt.split(".");
-        if (parts.length !== 3) return null;
-        const base64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-        const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
-        const json = atob(padded);
-        return JSON.parse(json) as JwtPayload;
-    } catch {
-        return null;
-    }
-}
 
 function formatUnixTime(ts: number): string {
     return new Date(ts * 1000).toISOString().replace("T", " ").replace(".000Z", " UTC");
@@ -209,8 +184,8 @@ export default async function PortalPage() {
                 {payload && directEmail && payload.email && (
                     <div
                         className={`rounded-lg border px-4 py-3 text-sm ${payload.email === directEmail
-                                ? "border-green-200 bg-green-50 text-green-800"
-                                : "border-red-200 bg-red-50 text-red-800"
+                            ? "border-green-200 bg-green-50 text-green-800"
+                            : "border-red-200 bg-red-50 text-red-800"
                             }`}
                     >
                         {payload.email === directEmail ? (

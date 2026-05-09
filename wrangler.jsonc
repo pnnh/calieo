@@ -1,16 +1,31 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "calieo",
-  "compatibility_date": "2026-05-09",
-  "main": ".open-next/worker.js",
-  "observability": {
-    "enabled": true
-  },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "calieo",
+	"compatibility_date": "2026-05-09",
+	"main": ".open-next/worker.js",
+	"observability": {
+		"enabled": true
+	},
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	// D1 database — run `wrangler d1 create calieo-portal` to obtain the real database_id
+	// then replace the placeholder below before deploying to production.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "calieo-portal",
+			"database_id": "00000000-0000-0000-0000-000000000000"
+		},
+		{
+			"binding": "calieo_portal",
+			"database_name": "calieo-portal",
+			"database_id": "7bab5336-0005-4f62-9e6b-ac631c9a0788",
+			"remote": true
+		}
+	]
 }
