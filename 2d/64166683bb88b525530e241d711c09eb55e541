@@ -1,0 +1,29 @@
+src/app/portal/page.tsx
+  s_67f717d2c7560a::t_46b15b8bceb53c 5-45,47-61,63-64,72-73,85-87,91-101,110-113,117,121-123,127-140,150-167,179-189,195,197-201,208-209,212-227,229,231-233
+  h_6465a203f88bd5 1-4,46,62,65-71,74-84,88-90,109,115-116,120,126,149,178,194,196,202-207,211,228,230,234
+.gitignore
+  h_6465a203f88bd5 2
+package.json
+  h_6465a203f88bd5 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "2d64166683bb88b525530e241d711c09eb55e541",
+  "prompts": {},
+  "humans": {
+    "h_6465a203f88bd5": {
+      "author": "larry <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_67f717d2c7560a": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "28fccb45-a314-41f1-979c-87a937d94ba1",
+        "model": "unknown"
+      },
+      "human_author": "larry <xspanni@gmail.com>"
+    }
+  }
+}
