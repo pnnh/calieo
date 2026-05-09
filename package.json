@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 7500 --turbo",
+    "dev": "next dev -p 7300 --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
