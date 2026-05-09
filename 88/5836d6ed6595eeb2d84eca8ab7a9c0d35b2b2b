@@ -1,0 +1,26 @@
+wrangler.jsonc
+  h_6465a203f88bd5 15-24
+src/app/portal/users/page.tsx
+  h_6465a203f88bd5 1-90,106-109
+migrations/0001_create_users.sql
+  h_6465a203f88bd5 1-17
+src/app/portal/layout.tsx
+  h_6465a203f88bd5 1-38
+src/lib/jwt.ts
+  h_6465a203f88bd5 1-28
+src/lib/db.ts
+  h_6465a203f88bd5 1-100
+src/app/portal/page.tsx
+  h_6465a203f88bd5 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "885836d6ed6595eeb2d84eca8ab7a9c0d35b2b2b",
+  "prompts": {},
+  "humans": {
+    "h_6465a203f88bd5": {
+      "author": "larry <xspanni@gmail.com>"
+    }
+  }
+}
