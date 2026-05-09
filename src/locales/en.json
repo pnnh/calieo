@@ -1,0 +1,20 @@
+{
+    "siteName": "Calieo",
+    "siteTagline": "Handy online tools for developers & everyday users",
+    "siteDescription": "Calieo is a collection of free, privacy-first online utilities — encoding, hashing, encryption, random generation, time tools, and JSON processing — all running in your browser.",
+    "homeTitle": "Calieo — Free Online Developer Tools",
+    "homeDescription": "A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.",
+    "launchTool": "Launch Tool",
+    "learnMore": "Learn More",
+    "backToHome": "Back to Home",
+    "allTools": "All Tools",
+    "features": "Features",
+    "about": "About",
+    "visitTool": "Visit Tool",
+    "toolDetailTitle": "{name} — Calieo",
+    "changeLanguage": "Language",
+    "cookieMessage": "We use browser storage to save your tool history and preferences. No personal data is collected or shared.",
+    "cookieAccept": "Got it",
+    "cookieDecline": "No thanks",
+    "privacyPolicy": "Privacy Policy"
+}

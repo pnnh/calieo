@@ -1,0 +1,20 @@
+{
+    "siteName": "Calieo",
+    "siteTagline": "Ferramentas online práticas para desenvolvedores e utilizadores do dia a dia",
+    "siteDescription": "Calieo é uma coleção de utilitários online gratuitos e focados na privacidade: codificação Base, hashing, encriptação, geração aleatória, ferramentas de data/hora e processamento JSON.",
+    "homeTitle": "Calieo — Ferramentas gratuitas para desenvolvedores",
+    "homeDescription": "Uma coleção de ferramentas online gratuitas: codificação Base, hashing, encriptação, geradores aleatórios, utilitários de data/hora e processamento JSON.",
+    "launchTool": "Abrir ferramenta",
+    "learnMore": "Saber mais",
+    "backToHome": "Voltar ao início",
+    "allTools": "Todas as ferramentas",
+    "features": "Funcionalidades",
+    "about": "Sobre",
+    "visitTool": "Visitar ferramenta",
+    "toolDetailTitle": "{name} — Calieo",
+    "changeLanguage": "Idioma",
+    "cookieMessage": "Usamos o armazenamento do navegador para guardar o histórico e preferências das ferramentas. Nenhum dado pessoal é recolhido ou partilhado.",
+    "cookieAccept": "Entendido",
+    "cookieDecline": "Não, obrigado",
+    "privacyPolicy": "Política de Privacidade"
+}
