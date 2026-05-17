@@ -28,9 +28,10 @@ export default async function PortalLayout({
                 aud: payload?.aud,
                 token_exp: payload?.exp,
             });
-        } catch {
+        } catch (error) {
             // D1 not available in local `next dev` — silently ignore.
             // Use `pnpm preview` / `wrangler dev` to test with D1.
+            console.error("Failed to upsert user:", error);
         }
     }
 

@@ -33,7 +33,8 @@ export default async function UsersPage() {
 
     try {
         users = await listUsers();
-    } catch {
+    } catch(error) {
+        console.error("Failed to list users:", error);
         dbError = true;
     }
 
