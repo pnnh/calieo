@@ -13,14 +13,18 @@
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
 	},
-	// D1 database — run `wrangler d1 create calieo-portal` to obtain the real database_id
-	// then replace the placeholder below before deploying to production.
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "calieo-portal",
+			"database_name": "calieo-db",
 			"database_id": "7bab5336-0005-4f62-9e6b-ac631c9a0788",
 			"remote": true
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "FILES_BUCKET",
+			"bucket_name": "calieo-files"
 		}
 	]
 }
