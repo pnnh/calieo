@@ -85,6 +85,7 @@ export default async function ChannelEditorPage({ params }: Props) {
                     <div className="mb-8">
                         <ChannelAvatarUpload
                             channelId={channel.id}
+                            channelName={channel.name}
                             labels={{ uploadAvatar: t(l, "uploadAvatar"), avatarHint: t(l, "avatarHint") }}
                         />
                     </div>

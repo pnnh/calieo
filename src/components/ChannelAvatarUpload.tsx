@@ -4,11 +4,13 @@ import { useState, useRef } from "react";
 
 type Props = {
     channelId: string;
+    channelName: string;
     labels: { uploadAvatar: string; avatarHint: string };
 };
 
-export default function ChannelAvatarUpload({ channelId, labels }: Props) {
+export default function ChannelAvatarUpload({ channelId, channelName, labels }: Props) {
     const [preview, setPreview] = useState<string | null>(null);
+    const [avatarError, setAvatarError] = useState(false);
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -21,20 +23,27 @@ export default function ChannelAvatarUpload({ channelId, labels }: Props) {
         const res = await fetch(`/api/channel/avatar/${channelId}`, { method: "POST", body: form });
         if (res.ok) {
             setPreview(URL.createObjectURL(file));
+            setAvatarError(false);
         }
         setUploading(false);
     }
 
+    const initial = channelName.charAt(0).toUpperCase();
+
     return (
         <div className="flex items-center gap-4">
             {preview ? (
-                <img src={preview} alt="" className="w-12 h-12 rounded-full object-cover" />
+                <img src={preview} alt={channelName} className="w-12 h-12 rounded-full object-cover" />
+            ) : avatarError ? (
+                <span className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 text-gray-600 font-medium text-lg">
+                    {initial}
+                </span>
             ) : (
                 <img
                     src={`/api/channel/avatar/${channelId}`}
-                    alt=""
+                    alt={channelName}
                     className="w-12 h-12 rounded-full object-cover bg-gray-100"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                    onError={() => setAvatarError(true)}
                 />
             )}
             <div>

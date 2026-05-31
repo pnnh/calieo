@@ -68,5 +68,8 @@
     "latestFiles": "Latest Files",
     "download": "Download",
     "fileTooLarge": "File is too large (max 50 MB).",
-    "uploadError": "Upload failed. Please try again."
+    "uploadError": "Upload failed. Please try again.",
+    "publicFiles": "Public Files",
+    "prevPage": "Previous",
+    "nextPage": "Next"
 }

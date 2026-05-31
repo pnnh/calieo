@@ -66,5 +66,8 @@
     "noResults": "結果が見つかりませんでした。",
     "publishFile": "公開する",
     "latestFiles": "最新のファイル",
-    "download": "ダウンロード"
+    "download": "ダウンロード",
+    "publicFiles": "公開ファイル",
+    "prevPage": "前へ",
+    "nextPage": "次へ"
 }

@@ -66,5 +66,8 @@
     "noResults": "Keine Ergebnisse gefunden.",
     "publishFile": "Veröffentlichen",
     "latestFiles": "Neueste Dateien",
-    "download": "Herunterladen"
+    "download": "Herunterladen",
+    "publicFiles": "Öffentliche Dateien",
+    "prevPage": "Zurück",
+    "nextPage": "Weiter"
 }

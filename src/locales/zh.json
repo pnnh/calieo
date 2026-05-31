@@ -68,5 +68,8 @@
     "latestFiles": "最新文件",
     "download": "下载",
     "fileTooLarge": "文件过大（最大 50 MB）。",
-    "uploadError": "上传失败，请重试。"
+    "uploadError": "上传失败，请重试。",
+    "publicFiles": "公开文件",
+    "prevPage": "上一页",
+    "nextPage": "下一页"
 }

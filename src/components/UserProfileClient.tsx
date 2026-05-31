@@ -23,6 +23,7 @@ type Props = {
 
 export default function UserProfileClient({ userId, name, email, nickname, bio, labels }: Props) {
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [avatarError, setAvatarError] = useState(false);
     const [saved, setSaved] = useState(false);
     const [nicknameVal, setNicknameVal] = useState(nickname ?? "");
     const [bioVal, setBioVal] = useState(bio ?? "");
@@ -34,7 +35,10 @@ export default function UserProfileClient({ userId, name, email, nickname, bio, 
         const form = new FormData();
         form.append("file", file);
         const res = await fetch("/api/user/avatar", { method: "POST", body: form });
-        if (res.ok) setAvatarPreview(URL.createObjectURL(file));
+        if (res.ok) {
+            setAvatarPreview(URL.createObjectURL(file));
+            setAvatarError(false);
+        }
     }
 
     async function handleSave(e: React.FormEvent) {
@@ -55,12 +59,20 @@ export default function UserProfileClient({ userId, name, email, nickname, bio, 
             <div>
                 <h2 className="text-sm font-medium text-gray-700 mb-2">{labels.avatar}</h2>
                 <div className="flex items-center gap-4">
-                    <img
-                        src={avatarPreview ?? `/api/user/avatar/${userId}`}
-                        alt=""
-                        className="w-16 h-16 rounded-full object-cover bg-gray-100"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                    />
+                    {avatarPreview ? (
+                        <img src={avatarPreview} alt="" className="w-16 h-16 rounded-full object-cover" />
+                    ) : avatarError ? (
+                        <span className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-200 text-gray-600 font-medium text-xl">
+                            {name.charAt(0).toUpperCase()}
+                        </span>
+                    ) : (
+                        <img
+                            src={`/api/user/avatar/${userId}`}
+                            alt=""
+                            className="w-16 h-16 rounded-full object-cover bg-gray-100"
+                            onError={() => setAvatarError(true)}
+                        />
+                    )}
                     <div>
                         <button
                             type="button"

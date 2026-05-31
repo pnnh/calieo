@@ -66,5 +66,8 @@
     "noResults": "找不到結果。",
     "publishFile": "發佈",
     "latestFiles": "最新檔案",
-    "download": "下載"
+    "download": "下載",
+    "publicFiles": "公開檔案",
+    "prevPage": "上一頁",
+    "nextPage": "下一頁"
 }

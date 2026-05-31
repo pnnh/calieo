@@ -66,5 +66,8 @@
     "noResults": "Nenhum resultado encontrado.",
     "publishFile": "Publicar",
     "latestFiles": "Últimos ficheiros",
-    "download": "Transferir"
+    "download": "Transferir",
+    "publicFiles": "Ficheiros públicos",
+    "prevPage": "Anterior",
+    "nextPage": "Seguinte"
 }

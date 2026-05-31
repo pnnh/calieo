@@ -10,6 +10,7 @@ import SiteFooter from "@/components/SiteFooter";
 import { t } from "@/lib/i18n";
 import Link from "next/link";
 
+
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ lang: string }> };
@@ -37,7 +38,12 @@ export default async function ConsoleDashboard({ params }: Props) {
             <SiteHeader lang={l} />
             <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(l, "console")}</h1>
-                <p className="text-gray-500 mb-8">{t(l, "welcomeUser")}, {user.nickname || user.name}</p>
+                <p className="text-gray-500 mb-8">
+                    {t(l, "welcomeUser")},{" "}
+                    <Link href={`/${l}/console/profile`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors">
+                        {user.nickname || user.name}
+                    </Link>
+                </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                     <Link href={`/${l}/console/channels`} className="p-6 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition">

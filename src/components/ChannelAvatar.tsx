@@ -1,3 +1,5 @@
+"use client";
+
 type Props = {
     channelId: string;
     channelName: string;

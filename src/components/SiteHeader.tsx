@@ -32,7 +32,7 @@ export default function SiteHeader({ lang, pathSuffix = "" }: Props) {
                         <BiSolidUserRectangle size={22} />
                     </Link>
                     <Link
-                        href={`/${lang}/tools`}
+                        href={`/${lang}/apps`}
                         title={t(lang, "allTools")}
                         className="text-gray-500 hover:text-gray-900 transition-colors"
                     >
