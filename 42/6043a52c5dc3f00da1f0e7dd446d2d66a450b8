@@ -1,0 +1,20 @@
+src/components/ChannelAvatar.tsx
+  h_de2c1989c48e7b 24
+src/components/ChannelAvatarUpload.tsx
+  h_de2c1989c48e7b 21,27-32,36
+src/lib/auth.ts
+  h_de2c1989c48e7b 83-93
+src/components/UserProfileClient.tsx
+  h_de2c1989c48e7b 35,42-44,51-52,57,60-63,76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "426043a52c5dc3f00da1f0e7dd446d2d66a450b8",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
