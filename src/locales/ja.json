@@ -67,6 +67,8 @@
     "publishFile": "公開する",
     "latestFiles": "最新のファイル",
     "download": "ダウンロード",
+    "fileTooLarge": "ファイルサイズが大きすぎます（最大 50 MB）。",
+    "uploadError": "アップロードに失敗しました。もう一度お試しください。",
     "publicFiles": "公開ファイル",
     "prevPage": "前へ",
     "nextPage": "次へ"

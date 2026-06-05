@@ -67,6 +67,8 @@
     "publishFile": "Publicar",
     "latestFiles": "Últimos archivos",
     "download": "Descargar",
+    "fileTooLarge": "El archivo es demasiado grande (máx. 50 MB).",
+    "uploadError": "La carga falló. Inténtalo de nuevo.",
     "publicFiles": "Archivos públicos",
     "prevPage": "Anterior",
     "nextPage": "Siguiente"

@@ -67,6 +67,8 @@
     "publishFile": "Veröffentlichen",
     "latestFiles": "Neueste Dateien",
     "download": "Herunterladen",
+    "fileTooLarge": "Die Datei ist zu groß (max. 50 MB).",
+    "uploadError": "Upload fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "publicFiles": "Öffentliche Dateien",
     "prevPage": "Zurück",
     "nextPage": "Weiter"

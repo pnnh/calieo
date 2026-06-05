@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "codebase-memory-mcp": {
+      "type": "stdio",
+      "command": "/home/azureuser/.local/bin/codebase-memory-mcp",
+      "args": []
+    }
+  }
+}

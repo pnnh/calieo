@@ -1,7 +1,9 @@
 import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import { eq } from 'drizzle-orm';
 import { getDb } from '@/db/index';
 import { users } from '@/db/schema';
+import { parseJwtPayload } from '@/lib/jwt';
 
 export interface CurrentUser {
   id: string;
@@ -19,7 +21,7 @@ const DEV_USER_BASE = {
 
 async function ensureUserRow(id: string, name: string, email: string): Promise<CurrentUser> {
   const db = getDb();
-  db.insert(users)
+  await db.insert(users)
     .values({ id, name, email })
     .onConflictDoNothing()
     .run();
@@ -30,11 +32,36 @@ async function ensureUserRow(id: string, name: string, email: string): Promise<C
   return { id, name, email, nickname: null, bio: null };
 }
 
+async function getAccessUserBase(): Promise<{ id: string; name: string; email: string } | null> {
+  const headerMap = await headers();
+  const jwtToken = headerMap.get('cf-access-jwt-assertion');
+  const directEmail = headerMap.get('cf-access-authenticated-user-email');
+  const payload = jwtToken ? parseJwtPayload(jwtToken) : null;
+
+  const id = payload?.sub ?? directEmail ?? payload?.email;
+  if (!id) return null;
+
+  const email = directEmail ?? payload?.email ?? `${id}@access.local`;
+  const name = payload?.name ?? email;
+
+  return { id, name, email };
+}
+
 export async function getCurrentUser(): Promise<CurrentUser> {
+  const accessBase = await getAccessUserBase();
+  if (accessBase) {
+    return ensureUserRow(accessBase.id, accessBase.name, accessBase.email);
+  }
+
   const cookieStore = await cookies();
   const userId = cookieStore.get('user_id')?.value;
   const base = userId
     ? { id: userId, name: userId, email: `${userId}@local` }
-    : DEV_USER_BASE;
+    : (process.env.NODE_ENV !== 'production' ? DEV_USER_BASE : null);
+
+  if (!base) {
+    throw new Error('Unauthenticated request: missing Cloudflare Access identity and user_id cookie.');
+  }
+
   return ensureUserRow(base.id, base.name, base.email);
 }

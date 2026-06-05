@@ -1,3 +1,5 @@
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+
 export interface StorageAdapter {
   save(fileId: string, filename: string, data: Buffer): Promise<void>;
   read(fileId: string, filename: string): Promise<Buffer | null>;
@@ -79,9 +81,45 @@ export class LocalStorageAdapter implements StorageAdapter {
   }
 }
 
+export class R2StorageAdapter implements StorageAdapter {
+  private getBucket(): R2Bucket {
+    const { env } = getCloudflareContext();
+    return env.FILES_BUCKET;
+  }
+
+  async save(fileId: string, filename: string, data: Buffer): Promise<void> {
+    assertSafeSegment(fileId, "fileId");
+    assertSafeSegment(filename, "filename");
+    await this.getBucket().put(`${fileId}/${filename}`, data);
+  }
+
+  async read(fileId: string, filename: string): Promise<Buffer | null> {
+    assertSafeSegment(fileId, "fileId");
+    assertSafeSegment(filename, "filename");
+    const obj = await this.getBucket().get(`${fileId}/${filename}`);
+    if (!obj) return null;
+    return Buffer.from(await obj.arrayBuffer());
+  }
+
+  async delete(fileId: string, filename: string): Promise<void> {
+    assertSafeSegment(fileId, "fileId");
+    assertSafeSegment(filename, "filename");
+    await this.getBucket().delete(`${fileId}/${filename}`);
+  }
+}
+
 let storageInstance: StorageAdapter | undefined;
 
 export function getStorage(): StorageAdapter {
+  try {
+    const { env } = getCloudflareContext();
+    if (env.FILES_BUCKET) {
+      return new R2StorageAdapter();
+    }
+  } catch {
+    // Not running inside a Cloudflare Worker — fall through to local storage.
+  }
+
   if (!storageInstance) {
     storageInstance = new LocalStorageAdapter();
   }

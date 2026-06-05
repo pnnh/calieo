@@ -16,7 +16,7 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "calieo-db",
+			"database_name": "calieo-portal",
 			"database_id": "7bab5336-0005-4f62-9e6b-ac631c9a0788",
 			"remote": true
 		}
@@ -25,6 +25,10 @@
 		{
 			"binding": "FILES_BUCKET",
 			"bucket_name": "calieo-files"
+		},
+		{
+		"bucket_name": "calieo-files",
+		"binding": "NEXT_INC_CACHE_R2_BUCKET"
 		}
 	]
 }

@@ -67,6 +67,8 @@
     "publishFile": "發佈",
     "latestFiles": "最新檔案",
     "download": "下載",
+    "fileTooLarge": "檔案過大（最大 50 MB）。",
+    "uploadError": "上傳失敗，請再試一次。",
     "publicFiles": "公開檔案",
     "prevPage": "上一頁",
     "nextPage": "下一頁"

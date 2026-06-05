@@ -67,6 +67,8 @@
     "publishFile": "Publier",
     "latestFiles": "Derniers fichiers",
     "download": "Télécharger",
+    "fileTooLarge": "Le fichier est trop volumineux (max 50 Mo).",
+    "uploadError": "Échec de l'envoi. Veuillez réessayer.",
     "publicFiles": "Fichiers publics",
     "prevPage": "Précédent",
     "nextPage": "Suivant"
