@@ -32,25 +32,35 @@ export default function UserProfileClient({ userId, name, email, nickname, bio, 
     async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
         if (!file) return;
-        const form = new FormData();
-        form.append("file", file);
-        const res = await fetch("/api/user/avatar", { method: "POST", body: form });
-        if (res.ok) {
-            setAvatarPreview(URL.createObjectURL(file));
-            setAvatarError(false);
+        try {
+            const form = new FormData();
+            form.append("file", file);
+            const res = await fetch("/api/user/avatar", { method: "POST", body: form });
+            if (res.ok) {
+                setAvatarPreview(URL.createObjectURL(file));
+                setAvatarError(false);
+            }
+        } catch {
+            // Network or unexpected error — leave the current avatar display unchanged.
         }
     }
 
     async function handleSave(e: React.FormEvent) {
         e.preventDefault();
         setSaved(false);
-        await fetch("/api/user/profile", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nickname: nicknameVal, bio: bioVal }),
-        });
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
+        try {
+            const res = await fetch("/api/user/profile", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nickname: nicknameVal, bio: bioVal }),
+            });
+            if (res.ok) {
+                setSaved(true);
+                setTimeout(() => setSaved(false), 2000);
+            }
+        } catch {
+            // Network or unexpected error — silently ignore, user can retry.
+        }
     }
 
     return (
@@ -63,7 +73,7 @@ export default function UserProfileClient({ userId, name, email, nickname, bio, 
                         <img src={avatarPreview} alt="" className="w-16 h-16 rounded-full object-cover" />
                     ) : avatarError ? (
                         <span className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-200 text-gray-600 font-medium text-xl">
-                            {name.charAt(0).toUpperCase()}
+                            {(name || email || '?').charAt(0).toUpperCase()}
                         </span>
                     ) : (
                         <img

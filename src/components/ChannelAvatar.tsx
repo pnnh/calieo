@@ -21,7 +21,7 @@ export default function ChannelAvatar({ channelId, channelName, size = 40 }: Pro
                 const parent = el.parentElement;
                 if (parent && !parent.querySelector("span")) {
                     const span = document.createElement("span");
-                    span.textContent = channelName.charAt(0).toUpperCase();
+                    span.textContent = (channelName || "?").charAt(0).toUpperCase();
                     span.className = "flex items-center justify-center rounded-full bg-gray-200 text-gray-600 font-medium";
                     span.style.width = `${size}px`;
                     span.style.height = `${size}px`;

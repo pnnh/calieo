@@ -80,7 +80,17 @@ async function ensureUserRow(id: string, name: string, email: string): Promise<C
   const rowsByEmail = await db.select().from(users).where(eq(users.email, email)).limit(1);
   if (rowsByEmail.length > 0) {
     const u = rowsByEmail[0];
-    return { id: u.id, name: u.name, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
+    // Guard against legacy rows that have a null/empty name (pre-NOT NULL constraint data).
+    const safeName = u.name || name;
+    if (!u.name) {
+      // Best-effort: back-fill the name so future reads are clean.
+      try {
+        await db.update(users).set({ name: safeName }).where(eq(users.id, u.id)).run();
+      } catch (updateErr) {
+        console.warn('[auth.ensureUserRow] failed to back-fill null name', { id: u.id, error: toErrorDetails(updateErr) });
+      }
+    }
+    return { id: u.id, name: safeName, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
   }
 
   throw new Error(`[auth.ensureUserRow] user not found after insert attempt: id=${id}, email=${email}`);

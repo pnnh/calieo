@@ -18,17 +18,22 @@ export default function ChannelAvatarUpload({ channelId, channelName, labels }: 
         const file = e.target.files?.[0];
         if (!file) return;
         setUploading(true);
-        const form = new FormData();
-        form.append("file", file);
-        const res = await fetch(`/api/channel/avatar/${channelId}`, { method: "POST", body: form });
-        if (res.ok) {
-            setPreview(URL.createObjectURL(file));
-            setAvatarError(false);
+        try {
+            const form = new FormData();
+            form.append("file", file);
+            const res = await fetch(`/api/channel/avatar/${channelId}`, { method: "POST", body: form });
+            if (res.ok) {
+                setPreview(URL.createObjectURL(file));
+                setAvatarError(false);
+            }
+        } catch {
+            // Network or unexpected error — keep the current avatar display as-is.
+        } finally {
+            setUploading(false);
         }
-        setUploading(false);
     }
 
-    const initial = channelName.charAt(0).toUpperCase();
+    const initial = (channelName || "?").charAt(0).toUpperCase();
 
     return (
         <div className="flex items-center gap-4">
