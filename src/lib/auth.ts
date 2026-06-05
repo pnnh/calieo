@@ -19,6 +19,23 @@ const DEV_USER_BASE = {
   email: process.env.DEV_USER_EMAIL ?? 'dev@local',
 };
 
+function serializeCause(cause: unknown): unknown {
+  if (cause == null) return cause;
+  if (cause instanceof Error) return toErrorDetails(cause);
+  if (typeof cause === 'object') {
+    // D1 errors often have non-enumerable properties; use getOwnPropertyNames to capture them.
+    const names = Object.getOwnPropertyNames(cause);
+    if (names.length > 0) {
+      const result: Record<string, unknown> = {};
+      for (const key of names) {
+        try { result[key] = (cause as Record<string, unknown>)[key]; } catch { result[key] = '[unreadable]'; }
+      }
+      return result;
+    }
+  }
+  return String(cause);
+}
+
 function toErrorDetails(error: unknown): Record<string, unknown> {
   if (error instanceof Error) {
     const errWithCause = error as Error & { cause?: unknown };
@@ -26,32 +43,47 @@ function toErrorDetails(error: unknown): Record<string, unknown> {
       name: error.name,
       message: error.message,
       stack: error.stack,
-      cause: errWithCause.cause,
+      cause: serializeCause(errWithCause.cause),
     };
   }
 
-  return { value: error };
+  return { value: String(error) };
 }
 
 async function ensureUserRow(id: string, name: string, email: string): Promise<CurrentUser> {
   const db = getDb();
+
   try {
     await db.insert(users)
       .values({ id, name, email })
       .onConflictDoNothing()
       .run();
   } catch (error) {
-    console.error('[auth.ensureUserRow] failed to upsert user row', {
-      user: { id, name, email },
+    // D1 may throw even with ON CONFLICT DO NOTHING when a UNIQUE constraint
+    // (e.g. email) conflicts with an existing row that has a different primary key.
+    // Log the failure and fall through to the SELECT-based lookup below.
+    console.warn('[auth.ensureUserRow] insert failed, falling back to SELECT', {
+      user: { id, email },
       error: toErrorDetails(error),
     });
-    throw error;
   }
-  const rows = await db.select().from(users).where(eq(users.id, id)).limit(1);
-  if (rows.length > 0) {
-    return { id: rows[0].id, name: rows[0].name, email: rows[0].email, nickname: rows[0].nickname ?? null, bio: rows[0].bio ?? null };
+
+  // 1. Try to find the row by the primary key supplied by the auth provider.
+  const rowsById = await db.select().from(users).where(eq(users.id, id)).limit(1);
+  if (rowsById.length > 0) {
+    const u = rowsById[0];
+    return { id: u.id, name: u.name, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
   }
-  return { id, name, email, nickname: null, bio: null };
+
+  // 2. The INSERT may have been silently skipped (or failed) because the same email
+  //    already exists under a different id.  Return that existing row instead.
+  const rowsByEmail = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  if (rowsByEmail.length > 0) {
+    const u = rowsByEmail[0];
+    return { id: u.id, name: u.name, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
+  }
+
+  throw new Error(`[auth.ensureUserRow] user not found after insert attempt: id=${id}, email=${email}`);
 }
 
 async function getAccessUserBase(): Promise<{ id: string; name: string; email: string } | null> {
