@@ -36,6 +36,7 @@ export function getDb(): DbInstance {
     }
   } catch {
     // Not running inside a Cloudflare Worker — fall through to local SQLite.
+    console.warn("Cloudflare D1 database not found. Falling back to local SQLite database.");
   }
 
   return getLocalDb();

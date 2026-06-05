@@ -19,12 +19,34 @@ const DEV_USER_BASE = {
   email: process.env.DEV_USER_EMAIL ?? 'dev@local',
 };
 
+function toErrorDetails(error: unknown): Record<string, unknown> {
+  if (error instanceof Error) {
+    const errWithCause = error as Error & { cause?: unknown };
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      cause: errWithCause.cause,
+    };
+  }
+
+  return { value: error };
+}
+
 async function ensureUserRow(id: string, name: string, email: string): Promise<CurrentUser> {
   const db = getDb();
-  await db.insert(users)
-    .values({ id, name, email })
-    .onConflictDoNothing()
-    .run();
+  try {
+    await db.insert(users)
+      .values({ id, name, email })
+      .onConflictDoNothing()
+      .run();
+  } catch (error) {
+    console.error('[auth.ensureUserRow] failed to upsert user row', {
+      user: { id, name, email },
+      error: toErrorDetails(error),
+    });
+    throw error;
+  }
   const rows = await db.select().from(users).where(eq(users.id, id)).limit(1);
   if (rows.length > 0) {
     return { id: rows[0].id, name: rows[0].name, email: rows[0].email, nickname: rows[0].nickname ?? null, bio: rows[0].bio ?? null };
