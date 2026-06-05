@@ -1,0 +1,61 @@
+src/db/migrate.ts
+  s_c1609a0b592c9c::t_05798d6a554368 6-8,10-14,16,18-19,21
+src/lib/storage.ts
+  h_de2c1989c48e7b 86,115
+  s_c1609a0b592c9c::t_05798d6a554368 1-2,84-85,87-110,114,116-122
+src/locales/pt-PT.json
+  h_de2c1989c48e7b 70-71
+src/locales/fr.json
+  h_de2c1989c48e7b 70-71
+src/locales/zh-TW.json
+  h_de2c1989c48e7b 70-71
+wrangler.jsonc
+  s_c1609a0b592c9c::t_05798d6a554368 19,28-31
+src/app/api/user/avatar/[userId]/route.ts
+  h_de2c1989c48e7b 24
+src/lib/auth.ts
+  h_de2c1989c48e7b 2,6,35-49,51-55,60-65
+  s_c1609a0b592c9c::t_05798d6a554368 24
+calieo.code-workspace
+  s_c1609a0b592c9c::t_05798d6a554368 10-11
+worker-configuration.d.ts
+  h_de2c1989c48e7b 1-36
+src/app/api/channel/avatar/[channelId]/route.ts
+  h_de2c1989c48e7b 27
+AGENTS.md
+  s_c1609a0b592c9c::t_05798d6a554368 39-83
+src/locales/es.json
+  h_de2c1989c48e7b 70-71
+src/app/api/files/[fileId]/download/route.ts
+  h_de2c1989c48e7b 36
+src/db/index.ts
+  h_de2c1989c48e7b 7,9,21,31,35
+  s_c1609a0b592c9c::t_05798d6a554368 1,32-34,36-38,41
+src/locales/de-DE.json
+  h_de2c1989c48e7b 70-71
+tsconfig.json
+  s_c1609a0b592c9c::t_05798d6a554368 27
+src/locales/ja.json
+  h_de2c1989c48e7b 70-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "c5f3493f5a5c1ffe1fbac6d40911186fdaa29209",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_c1609a0b592c9c": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "afedd050-4020-4a59-942f-7f2bd5e65741",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
