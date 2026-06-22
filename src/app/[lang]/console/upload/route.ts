@@ -28,9 +28,12 @@ export async function POST(req: NextRequest) {
     await storage.save(id, file.name, buffer);
 
     const db = getDb();
+    const parentId = (formData.get("parentId") as string | null) || null;
+
     await db.insert(files).values({
         id,
         userId: user.id,
+        parentId,
         title: file.name.replace(/\.[^.]+$/, ""),
         filename: file.name,
         mimeType: file.type || "application/octet-stream",

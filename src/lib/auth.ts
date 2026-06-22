@@ -132,13 +132,31 @@ export async function getCurrentUser(): Promise<CurrentUser> {
 
   const cookieStore = await cookies();
   const userId = cookieStore.get('user_id')?.value;
+  const devEmail =
+    process.env.NODE_ENV !== 'production'
+      ? (cookieStore.get('dev_email')?.value ?? null)
+      : null;
   const base = userId
     ? { id: userId, name: userId, email: `${userId}@local` }
-    : (process.env.NODE_ENV !== 'production' ? DEV_USER_BASE : null);
+    : devEmail
+      ? { id: devEmail, name: devEmail, email: devEmail }
+      : (process.env.NODE_ENV !== 'production' ? DEV_USER_BASE : null);
 
   if (!base) {
     throw new Error('Unauthenticated request: missing Cloudflare Access identity and user_id cookie.');
   }
 
   return ensureUserRow(base.id, base.name, base.email);
+}
+
+/**
+ * Returns the dev_email cookie value when running in development mode,
+ * or null when there is no explicit dev session (or in production).
+ * Use this to distinguish "user explicitly logged in via dev sign-in form"
+ * from "using the default DEV_USER_BASE fallback".
+ */
+export async function getDevEmail(): Promise<string | null> {
+  if (process.env.NODE_ENV === 'production') return null;
+  const cookieStore = await cookies();
+  return cookieStore.get('dev_email')?.value ?? null;
 }

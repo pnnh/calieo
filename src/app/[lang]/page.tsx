@@ -6,7 +6,7 @@ import SiteFooter from "@/components/SiteFooter";
 import ChannelSearch from "@/components/ChannelSearch";
 import { t } from "@/lib/i18n";
 import { getDb } from "@/db/index";
-import { files, channels } from "@/db/schema";
+import { files, channels, channelFiles } from "@/db/schema";
 import { eq, and, desc, like, or, sql } from "drizzle-orm";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -48,7 +48,8 @@ export default async function HomePage({ params, searchParams }: Props) {
         db
             .select({ count: sql<number>`count(*)` })
             .from(files)
-            .innerJoin(channels, eq(files.channelId, channels.id))
+            .innerJoin(channelFiles, eq(channelFiles.fileId, files.id))
+            .innerJoin(channels, eq(channelFiles.channelId, channels.id))
             .where(condition),
         db
             .select({
@@ -62,7 +63,8 @@ export default async function HomePage({ params, searchParams }: Props) {
                 channelName: channels.name,
             })
             .from(files)
-            .innerJoin(channels, eq(files.channelId, channels.id))
+            .innerJoin(channelFiles, eq(channelFiles.fileId, files.id))
+            .innerJoin(channels, eq(channelFiles.channelId, channels.id))
             .where(condition)
             .orderBy(desc(files.updatedAt))
             .limit(PAGE_SIZE)

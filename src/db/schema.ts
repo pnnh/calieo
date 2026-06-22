@@ -47,9 +47,7 @@ export const files = sqliteTable("files", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  channelId: text("channel_id").references(() => channels.id, {
-    onDelete: "set null",
-  }),
+  parentId: text("parent_id"),
   title: text("title").notNull(),
   description: text("description").notNull().default(""),
   filename: text("filename").notNull(),
@@ -62,6 +60,15 @@ export const files = sqliteTable("files", {
   updatedAt: integer("updated_at").notNull().$defaultFn(() => Date.now()),
 });
 
+export const channelFiles = sqliteTable("channel_files", {
+  channelId: text("channel_id")
+    .notNull()
+    .references(() => channels.id, { onDelete: "cascade" }),
+  fileId: text("file_id")
+    .notNull()
+    .references(() => files.id, { onDelete: "cascade" }),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   channels: many(channels),
   files: many(files),
@@ -72,16 +79,24 @@ export const channelsRelations = relations(channels, ({ one, many }) => ({
     fields: [channels.userId],
     references: [users.id],
   }),
-  files: many(files),
+  channelFiles: many(channelFiles),
 }));
 
-export const filesRelations = relations(files, ({ one }) => ({
+export const filesRelations = relations(files, ({ one, many }) => ({
   user: one(users, {
     fields: [files.userId],
     references: [users.id],
   }),
+  channelFiles: many(channelFiles),
+}));
+
+export const channelFilesRelations = relations(channelFiles, ({ one }) => ({
   channel: one(channels, {
-    fields: [files.channelId],
+    fields: [channelFiles.channelId],
     references: [channels.id],
+  }),
+  file: one(files, {
+    fields: [channelFiles.fileId],
+    references: [files.id],
   }),
 }));

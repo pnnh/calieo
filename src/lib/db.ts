@@ -1,4 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getDb } from "@/db/index";
+import { users as usersTable } from "@/db/schema";
+import { desc } from "drizzle-orm";
 
 // Minimal D1 type definitions — compatible with @cloudflare/workers-types D1Database
 interface D1Result<T = unknown> {
@@ -92,9 +95,31 @@ export async function upsertUser(data: UpsertUserData): Promise<void> {
 }
 
 export async function listUsers(): Promise<User[]> {
-  const db = getDB();
-  const result = await db
-    .prepare("SELECT * FROM users ORDER BY last_seen_at DESC")
-    .all<User>();
-  return result.results;
+  try {
+    const db = getDB();
+    const result = await db
+      .prepare("SELECT * FROM users ORDER BY last_seen_at DESC")
+      .all<User>();
+    return result.results;
+  } catch {
+    // D1 unavailable in local `next dev` — fall back to SQLite via Drizzle
+    const drizzleDb = getDb();
+    const rows = await drizzleDb
+      .select()
+      .from(usersTable)
+      .orderBy(desc(usersTable.createdAt));
+    return rows.map((u) => ({
+      id: u.id as unknown as number,
+      email: u.email,
+      name: u.name,
+      sub: null,
+      groups: null,
+      country: null,
+      iss: null,
+      aud: null,
+      created_at: Math.floor(u.createdAt / 1000),
+      last_seen_at: Math.floor(u.createdAt / 1000),
+      token_exp: null,
+    }));
+  }
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/db/index";
-import { files } from "@/db/schema";
+import { files, channelFiles } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { getStorage } from "@/lib/storage";
 
@@ -68,7 +68,15 @@ export async function PATCH(req: NextRequest, { params }: Props) {
         updates.description = body.description;
     }
     if ("channelId" in body) {
-        updates.channelId = body.channelId === null ? null : String(body.channelId);
+        const newChannelId = body.channelId === null ? null : String(body.channelId);
+        if (newChannelId) {
+            await db
+                .insert(channelFiles)
+                .values({ channelId: newChannelId, fileId })
+                .onConflictDoUpdate({ target: channelFiles.fileId, set: { channelId: newChannelId } });
+        } else {
+            await db.delete(channelFiles).where(eq(channelFiles.fileId, fileId));
+        }
     }
     if ("isPublished" in body && typeof body.isPublished === "boolean") {
         updates.isPublished = body.isPublished;

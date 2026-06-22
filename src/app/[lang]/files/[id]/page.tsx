@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { isValidLang } from "@/lib/language";
 import type { LangKey } from "@/lib/language";
 import { getDb } from "@/db/index";
-import { channels, files } from "@/db/schema";
+import { channels, files, channelFiles } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -23,7 +23,8 @@ export default async function FileDetailPage({ params }: Props) {
     const [result] = await db
         .select()
         .from(files)
-        .innerJoin(channels, eq(files.channelId, channels.id))
+        .innerJoin(channelFiles, eq(channelFiles.fileId, files.id))
+        .innerJoin(channels, eq(channelFiles.channelId, channels.id))
         .where(and(eq(files.id, id), eq(files.isPublished, true), eq(channels.isPublic, true)))
         .limit(1);
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/db/index";
-import { channels, files } from "@/db/schema";
+import { channels, files, channelFiles } from "@/db/schema";
 import { and, count, eq } from "drizzle-orm";
 
 export const runtime = "nodejs";
@@ -30,8 +30,9 @@ export async function DELETE(_req: NextRequest, { params }: Props) {
 
     const [{ cnt }] = await db
         .select({ cnt: count() })
-        .from(files)
-        .where(and(eq(files.channelId, channelId), eq(files.isPublished, true)));
+        .from(channelFiles)
+        .innerJoin(files, eq(channelFiles.fileId, files.id))
+        .where(and(eq(channelFiles.channelId, channelId), eq(files.isPublished, true)));
 
     if (cnt > 0) {
         return NextResponse.json({ error: "Channel has published files" }, { status: 409 });

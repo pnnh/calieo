@@ -3,7 +3,7 @@ import { isValidLang } from "@/lib/language";
 import type { LangKey } from "@/lib/language";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/db/index";
-import { channels, files, createId } from "@/db/schema";
+import { channels, files, channelFiles, createId } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -13,9 +13,12 @@ import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ lang: string; fileId: string }> };
+type Props = {
+    params: Promise<{ lang: string; fileId: string }>;
+    searchParams: Promise<{ parent?: string }>;
+};
 
-export default async function FileEditorPage({ params }: Props) {
+export default async function FileEditorPage({ params, searchParams }: Props) {
     const { lang, fileId } = await params;
     if (!isValidLang(lang)) notFound();
     const l = lang as LangKey;
@@ -25,6 +28,8 @@ export default async function FileEditorPage({ params }: Props) {
     const isNew = fileId === "new";
 
     if (isNew) {
+        const { parent } = await searchParams;
+        const parentId = parent ?? null;
         return (
             <>
                 <SiteHeader lang={l} />
@@ -32,6 +37,7 @@ export default async function FileEditorPage({ params }: Props) {
                     <h1 className="text-2xl font-bold text-gray-900 mb-8">{t(l, "newFile")}</h1>
                     <FileUploadForm
                         lang={lang}
+                        parentId={parentId}
                         labels={{
                             newFile: t(l, "newFile"),
                             fileTooLarge: t(l, "fileTooLarge"),
@@ -52,6 +58,14 @@ export default async function FileEditorPage({ params }: Props) {
 
     if (!existingFile) notFound();
 
+    // Look up the current channel association via channelFiles
+    const [existingCf] = await db
+        .select({ channelId: channelFiles.channelId })
+        .from(channelFiles)
+        .where(eq(channelFiles.fileId, fileId))
+        .limit(1);
+    const currentChannelId = existingCf?.channelId ?? null;
+
     const userChannels = await db
         .select()
         .from(channels)
@@ -61,7 +75,7 @@ export default async function FileEditorPage({ params }: Props) {
         "use server";
 
         const { getDb: getDatabase } = await import("@/db/index");
-        const { files, channels } = await import("@/db/schema");
+        const { files, channels, channelFiles } = await import("@/db/schema");
         const { getCurrentUser: getUser } = await import("@/lib/auth");
         const { eq, and } = await import("drizzle-orm");
 
@@ -87,8 +101,18 @@ export default async function FileEditorPage({ params }: Props) {
 
         await db2
             .update(files)
-            .set({ title, description, channelId, isPublished, updatedAt: now })
+            .set({ title, description, isPublished, updatedAt: now })
             .where(and(eq(files.id, fileId), eq(files.userId, user2.id)));
+
+        // Upsert / delete the channelFiles association
+        if (channelId) {
+            await db2
+                .insert(channelFiles)
+                .values({ channelId, fileId })
+                .onConflictDoUpdate({ target: channelFiles.fileId, set: { channelId } });
+        } else {
+            await db2.delete(channelFiles).where(eq(channelFiles.fileId, fileId));
+        }
 
         const { redirect: redir } = await import("next/navigation");
         redir(`/${lang}/console/files`);
@@ -128,7 +152,7 @@ export default async function FileEditorPage({ params }: Props) {
                         <label className="block text-sm font-medium text-gray-700 mb-1">{t(l, "fileChannel")}</label>
                         <select
                             name="channelId"
-                            defaultValue={existingFile.channelId ?? ""}
+                            defaultValue={currentChannelId ?? ""}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">{t(l, "noChannel")}</option>

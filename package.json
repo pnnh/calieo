@@ -11,8 +11,6 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "adapter": "next build && opennextjs-cloudflare build",
-    "preview": "opennextjs-cloudflare preview",
     "db:migrate": "tsx src/db/migrate.ts"
   },
   "dependencies": {
