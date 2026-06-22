@@ -1,6 +1,13 @@
+import { notFound } from "next/navigation";
+import { isValidLang } from "@/lib/language";
+import type { LangKey } from "@/lib/language";
 import { listUsers, type User } from "@/lib/db";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 export const dynamic = "force-dynamic";
+
+type Props = { params: Promise<{ lang: string }> };
 
 function formatUnixTime(ts: number): string {
     return new Date(ts * 1000).toISOString().replace("T", " ").slice(0, 19) + " UTC";
@@ -27,24 +34,29 @@ const COLUMNS: { label: string; render: (u: User) => string }[] = [
     { label: "token 到期", render: (u) => (u.token_exp ? formatUnixTime(u.token_exp) : "—") },
 ];
 
-export default async function UsersPage() {
+export default async function UsersPage({ params }: Props) {
+    const { lang } = await params;
+    if (!isValidLang(lang)) notFound();
+    const l = lang as LangKey;
+
     let users: User[] = [];
     let dbError = false;
 
     try {
         users = await listUsers();
-    } catch(error) {
+    } catch (error) {
         console.error("Failed to list users:", error);
         dbError = true;
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4">
-            <div className="max-w-5xl mx-auto space-y-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Portal — 用户列表</h1>
+        <>
+            <SiteHeader lang={l} />
+            <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold text-gray-900">用户列表</h1>
                     <p className="mt-1 text-sm text-gray-500">
-                        所有曾通过 Cloudflare Access 认证并访问过 /portal 的用户，按最近活跃时间倒序。
+                        所有曾通过 Cloudflare Access 认证并访问过 /console 的用户，按最近活跃时间倒序。
                     </p>
                 </div>
 
@@ -68,7 +80,7 @@ export default async function UsersPage() {
 
                         {users.length === 0 ? (
                             <div className="px-5 py-10 text-center text-sm text-gray-400">
-                                暂无用户记录。访问任意 /portal 页面后将自动写入。
+                                暂无用户记录。访问任意 /console 页面后将自动写入。
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
@@ -104,7 +116,8 @@ export default async function UsersPage() {
                         )}
                     </section>
                 )}
-            </div>
-        </div>
+            </main>
+            <SiteFooter lang={l} />
+        </>
     );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 type Props = {
+    lang: string;
     channelId: string;
     redirectTo: string;
     labels: {
@@ -12,13 +13,13 @@ type Props = {
     };
 };
 
-export default function ChannelDeleteSection({ channelId, redirectTo, labels }: Props) {
+export default function ChannelDeleteSection({ lang, channelId, redirectTo, labels }: Props) {
     const [error, setError] = useState("");
 
     async function handleDelete() {
         if (!confirm(labels.deleteChannelConfirm)) return;
         setError("");
-        const res = await fetch(`/api/channels/${channelId}`, { method: "DELETE" });
+        const res = await fetch(`/${lang}/console/channels/${channelId}/actions`, { method: "DELETE" });
         if (res.ok) {
             window.location.href = redirectTo;
         } else {

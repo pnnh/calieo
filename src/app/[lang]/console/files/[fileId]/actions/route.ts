@@ -7,7 +7,7 @@ import { getStorage } from "@/lib/storage";
 
 export const runtime = "nodejs";
 
-type Props = { params: Promise<{ fileId: string }> };
+type Props = { params: Promise<{ lang: string; fileId: string }> };
 
 export async function DELETE(_req: NextRequest, { params }: Props) {
     const { fileId } = await params;

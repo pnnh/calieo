@@ -100,7 +100,20 @@ async function getAccessUserBase(): Promise<{ id: string; name: string; email: s
   const headerMap = await headers();
   const jwtToken = headerMap.get('cf-access-jwt-assertion');
   const directEmail = headerMap.get('cf-access-authenticated-user-email');
-  const payload = jwtToken ? parseJwtPayload(jwtToken) : null;
+  let payload = jwtToken ? parseJwtPayload(jwtToken) : null;
+
+  // Fallback: API routes that are not covered by the Zero Trust policy do not
+  // receive the injected cf-access-* headers.  However, the browser still sends
+  // the CF_Authorization cookie (set by Cloudflare Access for this domain after
+  // a successful login), which contains the same JWT.  Parse it so that
+  // authenticated users can call API endpoints without being rejected.
+  if (!payload && !directEmail) {
+    const cookieStore = await cookies();
+    const cfAuthToken = cookieStore.get('CF_Authorization')?.value;
+    if (cfAuthToken) {
+      payload = parseJwtPayload(cfAuthToken);
+    }
+  }
 
   const id = payload?.sub ?? directEmail ?? payload?.email;
   if (!id) return null;

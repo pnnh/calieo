@@ -161,6 +161,7 @@ export default async function FileEditorPage({ params }: Props) {
                 </form>
 
                 <FileDeleteSection
+                    lang={lang}
                     fileId={fileId}
                     redirectTo={`/${lang}/console/files`}
                     labels={{

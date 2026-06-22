@@ -84,6 +84,7 @@ export default async function ChannelEditorPage({ params }: Props) {
                 {!isNew && channel && (
                     <div className="mb-8">
                         <ChannelAvatarUpload
+                            lang={lang}
                             channelId={channel.id}
                             channelName={channel.name}
                             labels={{ uploadAvatar: t(l, "uploadAvatar"), avatarHint: t(l, "avatarHint") }}
@@ -134,6 +135,7 @@ export default async function ChannelEditorPage({ params }: Props) {
 
                 {!isNew && channel && (
                     <ChannelDeleteSection
+                        lang={lang}
                         channelId={channel.id}
                         redirectTo={`/${lang}/console/channels`}
                         labels={{

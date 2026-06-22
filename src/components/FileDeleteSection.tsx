@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 type Props = {
+    lang: string;
     fileId: string;
     redirectTo: string;
     labels: {
@@ -11,10 +12,10 @@ type Props = {
     };
 };
 
-export default function FileDeleteSection({ fileId, redirectTo, labels }: Props) {
+export default function FileDeleteSection({ lang, fileId, redirectTo, labels }: Props) {
     async function handleDelete() {
         if (!confirm(labels.deleteFileConfirm)) return;
-        const res = await fetch(`/api/files/${fileId}`, { method: "DELETE" });
+        const res = await fetch(`/${lang}/console/files/${fileId}/actions`, { method: "DELETE" });
         if (res.ok) {
             window.location.href = redirectTo;
         }

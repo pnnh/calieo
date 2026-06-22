@@ -34,7 +34,7 @@ export default function FileUploadForm({ lang, labels }: Props) {
             const formData = new FormData();
             formData.append("file", file);
 
-            const res = await fetch("/api/upload", { method: "POST", body: formData });
+            const res = await fetch(`/${lang}/console/upload`, { method: "POST", body: formData });
 
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));

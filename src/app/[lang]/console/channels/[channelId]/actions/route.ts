@@ -6,7 +6,7 @@ import { and, count, eq } from "drizzle-orm";
 
 export const runtime = "nodejs";
 
-type Props = { params: Promise<{ channelId: string }> };
+type Props = { params: Promise<{ lang: string; channelId: string }> };
 
 export async function DELETE(_req: NextRequest, { params }: Props) {
     const { channelId } = await params;

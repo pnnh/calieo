@@ -3,12 +3,13 @@
 import { useState, useRef } from "react";
 
 type Props = {
+    lang: string;
     channelId: string;
     channelName: string;
     labels: { uploadAvatar: string; avatarHint: string };
 };
 
-export default function ChannelAvatarUpload({ channelId, channelName, labels }: Props) {
+export default function ChannelAvatarUpload({ lang, channelId, channelName, labels }: Props) {
     const [preview, setPreview] = useState<string | null>(null);
     const [avatarError, setAvatarError] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -21,7 +22,7 @@ export default function ChannelAvatarUpload({ channelId, channelName, labels }: 
         try {
             const form = new FormData();
             form.append("file", file);
-            const res = await fetch(`/api/channel/avatar/${channelId}`, { method: "POST", body: form });
+            const res = await fetch(`/${lang}/console/channels/${channelId}/avatar`, { method: "POST", body: form });
             if (res.ok) {
                 setPreview(URL.createObjectURL(file));
                 setAvatarError(false);
