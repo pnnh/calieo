@@ -1,0 +1,49 @@
+src/components/MarkdownContent.test.tsx
+  s_5a9e43fc77eac2::t_d2642354c917a9 1
+  s_5a9e43fc77eac2::t_2ca33532412867 2-60
+src/components/CookieBanner.test.tsx
+  s_5a9e43fc77eac2::t_00b25f553aa473 1-115
+src/components/FileDeleteSection.test.tsx
+  s_5a9e43fc77eac2::t_cc5169bb2cd477 39-41
+  s_5a9e43fc77eac2::t_b48cd87cae0e7a 1-38,42-105
+package.json
+  s_5a9e43fc77eac2::t_8799ca36696404 36-37,47
+src/components/ChannelAvatar.test.tsx
+  s_5a9e43fc77eac2::t_0329ab757bd659 2-45
+  s_5a9e43fc77eac2::t_d2642354c917a9 1
+src/components/SiteFooter.test.tsx
+  s_5a9e43fc77eac2::t_d2642354c917a9 1
+  s_5a9e43fc77eac2::t_0d02499a111a7d 2-40
+src/components/LanguageSelector.test.tsx
+  s_5a9e43fc77eac2::t_3fe97a2e098cbe 1-80
+src/components/FileUploadForm.test.tsx
+  s_5a9e43fc77eac2::t_010e6942954587 1-199
+src/components/ChannelSearch.test.tsx
+  s_5a9e43fc77eac2::t_e412dcd1a97295 1-111
+src/components/__mocks__/next.tsx
+  s_5a9e43fc77eac2::t_ebf685b036d616 1-54
+src/components/ToolCard.test.tsx
+  s_5a9e43fc77eac2::t_0617a00be3ebec 2-136
+  s_5a9e43fc77eac2::t_d2642354c917a9 1
+vitest.config.ts
+  s_5a9e43fc77eac2::t_28131510f8c513 7
+  s_5a9e43fc77eac2::t_ffd9d9e0427866 8-11,14
+src/components/ChannelDeleteSection.test.tsx
+  s_5a9e43fc77eac2::t_6c250f3d984c33 1-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "56123ed4f689a1f5858aa9d043da97fa2d581045",
+  "prompts": {},
+  "sessions": {
+    "s_5a9e43fc77eac2": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "36e091ba-f1c6-4213-a2c7-f89a38044a17",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
