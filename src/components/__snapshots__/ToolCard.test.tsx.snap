@@ -1,0 +1,462 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ToolCard > renders Chinese card snapshot 1`] = `
+<div
+  class="group relative flex flex-col bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 hover:shadow-md hover:ring-blue-200 transition-all duration-200 overflow-hidden"
+>
+  <a
+    class="flex flex-col flex-1 p-6 gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+    href="/zh/tools/basex/"
+  >
+    <div
+      class="flex items-center gap-4"
+    >
+      <div
+        class="relative w-12 h-12 flex-shrink-0"
+      >
+        <img
+          alt="BaseX"
+          class="object-contain rounded-xl"
+          src="/images/basex/logo.png"
+        />
+      </div>
+      <h2
+        class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors"
+      >
+        BaseX
+      </h2>
+    </div>
+    <p
+      class="text-sm text-gray-500 leading-relaxed line-clamp-3"
+    >
+      Base 编解码工具集。
+    </p>
+    <div
+      class="flex flex-wrap gap-1.5 mt-auto"
+    >
+      <span
+        class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+      >
+        encoding
+      </span>
+      <span
+        class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+      >
+        base64
+      </span>
+      <span
+        class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+      >
+        base58
+      </span>
+    </div>
+  </a>
+  <div
+    class="px-6 pb-5 pt-0 flex items-center justify-between"
+  >
+    <a
+      class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
+      href="/zh/tools/basex/"
+    >
+      了解更多
+       →
+    </a>
+    <a
+      class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
+      href="https://basex.calieo.xyz"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      开始使用
+      <svg
+        class="w-3.5 h-3.5"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z"
+          fill-rule="evenodd"
+        />
+        <path
+          clip-rule="evenodd"
+          d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ToolCard > renders English card snapshot 1`] = `
+<div
+  class="group relative flex flex-col bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 hover:shadow-md hover:ring-blue-200 transition-all duration-200 overflow-hidden"
+>
+  <a
+    class="flex flex-col flex-1 p-6 gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+    href="/en/tools/basex/"
+  >
+    <div
+      class="flex items-center gap-4"
+    >
+      <div
+        class="relative w-12 h-12 flex-shrink-0"
+      >
+        <img
+          alt="BaseX"
+          class="object-contain rounded-xl"
+          src="/images/basex/logo.png"
+        />
+      </div>
+      <h2
+        class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors"
+      >
+        BaseX
+      </h2>
+    </div>
+    <p
+      class="text-sm text-gray-500 leading-relaxed line-clamp-3"
+    >
+      Base encoding & decoding toolkit.
+    </p>
+    <div
+      class="flex flex-wrap gap-1.5 mt-auto"
+    >
+      <span
+        class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+      >
+        encoding
+      </span>
+      <span
+        class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+      >
+        base64
+      </span>
+      <span
+        class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+      >
+        base58
+      </span>
+    </div>
+  </a>
+  <div
+    class="px-6 pb-5 pt-0 flex items-center justify-between"
+  >
+    <a
+      class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
+      href="/en/tools/basex/"
+    >
+      Learn More
+       →
+    </a>
+    <a
+      class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
+      href="https://basex.calieo.xyz"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Launch Tool
+      <svg
+        class="w-3.5 h-3.5"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z"
+          fill-rule="evenodd"
+        />
+        <path
+          clip-rule="evenodd"
+          d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`ToolGrid > renders a single-tool grid snapshot 1`] = `
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+>
+  <div
+    class="group relative flex flex-col bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 hover:shadow-md hover:ring-blue-200 transition-all duration-200 overflow-hidden"
+  >
+    <a
+      class="flex flex-col flex-1 p-6 gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+      href="/en/tools/basex/"
+    >
+      <div
+        class="flex items-center gap-4"
+      >
+        <div
+          class="relative w-12 h-12 flex-shrink-0"
+        >
+          <img
+            alt="BaseX"
+            class="object-contain rounded-xl"
+            src="/images/basex/logo.png"
+          />
+        </div>
+        <h2
+          class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors"
+        >
+          BaseX
+        </h2>
+      </div>
+      <p
+        class="text-sm text-gray-500 leading-relaxed line-clamp-3"
+      >
+        Base encoding & decoding toolkit.
+      </p>
+      <div
+        class="flex flex-wrap gap-1.5 mt-auto"
+      >
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          encoding
+        </span>
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          base64
+        </span>
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          base58
+        </span>
+      </div>
+    </a>
+    <div
+      class="px-6 pb-5 pt-0 flex items-center justify-between"
+    >
+      <a
+        class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
+        href="/en/tools/basex/"
+      >
+        Learn More
+         →
+      </a>
+      <a
+        class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
+        href="https://basex.calieo.xyz"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Launch Tool
+        <svg
+          class="w-3.5 h-3.5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z"
+            fill-rule="evenodd"
+          />
+          <path
+            clip-rule="evenodd"
+            d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ToolGrid > renders a two-tool grid snapshot 1`] = `
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+>
+  <div
+    class="group relative flex flex-col bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 hover:shadow-md hover:ring-blue-200 transition-all duration-200 overflow-hidden"
+  >
+    <a
+      class="flex flex-col flex-1 p-6 gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+      href="/en/tools/basex/"
+    >
+      <div
+        class="flex items-center gap-4"
+      >
+        <div
+          class="relative w-12 h-12 flex-shrink-0"
+        >
+          <img
+            alt="BaseX"
+            class="object-contain rounded-xl"
+            src="/images/basex/logo.png"
+          />
+        </div>
+        <h2
+          class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors"
+        >
+          BaseX
+        </h2>
+      </div>
+      <p
+        class="text-sm text-gray-500 leading-relaxed line-clamp-3"
+      >
+        Base encoding & decoding toolkit.
+      </p>
+      <div
+        class="flex flex-wrap gap-1.5 mt-auto"
+      >
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          encoding
+        </span>
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          base64
+        </span>
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          base58
+        </span>
+      </div>
+    </a>
+    <div
+      class="px-6 pb-5 pt-0 flex items-center justify-between"
+    >
+      <a
+        class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
+        href="/en/tools/basex/"
+      >
+        Learn More
+         →
+      </a>
+      <a
+        class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
+        href="https://basex.calieo.xyz"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Launch Tool
+        <svg
+          class="w-3.5 h-3.5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z"
+            fill-rule="evenodd"
+          />
+          <path
+            clip-rule="evenodd"
+            d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div
+    class="group relative flex flex-col bg-white rounded-2xl shadow-sm ring-1 ring-gray-200 hover:shadow-md hover:ring-blue-200 transition-all duration-200 overflow-hidden"
+  >
+    <a
+      class="flex flex-col flex-1 p-6 gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+      href="/en/tools/hashx/"
+    >
+      <div
+        class="flex items-center gap-4"
+      >
+        <div
+          class="relative w-12 h-12 flex-shrink-0"
+        >
+          <img
+            alt="HashX"
+            class="object-contain rounded-xl"
+            src="/images/hashx/logo.png"
+          />
+        </div>
+        <h2
+          class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors"
+        >
+          HashX
+        </h2>
+      </div>
+      <p
+        class="text-sm text-gray-500 leading-relaxed line-clamp-3"
+      >
+        Hashing toolkit.
+      </p>
+      <div
+        class="flex flex-wrap gap-1.5 mt-auto"
+      >
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          hash
+        </span>
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          md5
+        </span>
+        <span
+          class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+        >
+          sha256
+        </span>
+      </div>
+    </a>
+    <div
+      class="px-6 pb-5 pt-0 flex items-center justify-between"
+    >
+      <a
+        class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
+        href="/en/tools/hashx/"
+      >
+        Learn More
+         →
+      </a>
+      <a
+        class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
+        href="https://hashx.calieo.xyz"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Launch Tool
+        <svg
+          class="w-3.5 h-3.5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h5a.75.75 0 0 1 0 1.5h-5Z"
+            fill-rule="evenodd"
+          />
+          <path
+            clip-rule="evenodd"
+            d="M6.194 12.753a.75.75 0 0 0 1.06.053L16.5 4.44v2.81a.75.75 0 0 0 1.5 0v-4.5a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0 0 1.5h2.553l-9.056 8.194a.75.75 0 0 0-.053 1.06Z"
+            fill-rule="evenodd"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ToolGrid > renders an empty grid snapshot 1`] = `
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+/>
+`;

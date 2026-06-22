@@ -1,0 +1,122 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MarkdownContent > renders a code block snapshot 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+  <pre>
+    <code>
+      console.log('hi');
+
+    </code>
+  </pre>
+  
+
+</div>
+`;
+
+exports[`MarkdownContent > renders a heading snapshot 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+  <h1>
+    Hello World
+  </h1>
+  
+
+</div>
+`;
+
+exports[`MarkdownContent > renders a link snapshot 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+  <p>
+    Visit 
+    <a
+      href="https://calieo.xyz"
+    >
+      Calieo
+    </a>
+  </p>
+  
+
+</div>
+`;
+
+exports[`MarkdownContent > renders a paragraph snapshot 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+  <p>
+    This is a 
+    <strong>
+      bold
+    </strong>
+     and 
+    <em>
+      italic
+    </em>
+     paragraph.
+  </p>
+  
+
+</div>
+`;
+
+exports[`MarkdownContent > renders an image tag from markdown 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+  <p>
+    <img
+      alt="alt text"
+      src="https://example.com/img.png"
+    />
+  </p>
+  
+
+</div>
+`;
+
+exports[`MarkdownContent > renders an unordered list snapshot 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+  <ul>
+    
+
+    <li>
+      item one
+    </li>
+    
+
+    <li>
+      item two
+    </li>
+    
+
+    <li>
+      item three
+    </li>
+    
+
+  </ul>
+  
+
+</div>
+`;
+
+exports[`MarkdownContent > renders empty string without error 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+/>
+`;
+
+exports[`MarkdownContent > strips disallowed tags (script) 1`] = `
+<div
+  class="prose prose-sm max-w-none"
+>
+   safe text
+</div>
+`;

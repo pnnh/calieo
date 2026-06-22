@@ -4,10 +4,14 @@ import path from "node:path";
 export default defineConfig({
     test: {
         environment: "node",
-        include: ["src/**/*.test.ts"],
+        globals: true,
+        environmentMatchGlobs: [
+            ["src/components/**/*.test.tsx", "jsdom"],
+        ],
+        include: ["src/**/*.test.{ts,tsx}"],
         coverage: {
             provider: "v8",
-            include: ["src/lib/**/*.ts"],
+            include: ["src/lib/**/*.ts", "src/components/**/*.tsx"],
         },
     },
     resolve: {

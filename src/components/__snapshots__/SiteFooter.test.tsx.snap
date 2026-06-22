@@ -1,0 +1,76 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SiteFooter > renders Chinese footer snapshot 1`] = `
+<footer
+  class="w-full border-t border-gray-200 bg-white mt-auto"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"
+  >
+    <p
+      class="text-sm text-gray-400"
+    >
+      © 
+      2026
+       
+      Calieo
+    </p>
+    <a
+      class="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+      href="/zh/privacy/"
+    >
+      隐私政策
+    </a>
+  </div>
+</footer>
+`;
+
+exports[`SiteFooter > renders English footer snapshot 1`] = `
+<footer
+  class="w-full border-t border-gray-200 bg-white mt-auto"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"
+  >
+    <p
+      class="text-sm text-gray-400"
+    >
+      © 
+      2026
+       
+      Calieo
+    </p>
+    <a
+      class="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+      href="/en/privacy/"
+    >
+      Privacy Policy
+    </a>
+  </div>
+</footer>
+`;
+
+exports[`SiteFooter > renders German footer snapshot 1`] = `
+<footer
+  class="w-full border-t border-gray-200 bg-white mt-auto"
+>
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"
+  >
+    <p
+      class="text-sm text-gray-400"
+    >
+      © 
+      2026
+       
+      Calieo
+    </p>
+    <a
+      class="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+      href="/de-DE/privacy/"
+    >
+      Datenschutz
+    </a>
+  </div>
+</footer>
+`;
