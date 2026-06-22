@@ -47,3 +47,5 @@ next-env.d.ts
 
 .codebase-memory/
 .codebase/
+
+test-results/
