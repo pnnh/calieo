@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import bs58 from "bs58";
 import { uuidv7 } from "uuidv7";
 
@@ -58,7 +58,9 @@ export const files = sqliteTable("files", {
     .default(false),
   createdAt: integer("created_at").notNull().$defaultFn(() => Date.now()),
   updatedAt: integer("updated_at").notNull().$defaultFn(() => Date.now()),
-});
+}, (table) => [
+  uniqueIndex("files_parent_id_filename_unique").on(table.parentId, table.filename),
+]);
 
 export const channelFiles = sqliteTable("channel_files", {
   channelId: text("channel_id")
