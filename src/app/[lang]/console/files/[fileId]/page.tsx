@@ -57,19 +57,24 @@ export default async function FileEditorPage({ params, searchParams }: Props) {
         .limit(1);
 
     if (!existingFile) notFound();
+    const isDirectory = existingFile.mimeType === "directory";
 
     // Look up the current channel association via channelFiles
-    const [existingCf] = await db
-        .select({ channelId: channelFiles.channelId })
-        .from(channelFiles)
-        .where(eq(channelFiles.fileId, fileId))
-        .limit(1);
+    const [existingCf] = isDirectory
+        ? []
+        : await db
+            .select({ channelId: channelFiles.channelId })
+            .from(channelFiles)
+            .where(eq(channelFiles.fileId, fileId))
+            .limit(1);
     const currentChannelId = existingCf?.channelId ?? null;
 
-    const userChannels = await db
-        .select()
-        .from(channels)
-        .where(eq(channels.userId, user.id));
+    const userChannels = isDirectory
+        ? []
+        : await db
+            .select()
+            .from(channels)
+            .where(eq(channels.userId, user.id));
 
     async function handleSave(formData: FormData) {
         "use server";
@@ -83,14 +88,14 @@ export default async function FileEditorPage({ params, searchParams }: Props) {
         const user2 = await getUser();
         const title = ((formData.get("title") as string | null) ?? "").trim();
         const description = (formData.get("description") as string | null) ?? "";
-        const rawChannelId = (formData.get("channelId") as string | null) ?? "";
-        const isPublished = formData.get("isPublished") === "true";
+        const rawChannelId = isDirectory ? "" : ((formData.get("channelId") as string | null) ?? "");
+        const isPublished = isDirectory ? false : formData.get("isPublished") === "true";
         const now = Date.now();
 
         if (!title) throw new Error("Title is required");
 
         const channelId = rawChannelId || null;
-        if (channelId) {
+        if (!isDirectory && channelId) {
             const [ownedChannel] = await db2
                 .select()
                 .from(channels)
@@ -99,13 +104,18 @@ export default async function FileEditorPage({ params, searchParams }: Props) {
             if (!ownedChannel) throw new Error("Channel not found");
         }
 
+        const updates: Record<string, string | number | boolean> = { title, description, updatedAt: now };
+        if (!isDirectory) {
+            updates.isPublished = isPublished;
+        }
+
         await db2
             .update(files)
-            .set({ title, description, isPublished, updatedAt: now })
+            .set(updates)
             .where(and(eq(files.id, fileId), eq(files.userId, user2.id)));
 
         // Upsert / delete the channelFiles association
-        if (channelId) {
+        if (!isDirectory && channelId) {
             await db2
                 .insert(channelFiles)
                 .values({ channelId, fileId })
@@ -148,32 +158,36 @@ export default async function FileEditorPage({ params, searchParams }: Props) {
                             className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t(l, "fileChannel")}</label>
-                        <select
-                            name="channelId"
-                            defaultValue={currentChannelId ?? ""}
-                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="">{t(l, "noChannel")}</option>
-                            {userChannels.map((ch) => (
-                                <option key={ch.id} value={ch.id}>
-                                    {ch.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <input
-                            type="checkbox"
-                            id="isPublished"
-                            name="isPublished"
-                            value="true"
-                            defaultChecked={existingFile.isPublished}
-                            className="h-4 w-4 rounded border-gray-300 text-blue-600"
-                        />
-                        <label htmlFor="isPublished" className="text-sm font-medium text-gray-700">{t(l, "publishFile")}</label>
-                    </div>
+                    {!isDirectory && (
+                        <>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t(l, "fileChannel")}</label>
+                                <select
+                                    name="channelId"
+                                    defaultValue={currentChannelId ?? ""}
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="">{t(l, "noChannel")}</option>
+                                    {userChannels.map((ch) => (
+                                        <option key={ch.id} value={ch.id}>
+                                            {ch.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <input
+                                    type="checkbox"
+                                    id="isPublished"
+                                    name="isPublished"
+                                    value="true"
+                                    defaultChecked={existingFile.isPublished}
+                                    className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                                />
+                                <label htmlFor="isPublished" className="text-sm font-medium text-gray-700">{t(l, "publishFile")}</label>
+                            </div>
+                        </>
+                    )}
                     <div className="flex gap-3">
                         <button type="submit" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
                             {t(l, "save")}

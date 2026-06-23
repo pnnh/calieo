@@ -15,6 +15,7 @@ const labels = {
     filePublished: "Published",
     fileDraft: "Draft",
     fileTitle: "Title",
+    editFile: "Edit",
     size: "Size",
     fileStatus: "Status",
     updated: "Updated",
@@ -99,6 +100,37 @@ describe("FilesTreeTable drag and drop", () => {
         });
 
         expect(container.querySelectorAll("tr").length).toBeGreaterThan(0);
+    });
+
+    it("shows edit action links for both files and directories", () => {
+        const initialRows = [
+            {
+                id: "file-1",
+                title: "Document",
+                mimeType: "text/plain",
+                size: 42,
+                isPublished: false,
+                updatedAt: Date.now(),
+            },
+            {
+                id: "dir-1",
+                title: "Target Folder",
+                mimeType: "directory",
+                size: 0,
+                isPublished: false,
+                updatedAt: Date.now(),
+            },
+        ];
+
+        const { getByLabelText } = render(
+            <FilesTreeTable lang="en" initialRows={initialRows} labels={labels} />,
+        );
+
+        const fileEditLink = getByLabelText("Edit: Document") as HTMLAnchorElement;
+        const dirEditLink = getByLabelText("Edit: Target Folder") as HTMLAnchorElement;
+
+        expect(fileEditLink.getAttribute("href")).toBe("/en/console/files/file-1");
+        expect(dirEditLink.getAttribute("href")).toBe("/en/console/files/dir-1");
     });
 });
 

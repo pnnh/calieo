@@ -68,6 +68,8 @@
     "created": "Criado",
     "search": "Pesquisar",
     "noResults": "Nenhum resultado encontrado.",
+    "itemsPerPage": "Itens por página",
+    "allItems": "Todos",
     "publishFile": "Publicar",
     "latestFiles": "Últimos ficheiros",
     "download": "Transferir",

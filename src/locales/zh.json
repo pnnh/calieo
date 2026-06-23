@@ -68,6 +68,8 @@
     "created": "创建于",
     "search": "搜索",
     "noResults": "未找到结果。",
+    "itemsPerPage": "每页条数",
+    "allItems": "全部",
     "publishFile": "发布",
     "latestFiles": "最新文件",
     "download": "下载",

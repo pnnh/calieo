@@ -68,6 +68,8 @@
     "created": "Créé",
     "search": "Rechercher",
     "noResults": "Aucun résultat trouvé.",
+    "itemsPerPage": "Articles par page",
+    "allItems": "Tous",
     "publishFile": "Publier",
     "latestFiles": "Derniers fichiers",
     "download": "Télécharger",

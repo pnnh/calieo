@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { fileIcon } from "@/lib/fileIcon";
@@ -21,6 +22,7 @@ type Labels = {
     filePublished: string;
     fileDraft: string;
     fileTitle: string;
+    editFile: string;
     size: string;
     fileStatus: string;
     updated: string;
@@ -79,6 +81,11 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
     const [draggedId, setDraggedId] = useState<string | null>(null);
     const [dropTargetId, setDropTargetId] = useState<string | null>(null);
     const [movingId, setMovingId] = useState<string | null>(null);
+    const [deletePortalTarget, setDeletePortalTarget] = useState<HTMLElement | null>(null);
+
+    useEffect(() => {
+        setDeletePortalTarget(document.getElementById("files-header-delete-slot"));
+    }, []);
 
     const visibleRows = useMemo(
         () => buildVisible(initialRows, 0, expanded, childMap, hiddenIds),
@@ -220,19 +227,22 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
         return <p className="text-gray-500">{labels.noFilesYet}</p>;
     }
 
+    const deleteButton = (
+        <button
+            type="button"
+            disabled={selected.size === 0 || deleting}
+            onClick={handleBulkDelete}
+            className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+            {deleting ? "…" : labels.deleteSelected}
+        </button>
+    );
+
     return (
         <div>
-            {/* Toolbar */}
-            <div className="flex items-center justify-end mb-2">
-                <button
-                    type="button"
-                    disabled={selected.size === 0 || deleting}
-                    onClick={handleBulkDelete}
-                    className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                    {deleting ? "…" : labels.deleteSelected}
-                </button>
-            </div>
+            {deletePortalTarget ? createPortal(deleteButton, deletePortalTarget) : (
+                <div className="flex items-center justify-end mb-2">{deleteButton}</div>
+            )}
 
             {/* Table */}
             <div className="border border-gray-200 rounded-lg overflow-hidden">
@@ -252,7 +262,8 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
                             <th className="px-4 py-3 font-medium text-gray-700">{labels.size}</th>
                             <th className="px-4 py-3 font-medium text-gray-700">{labels.fileStatus}</th>
                             <th className="px-4 py-3 font-medium text-gray-700">{labels.updated}</th>
-                            <th className="px-4 py-3 w-8" />
+                            <th className="px-2 py-3 w-8" />
+                            <th className="px-2 py-3 w-10 text-right font-medium text-gray-700">{labels.editFile}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -441,6 +452,22 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
                                                 </div>
                                             </div>
                                         )}
+                                    </td>
+                                    <td className="px-2 py-3 w-10 text-right">
+                                        <Link
+                                            href={`/${lang}/console/files/${f.id}`}
+                                            aria-label={`${labels.editFile}: ${f.title}`}
+                                            className="inline-flex items-center rounded p-1 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                                        >
+                                            <svg
+                                                className="h-4 w-4"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                                aria-hidden="true"
+                                            >
+                                                <path d="M13.586 3a2 2 0 012.828 2.828l-8.08 8.08a2 2 0 01-.878.497l-2.92.834a.5.5 0 01-.617-.617l.834-2.92a2 2 0 01.497-.878L13.586 3zm1.414 1.414a1 1 0 10-1.414-1.414l-.793.793 1.414 1.414.793-.793z" />
+                                            </svg>
+                                        </Link>
                                     </td>
                                 </tr>
                             );

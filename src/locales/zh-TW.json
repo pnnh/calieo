@@ -68,6 +68,8 @@
     "created": "建立時間",
     "search": "搜尋",
     "noResults": "找不到結果。",
+    "itemsPerPage": "每頁筆數",
+    "allItems": "全部",
     "publishFile": "發佈",
     "latestFiles": "最新檔案",
     "download": "下載",

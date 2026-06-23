@@ -68,6 +68,8 @@
     "created": "作成日",
     "search": "検索",
     "noResults": "結果が見つかりませんでした。",
+    "itemsPerPage": "1ページあたり",
+    "allItems": "すべて",
     "publishFile": "公開する",
     "latestFiles": "最新のファイル",
     "download": "ダウンロード",
