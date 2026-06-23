@@ -23,7 +23,12 @@ export default function FileDeleteSection({ lang, fileId, redirectTo, labels }: 
         if (res.ok) {
             window.location.href = redirectTo;
         } else {
-            const data = await res.json().catch(() => ({}));
+            let data: { error?: string } = {};
+            try {
+                data = await res.json();
+            } catch {
+                // ignore parse errors
+            }
             setError(data.error ?? labels.deleteDirectoryHasChildren);
         }
     }

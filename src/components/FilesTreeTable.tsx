@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { fileIcon } from "@/lib/fileIcon";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -67,6 +68,7 @@ function buildVisible(
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
+    const router = useRouter();
     const [expanded, setExpanded] = useState<Set<string>>(new Set());
     const [childMap, setChildMap] = useState<Record<string, FileRow[]>>({});
     const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
@@ -74,6 +76,9 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
     const [rowErrors, setRowErrors] = useState<Record<string, string>>({});
     const [deleting, setDeleting] = useState(false);
     const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
+    const [draggedId, setDraggedId] = useState<string | null>(null);
+    const [dropTargetId, setDropTargetId] = useState<string | null>(null);
+    const [movingId, setMovingId] = useState<string | null>(null);
 
     const visibleRows = useMemo(
         () => buildVisible(initialRows, 0, expanded, childMap, hiddenIds),
@@ -141,7 +146,10 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
         setDeleting(true);
         setRowErrors({});
 
-        const toDelete = [...selected];
+        const toDelete = visibleRows
+            .filter(({ file }) => selected.has(file.id))
+            .sort((a, b) => b.depth - a.depth)
+            .map(({ file }) => file.id);
         const newErrors: Record<string, string> = {};
 
         for (const id of toDelete) {
@@ -161,6 +169,51 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
 
         setRowErrors(newErrors);
         setDeleting(false);
+    }
+
+    async function handleMove(sourceId: string, targetDirId: string, dataTransfer: DataTransfer | null) {
+        const draggedSourceId = dataTransfer?.getData("text/plain") || draggedId || sourceId;
+
+        setDraggedId(null);
+        setDropTargetId(null);
+
+        if (!draggedSourceId || draggedSourceId === targetDirId) {
+            return;
+        }
+
+        setMovingId(draggedSourceId);
+        setRowErrors((prev) => {
+            const next = { ...prev };
+            delete next[draggedSourceId];
+            return next;
+        });
+
+        try {
+            const res = await fetch(`/${lang}/console/files/${draggedSourceId}/actions`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ parentId: targetDirId }),
+            });
+
+            if (res.ok) {
+                router.refresh();
+                return;
+            }
+
+            let message = "Failed to move item.";
+            try {
+                const data = (await res.json()) as { error?: string };
+                if (typeof data.error === "string" && data.error.trim()) {
+                    message = data.error;
+                }
+            } catch {
+                // ignore response parsing issues
+            }
+
+            setRowErrors((prev) => ({ ...prev, [draggedSourceId]: message }));
+        } finally {
+            setMovingId((prev) => (prev === draggedSourceId ? null : prev));
+        }
     }
 
     if (visibleRows.length === 0) {
@@ -209,9 +262,36 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
                             const isLoading = loadingIds.has(f.id);
                             const isSelected = selected.has(f.id);
                             const rowError = rowErrors[f.id];
+                            const isDropTarget = dropTargetId === f.id;
+                            const isMoving = movingId === f.id;
 
                             return (
-                                <tr key={f.id} className="hover:bg-gray-50">
+                                <tr
+                                    key={f.id}
+                                    className={`hover:bg-gray-50 ${isDropTarget ? "bg-blue-50" : ""} ${
+                                        isMoving ? "opacity-60" : ""
+                                    }`}
+                                    onDragEnter={() => {
+                                        if (draggedId && isDir && draggedId !== f.id) {
+                                            setDropTargetId(f.id);
+                                        }
+                                    }}
+                                    onDragOver={(e) => {
+                                        if (!draggedId || !isDir || draggedId === f.id) return;
+                                        e.preventDefault();
+                                        setDropTargetId(f.id);
+                                    }}
+                                    onDragLeave={() => {
+                                        if (dropTargetId === f.id) {
+                                            setDropTargetId(null);
+                                        }
+                                    }}
+                                    onDrop={(e) => {
+                                        if (!isDir) return;
+                                        e.preventDefault();
+                                        void handleMove(f.id, f.id, e.dataTransfer);
+                                    }}
+                                >
                                     {/* Checkbox */}
                                     <td className="px-4 py-3 w-10">
                                         <input
@@ -280,7 +360,21 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
                                                     className="text-blue-600 hover:underline flex items-center gap-1 min-w-0"
                                                 >
                                                     <span className="flex-shrink-0">📁</span>
-                                                    <span className="truncate">{f.title}</span>
+                                                    <span
+                                                        className="truncate cursor-move"
+                                                        draggable
+                                                        onDragStart={(e) => {
+                                                            e.dataTransfer.effectAllowed = "move";
+                                                            e.dataTransfer.setData("text/plain", f.id);
+                                                            setDraggedId(f.id);
+                                                        }}
+                                                        onDragEnd={() => {
+                                                            setDraggedId(null);
+                                                            setDropTargetId(null);
+                                                        }}
+                                                    >
+                                                        {f.title}
+                                                    </span>
                                                 </Link>
                                             ) : (
                                                 <Link
@@ -288,7 +382,21 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
                                                     className="text-blue-600 hover:underline flex items-center gap-1 min-w-0"
                                                 >
                                                     <span className="flex-shrink-0">{fileIcon(f.mimeType)}</span>
-                                                    <span className="truncate">{f.title}</span>
+                                                    <span
+                                                        className="truncate cursor-move"
+                                                        draggable
+                                                        onDragStart={(e) => {
+                                                            e.dataTransfer.effectAllowed = "move";
+                                                            e.dataTransfer.setData("text/plain", f.id);
+                                                            setDraggedId(f.id);
+                                                        }}
+                                                        onDragEnd={() => {
+                                                            setDraggedId(null);
+                                                            setDropTargetId(null);
+                                                        }}
+                                                    >
+                                                        {f.title}
+                                                    </span>
                                                 </Link>
                                             )}
                                         </div>
