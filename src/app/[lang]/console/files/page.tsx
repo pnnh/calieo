@@ -88,6 +88,14 @@ export default async function FilesListPage({ params, searchParams }: Props) {
         directory: t(l, "directory"),
         filePublished: t(l, "filePublished"),
         fileDraft: t(l, "fileDraft"),
+        fileTitle: t(l, "fileTitle"),
+        size: t(l, "size"),
+        fileStatus: t(l, "fileStatus"),
+        updated: t(l, "updated"),
+        deleteSelected: t(l, "deleteSelected"),
+        deleteSelectedConfirm: t(l, "deleteSelectedConfirm"),
+        deleteDirectoryHasChildren: t(l, "deleteDirectoryHasChildren"),
+        noFilesYet: t(l, "noFilesYet"),
     };
 
     const isEmpty = sorted.length === 0;
@@ -141,19 +149,7 @@ export default async function FilesListPage({ params, searchParams }: Props) {
                 {isEmpty ? (
                     <p className="text-gray-500">{t(l, "noFilesYet")}</p>
                 ) : (
-                    <div className="border border-gray-200 rounded-lg overflow-hidden">
-                        <table className="w-full text-sm">
-                            <thead className="bg-gray-50 text-left">
-                                <tr>
-                                    <th className="px-4 py-3 font-medium text-gray-700">{t(l, "fileTitle")}</th>
-                                    <th className="px-4 py-3 font-medium text-gray-700">Size</th>
-                                    <th className="px-4 py-3 font-medium text-gray-700">{t(l, "fileStatus")}</th>
-                                    <th className="px-4 py-3 font-medium text-gray-700">{t(l, "updated")}</th>
-                                </tr>
-                            </thead>
-                            <FilesTreeTable lang={lang} initialRows={treeRows} labels={treeLabels} />
-                        </table>
-                    </div>
+                    <FilesTreeTable lang={lang} initialRows={treeRows} labels={treeLabels} />
                 )}
             </main>
             <SiteFooter lang={l} />

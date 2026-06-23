@@ -191,6 +191,7 @@ export default async function FileEditorPage({ params, searchParams }: Props) {
                     labels={{
                         deleteFile: t(l, "deleteFile"),
                         deleteFileConfirm: t(l, "deleteFileConfirm"),
+                        deleteDirectoryHasChildren: t(l, "deleteDirectoryHasChildren"),
                     }}
                 />
             </main>

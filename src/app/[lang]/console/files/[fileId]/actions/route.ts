@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/db/index";
 import { files, channelFiles } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, count } from "drizzle-orm";
 import { getStorage } from "@/lib/storage";
 
 export const runtime = "nodejs";
@@ -27,6 +27,23 @@ export async function DELETE(_req: NextRequest, { params }: Props) {
 
     if (!file) {
         return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    if (file.mimeType === "directory") {
+        const [{ childCount }] = await db
+            .select({ childCount: count() })
+            .from(files)
+            .where(and(eq(files.parentId, fileId), eq(files.userId, user.id)));
+
+        if (childCount > 0) {
+            return NextResponse.json(
+                { error: "Cannot delete: this directory has children. Delete them first." },
+                { status: 409 },
+            );
+        }
+
+        await db.delete(files).where(and(eq(files.id, fileId), eq(files.userId, user.id)));
+        return new NextResponse(null, { status: 204 });
     }
 
     const storage = getStorage();
