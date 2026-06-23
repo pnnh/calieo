@@ -91,5 +91,13 @@
     "devSignOutCurrentUser": "Signed in as:",
     "devSignOutNotLoggedIn": "You are not signed in.",
     "devSignOutGoToSignIn": "Go to Sign In",
-    "devSignedOutMessage": "You have been signed out."
+    "devSignedOutMessage": "You have been signed out.",
+    "syncDirectory": "Sync Directory",
+    "syncHint": "Click to select a folder, or drag and drop a folder here",
+    "selectFolder": "Select Folder",
+    "startSync": "Start Sync",
+    "syncing": "Syncing...",
+    "syncName": "Name",
+    "syncSize": "Size",
+    "syncFilterNote": "Hidden files and files larger than 5 MB are excluded."
 }

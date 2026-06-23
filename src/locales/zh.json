@@ -91,5 +91,13 @@
     "devSignOutCurrentUser": "当前账号：",
     "devSignOutNotLoggedIn": "当前未登录。",
     "devSignOutGoToSignIn": "前往登录页面",
-    "devSignedOutMessage": "已成功注销。"
+    "devSignedOutMessage": "已成功注销。",
+    "syncDirectory": "同步目录",
+    "syncHint": "点击选择文件夹，或将文件夹拖放至此处",
+    "selectFolder": "选择文件夹",
+    "startSync": "开始同步",
+    "syncing": "同步中…",
+    "syncName": "名称",
+    "syncSize": "大小",
+    "syncFilterNote": "隐藏文件及大于 5 MB 的文件将被自动过滤。"
 }

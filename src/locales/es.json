@@ -91,5 +91,13 @@
     "devSignOutCurrentUser": "Cuenta actual:",
     "devSignOutNotLoggedIn": "No has iniciado sesión.",
     "devSignOutGoToSignIn": "Ir a inicio de sesión",
-    "devSignedOutMessage": "La sesión se ha cerrado correctamente."
+    "devSignedOutMessage": "La sesión se ha cerrado correctamente.",
+    "syncDirectory": "Sincronizar directorio",
+    "syncHint": "Haga clic para seleccionar una carpeta o arrástrela aquí",
+    "selectFolder": "Seleccionar carpeta",
+    "startSync": "Iniciar sincronización",
+    "syncing": "Sincronizando…",
+    "syncName": "Nombre",
+    "syncSize": "Tamaño",
+    "syncFilterNote": "Se excluyen los archivos ocultos y los archivos mayores de 5 MB."
 }

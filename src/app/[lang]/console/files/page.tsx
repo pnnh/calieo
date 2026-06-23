@@ -77,6 +77,10 @@ export default async function FilesListPage({ params, searchParams }: Props) {
         ? `/${l}/console/files/new?parent=${parentId}`
         : `/${l}/console/files/new`;
 
+    const syncHref = parentId
+        ? `/${l}/console/sync?parent=${parentId}`
+        : `/${l}/console/sync`;
+
     const isEmpty = sorted.length === 0;
 
     return (
@@ -88,6 +92,12 @@ export default async function FilesListPage({ params, searchParams }: Props) {
                     <h1 className="text-2xl font-bold text-gray-900">{t(l, "manageFiles")}</h1>
                     <div className="flex gap-2">
                         <MkdirButton lang={lang} parentId={parentId} labels={mkdirLabels} />
+                        <Link
+                            href={syncHref}
+                            className="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50"
+                        >
+                            {t(l, "syncDirectory")}
+                        </Link>
                         <Link
                             href={uploadHref}
                             className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"

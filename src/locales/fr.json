@@ -91,5 +91,13 @@
     "devSignOutCurrentUser": "Compte actuel :",
     "devSignOutNotLoggedIn": "Vous n'êtes pas connecté.",
     "devSignOutGoToSignIn": "Aller à la connexion",
-    "devSignedOutMessage": "Vous avez été déconnecté."
+    "devSignedOutMessage": "Vous avez été déconnecté.",
+    "syncDirectory": "Synchroniser le dossier",
+    "syncHint": "Cliquez pour sélectionner un dossier, ou déposez-en un ici",
+    "selectFolder": "Sélectionner un dossier",
+    "startSync": "Démarrer la synchronisation",
+    "syncing": "Synchronisation en cours…",
+    "syncName": "Nom",
+    "syncSize": "Taille",
+    "syncFilterNote": "Les fichiers cachés et les fichiers de plus de 5 Mo sont exclus."
 }

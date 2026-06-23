@@ -91,5 +91,13 @@
     "devSignOutCurrentUser": "目前帳號：",
     "devSignOutNotLoggedIn": "目前未登入。",
     "devSignOutGoToSignIn": "前往登入頁面",
-    "devSignedOutMessage": "已成功登出。"
+    "devSignedOutMessage": "已成功登出。",
+    "syncDirectory": "同步目錄",
+    "syncHint": "點擊選取資料夾，或將資料夾拖放至此處",
+    "selectFolder": "選取資料夾",
+    "startSync": "開始同步",
+    "syncing": "同步中…",
+    "syncName": "名稱",
+    "syncSize": "大小",
+    "syncFilterNote": "隱藏檔案及大於 5 MB 的檔案將被自動過濾。"
 }

@@ -91,5 +91,13 @@
     "devSignOutCurrentUser": "Aktuelles Konto:",
     "devSignOutNotLoggedIn": "Sie sind nicht angemeldet.",
     "devSignOutGoToSignIn": "Zur Anmeldung",
-    "devSignedOutMessage": "Sie wurden erfolgreich abgemeldet."
+    "devSignedOutMessage": "Sie wurden erfolgreich abgemeldet.",
+    "syncDirectory": "Verzeichnis synchronisieren",
+    "syncHint": "Klicken Sie, um einen Ordner auszuwählen, oder ziehen Sie einen Ordner hierher",
+    "selectFolder": "Ordner auswählen",
+    "startSync": "Synchronisierung starten",
+    "syncing": "Synchronisierung läuft…",
+    "syncName": "Name",
+    "syncSize": "Größe",
+    "syncFilterNote": "Versteckte Dateien und Dateien größer als 5 MB werden ausgeschlossen."
 }
