@@ -9,6 +9,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { t } from "@/lib/i18n";
 import Link from "next/link";
+import { fileIcon } from "@/lib/fileIcon";
 
 export const dynamic = "force-dynamic";
 
@@ -99,8 +100,9 @@ export default async function ChannelFilesPage({ params }: Props) {
                                         <td className="px-4 py-3">
                                             <Link
                                                 href={`/${l}/console/files/${f.id}`}
-                                                className="text-blue-600 hover:underline"
+                                                className="text-blue-600 hover:underline flex items-center gap-1"
                                             >
+                                                <span>{fileIcon(f.mimeType)}</span>
                                                 {f.title}
                                             </Link>
                                         </td>

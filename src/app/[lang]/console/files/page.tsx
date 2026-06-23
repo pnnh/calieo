@@ -8,6 +8,7 @@ import { eq, desc, and, isNull } from "drizzle-orm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MkdirButton from "@/components/MkdirButton";
+import FilesTreeTable from "@/components/FilesTreeTable";
 import { t } from "@/lib/i18n";
 import Link from "next/link";
 
@@ -56,13 +57,6 @@ export default async function FilesListPage({ params, searchParams }: Props) {
     const nonDirs = userFiles.filter((f) => f.mimeType !== "directory");
     const sorted = [...dirs, ...nonDirs];
 
-    function formatSize(bytes: number) {
-        if (bytes === 0) return "—";
-        if (bytes < 1024) return `${bytes} B`;
-        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-    }
-
     const mkdirLabels = {
         newDirectory: t(l, "newDirectory"),
         directoryName: t(l, "directoryName"),
@@ -80,6 +74,21 @@ export default async function FilesListPage({ params, searchParams }: Props) {
     const syncHref = parentId
         ? `/${l}/console/sync?parent=${parentId}`
         : `/${l}/console/sync`;
+
+    const treeRows = sorted.map((f) => ({
+        id: f.id,
+        title: f.title,
+        mimeType: f.mimeType,
+        size: f.size,
+        isPublished: f.isPublished,
+        updatedAt: f.updatedAt,
+    }));
+
+    const treeLabels = {
+        directory: t(l, "directory"),
+        filePublished: t(l, "filePublished"),
+        fileDraft: t(l, "fileDraft"),
+    };
 
     const isEmpty = sorted.length === 0;
 
@@ -142,41 +151,7 @@ export default async function FilesListPage({ params, searchParams }: Props) {
                                     <th className="px-4 py-3 font-medium text-gray-700">{t(l, "updated")}</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {sorted.map((f) => {
-                                    const isDir = f.mimeType === "directory";
-                                    return (
-                                        <tr key={f.id} className="hover:bg-gray-50">
-                                            <td className="px-4 py-3">
-                                                {isDir ? (
-                                                    <Link
-                                                        href={`/${l}/console/files?parent=${f.id}`}
-                                                        className="text-blue-600 hover:underline flex items-center gap-1"
-                                                    >
-                                                        <span>📁</span>
-                                                        {f.title}
-                                                    </Link>
-                                                ) : (
-                                                    <Link href={`/${l}/console/files/${f.id}`} className="text-blue-600 hover:underline">
-                                                        {f.title}
-                                                    </Link>
-                                                )}
-                                            </td>
-                                            <td className="px-4 py-3 text-gray-500">{isDir ? "—" : formatSize(f.size)}</td>
-                                            <td className="px-4 py-3 text-gray-500">
-                                                {isDir
-                                                    ? t(l, "directory")
-                                                    : f.isPublished
-                                                        ? t(l, "filePublished")
-                                                        : t(l, "fileDraft")}
-                                            </td>
-                                            <td className="px-4 py-3 text-gray-500">
-                                                {new Date(f.updatedAt).toLocaleDateString()}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
+                            <FilesTreeTable lang={lang} initialRows={treeRows} labels={treeLabels} />
                         </table>
                     </div>
                 )}
