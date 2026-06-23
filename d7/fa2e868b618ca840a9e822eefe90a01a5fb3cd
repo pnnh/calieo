@@ -1,0 +1,28 @@
+src/app/[lang]/console/files/page.tsx
+  s_9c7e468d3c424b::t_d385dda838ba82 11,78-92,154
+src/components/FilesTreeTable.tsx
+  s_9c7e468d3c424b::t_e0f03f15f1d1fe 5,170,172-173
+  s_9c7e468d3c424b::t_5ae74563b811ab 1-4,6-169,171,174-196
+src/lib/fileIcon.ts
+  s_9c7e468d3c424b::t_0f25eabb71377c 1-31
+src/app/[lang]/console/channels/[channelId]/files/page.tsx
+  s_9c7e468d3c424b::t_e0f03f15f1d1fe 12,103,105
+src/app/[lang]/console/files-children/route.ts
+  s_9c7e468d3c424b::t_2c2206ded99193 1-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "d7fa2e868b618ca840a9e822eefe90a01a5fb3cd",
+  "prompts": {},
+  "sessions": {
+    "s_9c7e468d3c424b": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "fc2b73f6-8287-40fd-8abf-c61898ad1ddb",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
