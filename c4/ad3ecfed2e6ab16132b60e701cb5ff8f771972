@@ -1,0 +1,71 @@
+src/locales/zh.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+src/locales/de-DE.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+src/locales/zh-TW.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+src/locales/fr.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+specs/001-multi-file-upload/research.md
+  s_2ffc009f91ea08::t_a6608e0e267eb4 1-40
+src/locales/es.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+specs/001-multi-file-upload/contracts/upload-api.md
+  s_2ffc009f91ea08::t_33116c85ae31f6 1-60
+src/components/FileUploadForm.test.tsx
+  s_2ffc009f91ea08::t_6251af4d0f76c9 8,10-14,17-18,21-22,25-29,34-39,50,52-54,80,85-96,98-103,107,111-136,140-143,148,159,164-167,172,180-280,282-283,286-289,291-292,306
+  s_2ffc009f91ea08::t_57a0b88fbada8c 281
+  s_2ffc009f91ea08::t_8fbc43bee44bf9 284-285
+  s_2ffc009f91ea08::t_7c0ce14b1c7604 290
+  s_2ffc009f91ea08::t_f1db233d56f4ea 293
+src/locales/pt-PT.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+src/app/[lang]/console/files/[fileId]/page.tsx
+  s_2ffc009f91ea08::t_1124e0fc243219 45-49
+specs/001-multi-file-upload/data-model.md
+  s_2ffc009f91ea08::t_3ce5b77b244e82 1-73
+src/app/[lang]/console/upload/route.ts
+  s_2ffc009f91ea08::t_5efa043aafcce7 2,11-41,46,48,52-56,59-62,80-81,88-100,103-137,140,142
+src/locales/en.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+specs/001-multi-file-upload/spec.md
+  s_2ffc009f91ea08::t_790fed0910c809 1,3,5,9,22,26,28,34,39,41,43,45,49-51,56,58,60,62,66-67,73,77,83,87,89,91,96,104,106,112-115
+  s_2ffc009f91ea08::t_61609675144d7f 18,24,32-33,35,74,84,86,97,103,105,110
+  s_2ffc009f91ea08::t_8be19268d82a90 2,4,6-8,10,20-21,23,25,27,29-31,36-38,40,42,44,46-48,53-55,57,59,61,63-65,68-72,78-82,93-95,98-102,107-109
+  s_2ffc009f91ea08::t_c38e6d772669db 11-17,19,52,75-76,85,88,90,92,111
+specs/001-multi-file-upload/plan.md
+  s_2ffc009f91ea08::t_6a3349d0e1214b 2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40-41,50-51,53-55,73-74,76,78,80
+  s_2ffc009f91ea08::t_5ac171fc25a197 1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,42-49,52,56-72,75,77,79
+.specify/feature.json
+  s_2ffc009f91ea08::t_01f62d0db8d0c5 1-3
+src/locales/ja.json
+  s_2ffc009f91ea08::t_15c1ec5e0d9e13 76,78-82
+specs/001-multi-file-upload/quickstart.md
+  s_2ffc009f91ea08::t_8beececcfaea07 1-47
+specs/001-multi-file-upload/checklists/requirements.md
+  s_2ffc009f91ea08::t_01927c0219bd43 1-15,17-29,31-33
+  s_2ffc009f91ea08::t_ab2c32e3574d3e 16
+  s_2ffc009f91ea08::t_3c5d45b4584352 30,34
+specs/001-multi-file-upload/tasks.md
+  s_2ffc009f91ea08::t_576cc10e96a047 27,37-41,55-61,75-78,92-95,105-107
+  s_2ffc009f91ea08::t_c97179dab8f7eb 1-26,28-36,42-54,62-74,79-91,96-104,108-185
+src/components/FileUploadForm.tsx
+  s_2ffc009f91ea08::t_41f09364629d21 5-16,20-29,34,38-43,47,53-54,56-75,82,93-110,132,136,145-148
+  s_2ffc009f91ea08::t_b546cb242b68d0 149-151
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "c4ad3ecfed2e6ab16132b60e701cb5ff8f771972",
+  "prompts": {},
+  "sessions": {
+    "s_2ffc009f91ea08": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "f7d1743c-0fcf-4432-a7c0-f5dc3984ec23",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
