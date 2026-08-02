@@ -42,6 +42,11 @@ export default async function FileEditorPage({ params, searchParams }: Props) {
                             newFile: t(l, "newFile"),
                             fileTooLarge: t(l, "fileTooLarge"),
                             uploadError: t(l, "uploadError"),
+                            maxFilesExceeded: t(l, "maxFilesExceeded"),
+                            batchTooLarge: t(l, "batchTooLarge"),
+                            uploadResultCreated: t(l, "uploadResultCreated"),
+                            uploadResultRenamed: t(l, "uploadResultRenamed"),
+                            uploadResultFailed: t(l, "uploadResultFailed"),
                         }}
                     />
                 </main>

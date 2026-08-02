@@ -423,7 +423,7 @@ export default function FilesTreeTable({ lang, initialRows, labels }: Props) {
                                               : labels.fileDraft}
                                     </td>
                                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
-                                        {new Date(f.updatedAt).toLocaleDateString()}
+                                        {new Date(f.updatedAt).toLocaleDateString(lang)}
                                     </td>
                                     {/* Error cell */}
                                     <td className="px-2 py-3 w-8 text-right">

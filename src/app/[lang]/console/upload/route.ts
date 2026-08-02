@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/db/index";
 import { files, createId } from "@/db/schema";
@@ -7,23 +8,58 @@ import { and, eq, isNull } from "drizzle-orm";
 
 export const runtime = "nodejs";
 
-const MAX_SIZE = 50 * 1024 * 1024; // 50 MB
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB per file
+const MAX_FILES_PER_BATCH = 20;
+const MAX_BATCH_TOTAL_SIZE = 300 * 1024 * 1024; // 300 MB per batch
+
+type BatchUploadResultItem = {
+    originalFilename: string;
+    status: "created" | "renamed" | "failed";
+    fileId?: string;
+    finalFilename?: string;
+    error?: string;
+};
+
+function splitExtension(filename: string): { base: string; ext: string } {
+    const dotIndex = filename.lastIndexOf(".");
+    if (dotIndex <= 0) return { base: filename, ext: "" };
+    return { base: filename.slice(0, dotIndex), ext: filename.slice(dotIndex) };
+}
+
+/** Generates a filename that isn't in `takenNames`, preserving the extension. */
+function resolveUniqueFilename(originalFilename: string, takenNames: Set<string>): string {
+    if (!takenNames.has(originalFilename)) return originalFilename;
+
+    const { base, ext } = splitExtension(originalFilename);
+    let candidate: string;
+    do {
+        const suffix = randomUUID().replace(/-/g, "").slice(0, 8);
+        candidate = `${base}-${suffix}${ext}`;
+    } while (takenNames.has(candidate));
+
+    return candidate;
+}
 
 export async function POST(req: NextRequest) {
     const user = await getCurrentUser();
     const formData = await req.formData();
-    const file = formData.get("file") as File | null;
+    const fileEntries = formData.getAll("file").filter((entry): entry is File => entry instanceof File);
 
-    if (!file) {
+    if (fileEntries.length === 0) {
         return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    if (file.size > MAX_SIZE) {
-        return NextResponse.json({ error: "File too large (max 50 MB)" }, { status: 400 });
+    if (fileEntries.length > MAX_FILES_PER_BATCH) {
+        return NextResponse.json(
+            { error: `Too many files (max ${MAX_FILES_PER_BATCH} per batch)` },
+            { status: 400 }
+        );
     }
 
-    const id = createId();
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const totalSize = fileEntries.reduce((sum, file) => sum + file.size, 0);
+    if (totalSize > MAX_BATCH_TOTAL_SIZE) {
+        return NextResponse.json({ error: "Batch total size exceeds 300 MB" }, { status: 400 });
+    }
 
     const storage = getStorage();
     const db = getDb();
@@ -41,43 +77,66 @@ export async function POST(req: NextRequest) {
         }
     }
 
-    const [conflict] = await db
-        .select({ id: files.id })
+    const existingSiblings = await db
+        .select({ filename: files.filename })
         .from(files)
         .where(
             and(
                 eq(files.userId, user.id),
                 parentId ? eq(files.parentId, parentId) : isNull(files.parentId),
-                eq(files.filename, file.name),
             )
-        )
-        .limit(1);
+        );
+    const takenNames = new Set(existingSiblings.map((row) => row.filename));
 
-    if (conflict) {
-        return NextResponse.json({ error: "A file or folder with that name already exists in this folder." }, { status: 409 });
-    }
+    const results: BatchUploadResultItem[] = [];
 
-    await storage.save(id, file.name, buffer);
-
-    try {
-        await db.insert(files).values({
-            id,
-            userId: user.id,
-            parentId,
-            title: file.name.replace(/\.[^.]+$/, ""),
-            filename: file.name,
-            mimeType: file.type || "application/octet-stream",
-            size: file.size,
-        });
-    } catch (error) {
-        await storage.delete(id, file.name).catch(() => undefined);
-
-        if (error instanceof Error && error.message.includes("UNIQUE constraint failed: files.parent_id, files.filename")) {
-            return NextResponse.json({ error: "A file or folder with that name already exists in this folder." }, { status: 409 });
+    for (const file of fileEntries) {
+        if (file.size > MAX_FILE_SIZE) {
+            results.push({
+                originalFilename: file.name,
+                status: "failed",
+                error: "File is too large (max 20 MB).",
+            });
+            continue;
         }
 
-        throw error;
+        const finalFilename = resolveUniqueFilename(file.name, takenNames);
+        const id = createId();
+        const buffer = Buffer.from(await file.arrayBuffer());
+
+        try {
+            await storage.save(id, finalFilename, buffer);
+
+            await db.insert(files).values({
+                id,
+                userId: user.id,
+                parentId,
+                title: finalFilename.replace(/\.[^.]+$/, ""),
+                filename: finalFilename,
+                mimeType: file.type || "application/octet-stream",
+                size: file.size,
+            });
+
+            takenNames.add(finalFilename);
+
+            const result: BatchUploadResultItem = {
+                originalFilename: file.name,
+                status: finalFilename === file.name ? "created" : "renamed",
+                fileId: id,
+            };
+            if (finalFilename !== file.name) result.finalFilename = finalFilename;
+            results.push(result);
+        } catch (error) {
+            await storage.delete(id, finalFilename).catch(() => undefined);
+
+            const message =
+                error instanceof Error && error.message.includes("UNIQUE constraint failed: files.parent_id, files.filename")
+                    ? "A file or folder with that name already exists in this folder."
+                    : "Upload failed. Please try again.";
+            results.push({ originalFilename: file.name, status: "failed", error: message });
+        }
     }
 
-    return NextResponse.json({ id }, { status: 201 });
+    return NextResponse.json({ results }, { status: 201 });
 }
+
