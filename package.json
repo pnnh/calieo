@@ -6,9 +6,6 @@
     "dev": "next dev -p 7300 --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "adapter": "next build && opennextjs-cloudflare build",
-    "preview": "opennextjs-cloudflare preview",
     "db:migrate": "tsx src/db/migrate.ts"
   },
   "dependencies": {
