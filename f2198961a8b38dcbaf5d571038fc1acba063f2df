@@ -1,0 +1,113 @@
+src/locales/zh-TW.json
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+  s_d678523ee2e61b::t_2afe5f982a0a6a 74,84-94
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+src/app/[lang]/console/signout/page.tsx
+  s_d678523ee2e61b::t_57c58b9bfc23b7 1-110
+src/db/schema.ts
+  s_d678523ee2e61b::t_a921bbe87fb283 50
+  s_d678523ee2e61b::t_e175aaa07e89ce 63-69
+  s_d678523ee2e61b::t_0f7f18ac50675a 82,85,90-93,95,98-100
+src/locales/de-DE.json
+  s_d678523ee2e61b::t_d3fe8631f9d2cc 74,84-94
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+migrations/0001_channel_files_table.sql
+  s_d678523ee2e61b::t_6eaedf8152765c 1-33
+src/locales/ja.json
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+  s_d678523ee2e61b::t_d3fe8631f9d2cc 74,84-94
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+src/app/[lang]/console/files/[fileId]/actions/route.ts
+  s_d678523ee2e61b::t_f545d39e2b446b 71-79
+  s_d678523ee2e61b::t_e54355b1b7997f 4
+src/app/[lang]/console/mkdir/route.ts
+  s_d678523ee2e61b::t_89405cdd6a3bc2 1-56
+src/app/[lang]/console/files/page.tsx
+  s_d678523ee2e61b::t_175f2b9491a852 7,10,16-19,21,26-28,32-35,37-40,42-47,51,54-58,60,66-81,86-87,89-97,99-122,136-168
+  s_d678523ee2e61b::t_30ea2d6f01525f 36,41
+src/db/index.ts
+  s_d678523ee2e61b::t_c03f2897f2cb55 39-41
+src/lib/db.ts
+  s_d678523ee2e61b::t_491167eb45a42c 2-4
+  s_d678523ee2e61b::t_a997afb207b158 98-124
+src/app/[lang]/page.tsx
+  s_d678523ee2e61b::t_b736bff668ef73 51-52,66-67
+  s_d678523ee2e61b::t_b905993c966005 9
+src/app/[lang]/files/[id]/page.tsx
+  s_d678523ee2e61b::t_ea11498990ff64 26-27
+  s_d678523ee2e61b::t_b5983543b6c0c9 5
+migrations/0002_files_parent_id.sql
+  s_d678523ee2e61b::t_8bb7c113823986 1
+migrations/meta/_journal.json
+  s_d678523ee2e61b::t_c03f2897f2cb55 11-24
+src/locales/pt-PT.json
+  s_d678523ee2e61b::t_d3fe8631f9d2cc 74,84-94
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+src/app/[lang]/console/signin/page.tsx
+  s_d678523ee2e61b::t_4cab42ba40f0df 1-112
+src/lib/auth.ts
+  s_d678523ee2e61b::t_cd66a8e427cbe7 135-138,141-143
+  s_d678523ee2e61b::t_ec26a48789893f 151-162
+src/locales/es.json
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+  s_d678523ee2e61b::t_d3fe8631f9d2cc 74,84-94
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+src/locales/en.json
+  s_d678523ee2e61b::t_2afe5f982a0a6a 74,84-94
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+src/components/FileUploadForm.tsx
+  s_d678523ee2e61b::t_9633353ecb4f11 7,11,37
+src/components/MkdirButton.tsx
+  s_d678523ee2e61b::t_e6d1379837ade0 1-111
+next.config.ts
+  h_de2c1989c48e7b 9
+src/app/[lang]/channels/[id]/page.tsx
+  s_d678523ee2e61b::t_80426198c91c07 5
+  s_d678523ee2e61b::t_04ec19b29c038d 35-37,43-44
+  s_d678523ee2e61b::t_df6eb762bd74a3 78
+src/app/[lang]/console/files/[fileId]/page.tsx
+  s_d678523ee2e61b::t_e22d9068be81cf 155
+  s_d678523ee2e61b::t_f6791a5519d087 78,104,107-115
+  s_d678523ee2e61b::t_42ffdd58b20ff2 6
+  s_d678523ee2e61b::t_b7f08603d32ff1 61-68
+  s_d678523ee2e61b::t_e1bf74c6444706 16-19,21,31-32,40
+src/app/[lang]/console/channels/[channelId]/actions/route.ts
+  s_d678523ee2e61b::t_f513fe9b7ab068 33-35
+  s_d678523ee2e61b::t_5ad2b0f296afa6 4
+src/app/[lang]/console/page.tsx
+  s_d678523ee2e61b::t_d0cad89acceec1 40-45
+src/app/[lang]/console/upload/route.ts
+  s_d678523ee2e61b::t_b841d83f058395 31-32,36
+src/locales/fr.json
+  s_d678523ee2e61b::t_d3fe8631f9d2cc 74,84-94
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+src/locales/zh.json
+  s_d678523ee2e61b::t_2afe5f982a0a6a 74,84-94
+  s_d678523ee2e61b::t_bd8fe1b75f4e4d 76-83
+  s_d678523ee2e61b::t_ce2f8ce248dff6 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "f2198961a8b38dcbaf5d571038fc1acba063f2df",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d678523ee2e61b": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "8d7518de-134c-49fa-a20f-342150d2725b",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}

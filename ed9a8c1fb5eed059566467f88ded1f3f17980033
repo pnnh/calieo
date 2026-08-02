@@ -1,0 +1,51 @@
+src/locales/es.json
+  s_9c7e468d3c424b::t_871310c8861965 94-102
+src/locales/zh.json
+  s_9c7e468d3c424b::t_871310c8861965 94-102
+src/locales/zh-TW.json
+  h_de2c1989c48e7b 94-102
+src/locales/de-DE.json
+  h_de2c1989c48e7b 94-102
+src/app/[lang]/console/files/page.tsx
+  s_9c7e468d3c424b::t_a32b009f9a2ebc 96-100
+  s_9c7e468d3c424b::t_3056d055478df5 80-83
+src/locales/pt-PT.json
+  h_de2c1989c48e7b 94-102
+src/locales/ja.json
+  s_9c7e468d3c424b::t_871310c8861965 94-102
+src/locales/fr.json
+  s_9c7e468d3c424b::t_871310c8861965 94-102
+src/app/[lang]/console/lookup/route.ts
+  s_9c7e468d3c424b::t_8ba57cde697600 1-42
+src/app/[lang]/console/channels/page.tsx
+  s_9c7e468d3c424b::t_7acbb7405cc333 60-70
+src/app/[lang]/console/channels/[channelId]/files/page.tsx
+  s_9c7e468d3c424b::t_cdf743abd6e86a 1-124
+src/locales/en.json
+  s_9c7e468d3c424b::t_871310c8861965 94-102
+src/components/SyncDirectoryClient.tsx
+  s_9c7e468d3c424b::t_d3c302457249a9 1-675
+src/app/[lang]/console/sync/page.tsx
+  s_9c7e468d3c424b::t_56657d9dc3b36d 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "ed9a8c1fb5eed059566467f88ded1f3f17980033",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_9c7e468d3c424b": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "fc2b73f6-8287-40fd-8abf-c61898ad1ddb",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+package.json
+  s_5a9e43fc77eac2::t_49a33c93c93c22 37
+  s_5a9e43fc77eac2::t_b3f86afd2c21fa 12-13
+calieo.code-workspace
+  h_de2c1989c48e7b 20-21
+playwright.config.ts
+  s_5a9e43fc77eac2::t_e951a4b6465b7e 1-21
+.gitignore
+  h_de2c1989c48e7b 50-51
+e2e/home.spec.ts
+  s_5a9e43fc77eac2::t_5fccc2411565a1 23-24,194-195
+  s_5a9e43fc77eac2::t_430a5b923a0b44 157-158,161-162
+  s_5a9e43fc77eac2::t_93037f9dcbf4b2 160
+  s_5a9e43fc77eac2::t_5a0bb83d0369f6 1-22,25-156,159,163-193,196-197
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "542bd7f2d436ac59b9c36bd2606efe75de59df09",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_5a9e43fc77eac2": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "36e091ba-f1c6-4213-a2c7-f89a38044a17",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}

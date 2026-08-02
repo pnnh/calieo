@@ -1,0 +1,72 @@
+src/app/[lang]/console/channels/[channelId]/page.tsx
+  s_5a9e43fc77eac2::t_74245c29897c12 87,138
+src/app/[lang]/console/layout.tsx
+  s_5a9e43fc77eac2::t_ac61521a9c07b5 1-51
+package.json
+  s_5a9e43fc77eac2::t_fbd99221375eac 41,48
+  s_5a9e43fc77eac2::t_f13a9b894fdfa4 9-11
+src/lib/auth.ts
+  s_5a9e43fc77eac2::t_ec6f0f1b9c1474 103-116
+src/lib/storage.test.ts
+  s_5a9e43fc77eac2::t_f0e416bf7cef70 1-106
+src/app/[lang]/console/files/[fileId]/actions/route.ts
+  s_5a9e43fc77eac2::t_9a85a7f505fdef 1-83
+src/app/[lang]/console/profile/page.tsx
+  s_5a9e43fc77eac2::t_74245c29897c12 39
+src/app/[lang]/console/channels/[channelId]/actions/route.ts
+  s_5a9e43fc77eac2::t_2f4e3853895ea3 1-43
+src/app/[lang]/console/files/[fileId]/page.tsx
+  s_5a9e43fc77eac2::t_74245c29897c12 164
+src/app/[lang]/console/profile/avatar/route.ts
+  s_5a9e43fc77eac2::t_606cca6b81141c 1-34
+src/components/ChannelAvatarUpload.tsx
+  s_5a9e43fc77eac2::t_2e09ee9a3d8c92 6,12,25
+src/components/ChannelDeleteSection.tsx
+  s_5a9e43fc77eac2::t_2e09ee9a3d8c92 6,16,22
+src/lib/jwt.test.ts
+  s_5a9e43fc77eac2::t_dc8e3e9c1abd95 1-86
+src/app/[lang]/console/profile/settings/route.ts
+  s_5a9e43fc77eac2::t_b13cba1f38dc46 1-30
+src/app/[lang]/console/channels/[channelId]/avatar/route.ts
+  s_5a9e43fc77eac2::t_327b70b83114dc 1-42
+src/components/FileUploadForm.tsx
+  s_5a9e43fc77eac2::t_2e09ee9a3d8c92 37
+src/components/UserProfileClient.tsx
+  s_5a9e43fc77eac2::t_2e09ee9a3d8c92 6,25,39,53
+src/app/[lang]/console/users/page.tsx
+  s_5a9e43fc77eac2::t_9d01fd05647d75 1-123
+src/app/[lang]/console/upload/route.ts
+  s_5a9e43fc77eac2::t_3f28304776538c 1-41
+src/components/FileDeleteSection.tsx
+  s_5a9e43fc77eac2::t_2e09ee9a3d8c92 6,15,18
+vitest.config.ts
+  s_5a9e43fc77eac2::t_766339f692f931 1-18
+.gitignore
+  h_de2c1989c48e7b 47-49
+src/lib/i18n.test.ts
+  s_5a9e43fc77eac2::t_a4d77acf333e95 1-43
+src/lib/language.test.ts
+  s_5a9e43fc77eac2::t_c2745600405c3d 1-45,51-58,62,64-87
+  s_5a9e43fc77eac2::t_c3694818b9d826 46-50,59-61,63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "c16e7ab932e87940df1aabd823a130d781fbbb14",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_5a9e43fc77eac2": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "36e091ba-f1c6-4213-a2c7-f89a38044a17",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}

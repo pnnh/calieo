@@ -1,0 +1,30 @@
+src/app/[lang]/console/upload/route.ts
+  h_de2c1989c48e7b 6,32-42,44-62,70-80
+src/app/[lang]/console/mkdir/route.ts
+  h_de2c1989c48e7b 5,39-54,57,69-77
+migrations/0003_files_parent_filename_unique.sql
+  h_de2c1989c48e7b 1
+src/db/schema.ts
+  s_d66652579e2aaa::t_9b68b9e4a040d9 2,61-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "72f5dae2fa8c03faedca2bda78665e83296e8f5f",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d66652579e2aaa": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "a1b0b6e5-dcd6-4884-bcfa-3c6196b09494",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}

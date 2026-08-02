@@ -1,0 +1,53 @@
+src/app/[lang]/console/files/[fileId]/page.tsx
+  s_7b7528f5285006::t_2a0e3187bec151 194
+src/locales/fr.json
+  s_7b7528f5285006::t_41511268f6775b 51
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+src/app/[lang]/console/files/[fileId]/actions/route.ts
+  s_7b7528f5285006::t_6b2afec99b20b3 32-48
+  s_7b7528f5285006::t_24978fdbf6916a 5
+src/app/[lang]/console/files/page.tsx
+  s_7b7528f5285006::t_bbc1f51f6cc30e 91-98
+  s_7b7528f5285006::t_528e80b5369a77 152
+src/components/FileDeleteSection.tsx
+  s_7b7528f5285006::t_51092894249984 12,17-18,21,25-27,34
+src/locales/zh-TW.json
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+  s_7b7528f5285006::t_41511268f6775b 51
+src/locales/ja.json
+  s_7b7528f5285006::t_41511268f6775b 51
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+src/locales/es.json
+  s_7b7528f5285006::t_327052add7a35d 54
+  s_7b7528f5285006::t_19317bb5f91ae1 51-53
+src/locales/en.json
+  s_7b7528f5285006::t_41511268f6775b 51
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+src/locales/pt-PT.json
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+  s_7b7528f5285006::t_41511268f6775b 51
+src/components/FilesTreeTable.tsx
+  s_7b7528f5285006::t_bac8fcac523f9a 3,22-29,54,58,61,73-76,79-80,83-110,139-169,171-334,336-343
+src/locales/zh.json
+  s_7b7528f5285006::t_41511268f6775b 51
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+src/locales/de-DE.json
+  s_7b7528f5285006::t_19317bb5f91ae1 52-54
+  s_7b7528f5285006::t_41511268f6775b 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "70f8a2054718aef33be75fc18ac6e16b95dccdef",
+  "prompts": {},
+  "sessions": {
+    "s_7b7528f5285006": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "b3da8f58-d872-4604-81d1-37d51e3f4226",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}

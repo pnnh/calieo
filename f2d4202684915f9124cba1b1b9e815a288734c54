@@ -1,0 +1,56 @@
+src/components/FilesTreeTable.tsx
+  h_de2c1989c48e7b 4,25,84,86-88,230,236-239,243-245,265-266,456-470
+src/locales/ja.json
+  h_de2c1989c48e7b 71-72
+src/app/[lang]/console/files/pagination.ts
+  h_de2c1989c48e7b 1-46
+src/locales/en.json
+  h_de2c1989c48e7b 71-72
+src/app/[lang]/console/files/page.tsx
+  h_de2c1989c48e7b 44,50,53,56-70,121,143
+  s_c69e9d21dda635::t_4024d769b4ea4a 14-15,160,163,209,211-219,221-266
+  s_c69e9d21dda635::t_f14c44da1c6a14 21,29,31-33,95-106,131,133,161-162,164-180,204,208,210,220,267
+src/app/[lang]/console/files/FilesPageSizeSelect.test.tsx
+  h_de2c1989c48e7b 1-39
+src/locales/pt-PT.json
+  h_de2c1989c48e7b 71-72
+src/locales/zh-TW.json
+  h_de2c1989c48e7b 71-72
+src/locales/zh.json
+  s_c69e9d21dda635::t_82f5937bf40c6a 71-72
+src/locales/es.json
+  s_c69e9d21dda635::t_37314d3e91b020 71-72
+src/app/[lang]/console/files/FilesPageSizeSelect.tsx
+  s_c69e9d21dda635::t_2a53f664a15e7e 1-45
+src/app/[lang]/console/files/pagination.test.ts
+  h_de2c1989c48e7b 1-26
+src/app/[lang]/console/files/[fileId]/page.tsx
+  h_de2c1989c48e7b 60,63-65,72-74,91-92,98,107-111,114,118,161-162,186-190
+src/locales/fr.json
+  h_de2c1989c48e7b 71-72
+src/components/FilesTreeTable.test.tsx
+  h_de2c1989c48e7b 18,104-133
+src/locales/de-DE.json
+  h_de2c1989c48e7b 71-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "f2d4202684915f9124cba1b1b9e815a288734c54",
+  "prompts": {},
+  "humans": {
+    "h_de2c1989c48e7b": {
+      "author": "xspanni <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_c69e9d21dda635": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "1ae7bd51-6e61-4b0c-8fe8-e6e2b426350a",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
