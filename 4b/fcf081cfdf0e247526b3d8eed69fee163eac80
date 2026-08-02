@@ -1,0 +1,19 @@
+.github/copilot-instructions.md
+  s_af8be1a7af796c::t_660bf58ef4a613 1,3-7,9-10,12-15,17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "4bfcf081cfdf0e247526b3d8eed69fee163eac80",
+  "prompts": {},
+  "sessions": {
+    "s_af8be1a7af796c": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "d8c5bb18-2493-4dee-a19a-9a6d299fae9c",
+        "model": "unknown"
+      },
+      "human_author": "xspanni <xspanni@gmail.com>"
+    }
+  }
+}
