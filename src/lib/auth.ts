@@ -100,7 +100,20 @@ async function getAccessUserBase(): Promise<{ id: string; name: string; email: s
   const headerMap = await headers();
   const jwtToken = headerMap.get('cf-access-jwt-assertion');
   const directEmail = headerMap.get('cf-access-authenticated-user-email');
-  const payload = jwtToken ? parseJwtPayload(jwtToken) : null;
+  let payload = jwtToken ? parseJwtPayload(jwtToken) : null;
+
+  // Fallback: API routes that are not covered by the Zero Trust policy do not
+  // receive the injected cf-access-* headers.  However, the browser still sends
+  // the CF_Authorization cookie (set by Cloudflare Access for this domain after
+  // a successful login), which contains the same JWT.  Parse it so that
+  // authenticated users can call API endpoints without being rejected.
+  if (!payload && !directEmail) {
+    const cookieStore = await cookies();
+    const cfAuthToken = cookieStore.get('CF_Authorization')?.value;
+    if (cfAuthToken) {
+      payload = parseJwtPayload(cfAuthToken);
+    }
+  }
 
   const id = payload?.sub ?? directEmail ?? payload?.email;
   if (!id) return null;
@@ -119,13 +132,31 @@ export async function getCurrentUser(): Promise<CurrentUser> {
 
   const cookieStore = await cookies();
   const userId = cookieStore.get('user_id')?.value;
+  const devEmail =
+    process.env.NODE_ENV !== 'production'
+      ? (cookieStore.get('dev_email')?.value ?? null)
+      : null;
   const base = userId
     ? { id: userId, name: userId, email: `${userId}@local` }
-    : (process.env.NODE_ENV !== 'production' ? DEV_USER_BASE : null);
+    : devEmail
+      ? { id: devEmail, name: devEmail, email: devEmail }
+      : (process.env.NODE_ENV !== 'production' ? DEV_USER_BASE : null);
 
   if (!base) {
     throw new Error('Unauthenticated request: missing Cloudflare Access identity and user_id cookie.');
   }
 
   return ensureUserRow(base.id, base.name, base.email);
+}
+
+/**
+ * Returns the dev_email cookie value when running in development mode,
+ * or null when there is no explicit dev session (or in production).
+ * Use this to distinguish "user explicitly logged in via dev sign-in form"
+ * from "using the default DEV_USER_BASE fallback".
+ */
+export async function getDevEmail(): Promise<string | null> {
+  if (process.env.NODE_ENV === 'production') return null;
+  const cookieStore = await cookies();
+  return cookieStore.get('dev_email')?.value ?? null;
 }

@@ -17,7 +17,8 @@
 			"mkdir": true,
 			"tar": true,
 			"sqlite3": true,
-			"pnpm": true
+			"pnpm": true,
+			"node_modules/.bin/playwright": true
 		},
 		"search.useIgnoreFiles": false,
 		"search.exclude": {

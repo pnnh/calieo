@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { isValidLang } from "@/lib/language";
 import type { LangKey } from "@/lib/language";
 import { getDb } from "@/db/index";
-import { channels, files } from "@/db/schema";
+import { channels, files, channelFiles } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -32,13 +32,16 @@ export default async function ChannelDetailPage({ params, searchParams }: Props)
     const page = Math.max(1, parseInt(sp.page ?? "1", 10) || 1);
     const offset = (page - 1) * PAGE_SIZE;
 
-    const allFiles = await db.select({ id: files.id }).from(files).where(and(eq(files.channelId, id), eq(files.isPublished, true)));
+    const allFiles = await db.select({ id: files.id }).from(files)
+        .innerJoin(channelFiles, eq(channelFiles.fileId, files.id))
+        .where(and(eq(channelFiles.channelId, id), eq(files.isPublished, true)));
     const total = allFiles.length;
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const currentPage = Math.min(page, totalPages);
 
     const pageFiles = await db.select().from(files)
-        .where(and(eq(files.channelId, id), eq(files.isPublished, true)))
+        .innerJoin(channelFiles, eq(channelFiles.fileId, files.id))
+        .where(and(eq(channelFiles.channelId, id), eq(files.isPublished, true)))
         .orderBy(desc(files.updatedAt)).limit(PAGE_SIZE).offset(offset);
 
     function formatSize(bytes: number) {
@@ -72,7 +75,7 @@ export default async function ChannelDetailPage({ params, searchParams }: Props)
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                {pageFiles.map((f) => (
+                                {pageFiles.map(({ files: f }) => (
                                     <tr key={f.id} className="hover:bg-gray-50">
                                         <td className="px-4 py-3">
                                             <Link href={`/${l}/files/${f.id}`} className="text-blue-600 hover:underline">{f.title}</Link>

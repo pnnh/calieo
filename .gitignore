@@ -45,4 +45,8 @@ next-env.d.ts
 
 .data/
 
+.codebase-memory/
+.codebase/
+
+test-results/
 graphify-out/

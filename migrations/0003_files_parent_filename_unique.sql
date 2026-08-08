@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `files_parent_id_filename_unique` ON `files` (`parent_id`, `filename`);

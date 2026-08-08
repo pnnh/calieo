@@ -57,9 +57,17 @@ export default async function ChannelsListPage({ params }: Props) {
                                 {userChannels.map((ch) => (
                                     <tr key={ch.id} className="hover:bg-gray-50">
                                         <td className="px-4 py-3">
-                                            <Link href={`/${l}/console/channels/${ch.id}`} className="text-blue-600 hover:underline">
-                                                {ch.name}
-                                            </Link>
+                                            <div className="flex items-center gap-3">
+                                                <Link href={`/${l}/console/channels/${ch.id}`} className="text-blue-600 hover:underline">
+                                                    {ch.name}
+                                                </Link>
+                                                <Link
+                                                    href={`/${l}/console/channels/${ch.id}/files`}
+                                                    className="text-xs text-gray-500 hover:text-blue-600 hover:underline"
+                                                >
+                                                    {t(l, "manageChannelFiles")}
+                                                </Link>
+                                            </div>
                                         </td>
                                         <td className="px-4 py-3 text-gray-500">
                                             {ch.isPublic ? t(l, "channelPublic") : t(l, "channelPrivate")}

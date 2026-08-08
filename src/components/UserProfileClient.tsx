@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 
 type Props = {
+    lang: string;
     userId: string;
     name: string;
     email: string;
@@ -21,7 +22,7 @@ type Props = {
     };
 };
 
-export default function UserProfileClient({ userId, name, email, nickname, bio, labels }: Props) {
+export default function UserProfileClient({ lang, userId, name, email, nickname, bio, labels }: Props) {
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const [avatarError, setAvatarError] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -35,7 +36,7 @@ export default function UserProfileClient({ userId, name, email, nickname, bio, 
         try {
             const form = new FormData();
             form.append("file", file);
-            const res = await fetch("/api/user/avatar", { method: "POST", body: form });
+            const res = await fetch(`/${lang}/console/profile/avatar`, { method: "POST", body: form });
             if (res.ok) {
                 setAvatarPreview(URL.createObjectURL(file));
                 setAvatarError(false);
@@ -49,7 +50,7 @@ export default function UserProfileClient({ userId, name, email, nickname, bio, 
         e.preventDefault();
         setSaved(false);
         try {
-            const res = await fetch("/api/user/profile", {
+            const res = await fetch(`/${lang}/console/profile/settings`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ nickname: nicknameVal, bio: bioVal }),

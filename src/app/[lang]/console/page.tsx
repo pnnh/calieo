@@ -37,7 +37,12 @@ export default async function ConsoleDashboard({ params }: Props) {
         <>
             <SiteHeader lang={l} />
             <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(l, "console")}</h1>
+                <div className="flex items-baseline justify-between mb-2">
+                    <h1 className="text-2xl font-bold text-gray-900">{t(l, "console")}</h1>
+                    <Link href={`/${l}/console/users`} className="text-sm text-gray-500 hover:text-blue-600 transition-colors">
+                        {t(l, "manageUsers")}
+                    </Link>
+                </div>
                 <p className="text-gray-500 mb-8">
                     {t(l, "welcomeUser")},{" "}
                     <Link href={`/${l}/console/profile`} className="font-medium text-gray-900 hover:text-blue-600 transition-colors">
