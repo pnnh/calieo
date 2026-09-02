@@ -52,13 +52,12 @@ describe("getTargetLang", () => {
 
     it("resolves a generic 'zh' Accept-Language header to a supported zh variant", () => {
         const result = getTargetLang("zh", defaultLanguage);
-        // accept-language may map "zh" to "zh" or "zh-TW"; either is valid
-        expect(isValidLang(result)).toBe(true);
+        expect(result).toBe("zh");
     });
 
     it("always returns a valid language key", () => {
-        // accept-language may not match generic 'de' to 'de-DE'; whatever it
-        // returns must still be a supported language key.
+        // "de" is not a supported language after the language trim; must fall back
+        // to a valid supported key rather than erroring.
         const result = getTargetLang("de", defaultLanguage);
         expect(isValidLang(result)).toBe(true);
     });
@@ -70,8 +69,8 @@ describe("getTargetLang", () => {
 });
 
 describe("supportedLanguages", () => {
-    it("contains at least 8 entries", () => {
-        expect(supportedLanguages.length).toBeGreaterThanOrEqual(8);
+    it("contains exactly 4 entries", () => {
+        expect(supportedLanguages.length).toBe(4);
     });
 
     it("every entry has a non-empty key and name", () => {

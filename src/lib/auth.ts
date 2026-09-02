@@ -1,9 +1,7 @@
-import { cookies } from 'next/headers';
-import { headers } from 'next/headers';
 import { eq } from 'drizzle-orm';
 import { getDb } from '@/db/index';
 import { users } from '@/db/schema';
-import { parseJwtPayload } from '@/lib/jwt';
+import { getSessionUser } from '@/lib/session';
 
 export interface CurrentUser {
   id: string;
@@ -13,11 +11,28 @@ export interface CurrentUser {
   bio: string | null;
 }
 
-const DEV_USER_BASE = {
-  id: process.env.DEV_USER_ID ?? 'dev-user-001',
-  name: process.env.DEV_USER_NAME ?? 'Dev User',
-  email: process.env.DEV_USER_EMAIL ?? 'dev@local',
-};
+// Only allow same-origin relative paths as a post-signin redirect target, since
+// `return_to` values originate from attacker-influenceable query parameters/form fields.
+export function sanitizeReturnTo(value: string | null | undefined, fallback: string): string {
+  if (!value || !value.startsWith('/') || value.startsWith('//') || value.includes('://')) {
+    return fallback;
+  }
+  return value;
+}
+
+export type SecurityEvent =
+  | 'auth.signin.success'
+  | 'auth.signin.failure'
+  | 'auth.oidc.state_mismatch'
+  | 'auth.oidc.pkce_failure'
+  | 'auth.oidc.token_invalid'
+  | 'auth.session.created'
+  | 'auth.session.revoked';
+
+// Structured log for security-relevant auth events (spec FR-013); not persisted to the DB.
+export function logSecurityEvent(event: SecurityEvent, details: Record<string, unknown> = {}): void {
+  console.log('[security]', event, details);
+}
 
 function serializeCause(cause: unknown): unknown {
   if (cause == null) return cause;
@@ -50,113 +65,53 @@ function toErrorDetails(error: unknown): Record<string, unknown> {
   return { value: String(error) };
 }
 
-async function ensureUserRow(id: string, name: string, email: string): Promise<CurrentUser> {
+// Finds a user by email (spec FR-015: email is the sole matching key for both
+// dev mock login and Calieo login); creates a new row when no match exists.
+// An existing user's `name` is never overwritten by a later login.
+export async function ensureUserRow(email: string, name: string): Promise<CurrentUser> {
   const db = getDb();
+
+  const existing = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  if (existing.length > 0) {
+    const u = existing[0];
+    return { id: u.id, name: u.name, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
+  }
 
   try {
     await db.insert(users)
-      .values({ id, name, email })
+      .values({ name, email })
       .onConflictDoNothing()
       .run();
   } catch (error) {
-    // D1 may throw even with ON CONFLICT DO NOTHING when a UNIQUE constraint
-    // (e.g. email) conflicts with an existing row that has a different primary key.
-    // Log the failure and fall through to the SELECT-based lookup below.
+    // D1 may throw even with ON CONFLICT DO NOTHING under a concurrent insert
+    // racing on the unique email constraint. Log and fall through to SELECT.
     console.warn('[auth.ensureUserRow] insert failed, falling back to SELECT', {
-      user: { id, email },
+      user: { email },
       error: toErrorDetails(error),
     });
   }
 
-  // 1. Try to find the row by the primary key supplied by the auth provider.
-  const rowsById = await db.select().from(users).where(eq(users.id, id)).limit(1);
-  if (rowsById.length > 0) {
-    const u = rowsById[0];
+  const rows = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  if (rows.length > 0) {
+    const u = rows[0];
     return { id: u.id, name: u.name, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
   }
 
-  // 2. The INSERT may have been silently skipped (or failed) because the same email
-  //    already exists under a different id.  Return that existing row instead.
-  const rowsByEmail = await db.select().from(users).where(eq(users.email, email)).limit(1);
-  if (rowsByEmail.length > 0) {
-    const u = rowsByEmail[0];
-    // Guard against legacy rows that have a null/empty name (pre-NOT NULL constraint data).
-    const safeName = u.name || name;
-    if (!u.name) {
-      // Best-effort: back-fill the name so future reads are clean.
-      try {
-        await db.update(users).set({ name: safeName }).where(eq(users.id, u.id)).run();
-      } catch (updateErr) {
-        console.warn('[auth.ensureUserRow] failed to back-fill null name', { id: u.id, error: toErrorDetails(updateErr) });
-      }
-    }
-    return { id: u.id, name: safeName, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
-  }
-
-  throw new Error(`[auth.ensureUserRow] user not found after insert attempt: id=${id}, email=${email}`);
-}
-
-async function getAccessUserBase(): Promise<{ id: string; name: string; email: string } | null> {
-  const headerMap = await headers();
-  const jwtToken = headerMap.get('cf-access-jwt-assertion');
-  const directEmail = headerMap.get('cf-access-authenticated-user-email');
-  let payload = jwtToken ? parseJwtPayload(jwtToken) : null;
-
-  // Fallback: API routes that are not covered by the Zero Trust policy do not
-  // receive the injected cf-access-* headers.  However, the browser still sends
-  // the CF_Authorization cookie (set by Cloudflare Access for this domain after
-  // a successful login), which contains the same JWT.  Parse it so that
-  // authenticated users can call API endpoints without being rejected.
-  if (!payload && !directEmail) {
-    const cookieStore = await cookies();
-    const cfAuthToken = cookieStore.get('CF_Authorization')?.value;
-    if (cfAuthToken) {
-      payload = parseJwtPayload(cfAuthToken);
-    }
-  }
-
-  const id = payload?.sub ?? directEmail ?? payload?.email;
-  if (!id) return null;
-
-  const email = directEmail ?? payload?.email ?? `${id}@access.local`;
-  const name = payload?.name ?? email;
-
-  return { id, name, email };
+  throw new Error(`[auth.ensureUserRow] user not found after insert attempt: email=${email}`);
 }
 
 export async function getCurrentUser(): Promise<CurrentUser> {
-  const accessBase = await getAccessUserBase();
-  if (accessBase) {
-    return ensureUserRow(accessBase.id, accessBase.name, accessBase.email);
+  const session = await getSessionUser();
+  if (!session) {
+    throw new Error('Unauthenticated request: no valid session.');
   }
 
-  const cookieStore = await cookies();
-  const userId = cookieStore.get('user_id')?.value;
-  const devEmail =
-    process.env.NODE_ENV !== 'production'
-      ? (cookieStore.get('dev_email')?.value ?? null)
-      : null;
-  const base = userId
-    ? { id: userId, name: userId, email: `${userId}@local` }
-    : devEmail
-      ? { id: devEmail, name: devEmail, email: devEmail }
-      : (process.env.NODE_ENV !== 'production' ? DEV_USER_BASE : null);
-
-  if (!base) {
-    throw new Error('Unauthenticated request: missing Cloudflare Access identity and user_id cookie.');
+  const db = getDb();
+  const rows = await db.select().from(users).where(eq(users.id, session.userId)).limit(1);
+  const u = rows[0];
+  if (!u) {
+    throw new Error(`Unauthenticated request: session references missing user id=${session.userId}`);
   }
 
-  return ensureUserRow(base.id, base.name, base.email);
-}
-
-/**
- * Returns the dev_email cookie value when running in development mode,
- * or null when there is no explicit dev session (or in production).
- * Use this to distinguish "user explicitly logged in via dev sign-in form"
- * from "using the default DEV_USER_BASE fallback".
- */
-export async function getDevEmail(): Promise<string | null> {
-  if (process.env.NODE_ENV === 'production') return null;
-  const cookieStore = await cookies();
-  return cookieStore.get('dev_email')?.value ?? null;
+  return { id: u.id, name: u.name, email: u.email, nickname: u.nickname ?? null, bio: u.bio ?? null };
 }

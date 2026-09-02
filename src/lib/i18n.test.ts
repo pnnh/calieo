@@ -22,8 +22,8 @@ describe("t (i18n translation function)", () => {
         expect(result.length).toBeGreaterThan(0);
     });
 
-    it("returns German translation for de-DE", () => {
-        const result = t("de-DE", "siteTagline");
+    it("returns French translation for fr", () => {
+        const result = t("fr", "siteTagline");
         expect(result).not.toBe(t("en", "siteTagline"));
         expect(result.length).toBeGreaterThan(0);
     });

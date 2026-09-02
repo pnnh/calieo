@@ -71,9 +71,21 @@ export const channelFiles = sqliteTable("channel_files", {
     .references(() => files.id, { onDelete: "cascade" }),
 });
 
+export const sessions = sqliteTable("sessions", {
+  // Primary key is the SHA-256 hash of the opaque session token; the raw token
+  // is only ever sent to the browser as a cookie value, never persisted.
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: integer("created_at").notNull().$defaultFn(() => Date.now()),
+  expiresAt: integer("expires_at").notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   channels: many(channels),
   files: many(files),
+  sessions: many(sessions),
 }));
 
 export const channelsRelations = relations(channels, ({ one, many }) => ({
@@ -100,5 +112,12 @@ export const channelFilesRelations = relations(channelFiles, ({ one }) => ({
   file: one(files, {
     fields: [channelFiles.fileId],
     references: [files.id],
+  }),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
   }),
 }));

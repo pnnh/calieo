@@ -17,11 +17,6 @@ describe("SiteFooter", () => {
         expect(container.firstChild).toMatchSnapshot();
     });
 
-    it("renders German footer snapshot", () => {
-        const { container } = render(<SiteFooter lang="de-DE" />);
-        expect(container.firstChild).toMatchSnapshot();
-    });
-
     it("contains site name text", () => {
         const { container } = render(<SiteFooter lang="en" />);
         expect(container.textContent).toContain("Calieo");

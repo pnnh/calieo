@@ -61,15 +61,15 @@ describe("LanguageSelector", () => {
             <LanguageSelector currentLang="en" pathSuffix="tools/basex/" />
         );
         const select = container.querySelector("select")!;
-        fireEvent.change(select, { target: { value: "ja" } });
-        expect(mockPush).toHaveBeenCalledWith("/ja/tools/basex/");
+        fireEvent.change(select, { target: { value: "es" } });
+        expect(mockPush).toHaveBeenCalledWith("/es/tools/basex/");
     });
 
     it("uses an empty pathSuffix by default (results in trailing slash)", () => {
         const { container } = render(<LanguageSelector currentLang="en" />);
         const select = container.querySelector("select")!;
-        fireEvent.change(select, { target: { value: "de-DE" } });
-        expect(mockPush).toHaveBeenCalledWith("/de-DE/");
+        fireEvent.change(select, { target: { value: "fr" } });
+        expect(mockPush).toHaveBeenCalledWith("/fr/");
     });
 
     it("calls router.push exactly once per change event", () => {
