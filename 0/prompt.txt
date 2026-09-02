@@ -1,0 +1,2017 @@
+/speckit.constitution
+
+## 核心原则
+
+### I. 语言规范（NON-NEGOTIABLE）
+
+所有规格（spec.md）、计划（plan.md）、任务（tasks.md）、检查清单、评估报告、修复记录等治理产物
+MUST 使用简体中文撰写。技术标识符（API 名称、类名、文件路径、库名、命令等）MAY 保留英文原文。
+说明性文字、用户故事、验收标准、任务描述 MUST 使用中文。与用户的所有 AI 代理回复 MUST 使用中文。
+
+**理由**：统一语言降低沟通歧义，确保团队成员可无障碍阅读所有治理文档。
+
+### II. 上下文优先
+
+执行任何操作前 MUST 先阅读根目录 `README.md` 及与任务相关的目录 `README.md`。
+源代码是最终真相；若文档与代码冲突，MUST 明确指出差异（文件/行号），以代码为准，并建议更新文档（未被明确要求时不得直接修改文档）。
+每次回复开头 MUST 用 1–2 句话总结当前上下文。工具调用应尽量精简，只使用最少必要的工具。
+
+**理由**：在缺乏上下文的情况下操作容易产生错误假设，增加返工成本。
+
+### III. 精准手术式修改
+
+只改动解决所请求问题的必要部分。MUST NOT 重构、改进或触碰相邻代码、注释、格式。
+每一行被修改的代码 MUST 能直接追溯到用户的请求。严格匹配现有代码风格。
+只清理因本次修改而变得无用的内容。若用户明确要求更广泛的重构，MUST 先确认范围再执行。
+
+**理由**：过度修改会引入非预期变更，增加 code review 负担，破坏代码可追溯性。
+
+### IV. 简洁优先
+
+只实现解决所请求问题的最少代码。MUST NOT 添加不必要的抽象、额外功能或防御性错误处理。
+若 200 行可简化为 50 行，SHOULD 重写并遵循 YAGNI 原则。
+执行前 MUST 对设计不合理（安全风险、架构违规、存在更简方案）的请求提出反对意见。
+
+**理由**：过度工程化增加维护成本，降低代码可读性，背离项目长期健康目标。
+
+### V. 质量门控
+
+多步骤任务 MUST 先给出简要计划与可验证的检查点，再开始执行。
+在工具允许的情况下，SHOULD 在最终输出前运行 linter / 类型检查 / 测试。
+MUST 明确陈述假设；若存在多种解释，MUST 先提问或列出选项，不得默默假设。
+
+**理由**：清晰的检查点减少中途返工，早期发现问题比事后修复成本更低。
+
+## 技术规范
+
+本项目（Calieo）采用以下技术栈，所有实现决策 MUST 与此保持一致：
+
+- **框架**：Next.js App Router（TypeScript）
+- **部署**：Cloudflare Workers（open-next + wrangler）
+- **数据库 ORM**：Drizzle ORM
+- **包管理**：pnpm（workspace 模式）
+- **国际化**：支持 `en`、`es`、`fr`、`zh`、`zh-TW`、`de-DE`、`pt-PT`、`ja`
+
+新增依赖 MUST 经过必要性评估，优先使用已有技术栈中的能力。
+
+## 沟通规范
+
+- 禁止废话：删除所有填充词（"当然！"、"我理解了"、"没问题！"等）
+- 代码优先；只有在逻辑不明显或涉及权衡时才解释原因（简要列出优缺点）
+- 对安全问题、架构违规或存在更简单方案的请求，MUST 在执行前提出反对意见
+- 回复目标：简洁、技术性强、可直接执行
+
+
+本项目禁止静默发明需求。用户未明确的行为不得写成已决定的功能需求，必须列为 Assumptions 或 [NEEDS CLARIFICATION]。
+进入 /speckit.plan 前，Assumptions 必须经用户确认或被 clarify 消除。
+未经明确授权，不得改变现有公共 API、数据模型、权限与错误语义。
+提出可能影响存量行为的需求时，必须先对照现有实现与测试并记录冲突。
+安全、隐私、金钱、数据删除、权限提升类决策没有默认值，必须提问。
+
+---
+
+/speckit.constitution
+
+## 核心原则
+
+### I. 语言规范（NON-NEGOTIABLE）
+
+所有规格（spec.md）、计划（plan.md）、任务（tasks.md）、检查清单、评估报告、修复记录等治理产物
+MUST 使用简体中文撰写。技术标识符（API 名称、类名、文件路径、库名、命令等）MAY 保留英文原文。
+说明性文字、用户故事、验收标准、任务描述 MUST 使用中文。与用户的所有 AI 代理回复 MUST 使用中文。
+
+**理由**：统一语言降低沟通歧义，确保团队成员可无障碍阅读所有治理文档。
+
+### II. 上下文优先
+
+执行任何操作前 MUST 先阅读根目录 `README.md` 及与任务相关的目录 `README.md`。
+源代码是最终真相；若文档与代码冲突，MUST 明确指出差异（文件/行号），以代码为准，并建议更新文档（未被明确要求时不得直接修改文档）。
+每次回复开头 MUST 用 1–2 句话总结当前上下文。工具调用应尽量精简，只使用最少必要的工具。
+
+**理由**：在缺乏上下文的情况下操作容易产生错误假设，增加返工成本。
+
+### III. 精准手术式修改
+
+只改动解决所请求问题的必要部分。MUST NOT 重构、改进或触碰相邻代码、注释、格式。
+每一行被修改的代码 MUST 能直接追溯到用户的请求。严格匹配现有代码风格。
+只清理因本次修改而变得无用的内容。若用户明确要求更广泛的重构，MUST 先确认范围再执行。
+
+**理由**：过度修改会引入非预期变更，增加 code review 负担，破坏代码可追溯性。
+
+### IV. 简洁优先
+
+只实现解决所请求问题的最少代码。MUST NOT 添加不必要的抽象、额外功能或防御性错误处理。
+若 200 行可简化为 50 行，SHOULD 重写并遵循 YAGNI 原则。
+执行前 MUST 对设计不合理（安全风险、架构违规、存在更简方案）的请求提出反对意见。
+
+**理由**：过度工程化增加维护成本，降低代码可读性，背离项目长期健康目标。
+
+### V. 质量门控
+
+多步骤任务 MUST 先给出简要计划与可验证的检查点，再开始执行。
+在工具允许的情况下，SHOULD 在最终输出前运行 linter / 类型检查 / 测试。
+MUST 明确陈述假设；若存在多种解释，MUST 先提问或列出选项，不得默默假设。
+
+**理由**：清晰的检查点减少中途返工，早期发现问题比事后修复成本更低。
+
+## 技术规范
+
+本项目（Calieo）采用以下技术栈，所有实现决策 MUST 与此保持一致：
+
+- **框架**：Next.js App Router（TypeScript）
+- **部署**：Cloudflare Workers（open-next + wrangler）
+- **数据库 ORM**：Drizzle ORM
+- **包管理**：pnpm（workspace 模式）
+- **国际化**：支持 `en`、`es`、`fr`、`zh`、`zh-TW`、`de-DE`、`pt-PT`、`ja`
+
+新增依赖 MUST 经过必要性评估，优先使用已有技术栈中的能力。
+
+## 沟通规范
+
+- 禁止废话：删除所有填充词（"当然！"、"我理解了"、"没问题！"等）
+- 代码优先；只有在逻辑不明显或涉及权衡时才解释原因（简要列出优缺点）
+- 对安全问题、架构违规或存在更简单方案的请求，MUST 在执行前提出反对意见
+- 回复目标：简洁、技术性强、可直接执行
+
+
+本项目禁止静默发明需求。用户未明确的行为不得写成已决定的功能需求，必须列为 Assumptions 或 [NEEDS CLARIFICATION]。
+进入 /speckit.plan 前，Assumptions 必须经用户确认或被 clarify 消除。
+未经明确授权，不得改变现有公共 API、数据模型、权限与错误语义。
+提出可能影响存量行为的需求时，必须先对照现有实现与测试并记录冲突。
+安全、隐私、金钱、数据删除、权限提升类决策没有默认值，必须提问。
+
+---
+
+/speckit.specify 
+
+为当前项目实现/en/account/signin和/en/account/signout页面。
+
+在/en/account/signin上方添加表单允许输入邮箱和用户名（可选）并点击登录直接登录成功，若邮箱不存在则新建用户。同时在页面下方增加“通过Calieo登录”功能。其中“Calieo”是一种OAuth2 OIDC认证提供程序，地址是https://portal.calieo.xyz
+
+在开发环境下，保留输入邮箱和用户名模拟登录功能以方便调试，同时开放 Calieo 登录功能。但是在发布到生产环境后，仅保留“通过Calieo登录”功能。
+
+可以使用 `oauth4webapi`npm库（OpenID 认证、无依赖、Cloudflare Workers 原生兼容）实现 Authorization Code Flow + PKCE。
+
+使用服务器存储+不透明会话ID Cookie，在sqlite数据库中创建记录表用来存储会话
+
+生产环境完全由 Calieo 登录取代 - 完全移除 Cloudflare Zero Trust 校验路径，生产环境身份识别只走 Calieo 登录会话。
+
+Cookie固定有效期7天（服务器.env可配置），过期需重新登录
+
+允许会话在多个浏览器之间共存，不必实现互相踢出的逻辑
+
+不用对登录授权等接口调用做限流等逻辑，交由 Cloudflare 边缘层（WAF/Rate Limiting）防护 - 减少本功能实现复杂度，依赖现有基础设施能力。
+
+记录关键安全事件到应用日志 - 包含登录成功/失败、state/PKCE 校验失败、令牌校验失败、会话创建与失效等事件，以方便后续审计和分析。
+
+---
+
+/speckit.specify 
+
+为当前项目实现/en/account/signin和/en/account/signout页面。
+
+在/en/account/signin上方添加表单允许输入邮箱和用户名（可选）并点击登录直接登录成功，若邮箱不存在则新建用户。同时在页面下方增加“通过Calieo登录”功能。其中“Calieo”是一种OAuth2 OIDC认证提供程序，地址是https://portal.calieo.xyz
+
+在开发环境下，保留输入邮箱和用户名模拟登录功能以方便调试，同时开放 Calieo 登录功能。但是在发布到生产环境后，仅保留“通过Calieo登录”功能。
+
+可以使用 `oauth4webapi`npm库（OpenID 认证、无依赖、Cloudflare Workers 原生兼容）实现 Authorization Code Flow + PKCE。
+
+使用服务器存储+不透明会话ID Cookie，在sqlite数据库中创建记录表用来存储会话
+
+生产环境完全由 Calieo 登录取代 - 完全移除 Cloudflare Zero Trust 校验路径，生产环境身份识别只走 Calieo 登录会话。
+
+Cookie固定有效期7天（服务器.env可配置），过期需重新登录
+
+允许会话在多个浏览器之间共存，不必实现互相踢出的逻辑
+
+不用对登录授权等接口调用做限流等逻辑，交由 Cloudflare 边缘层（WAF/Rate Limiting）防护 - 减少本功能实现复杂度，依赖现有基础设施能力。
+
+记录关键安全事件到应用日志 - 包含登录成功/失败、state/PKCE 校验失败、令牌校验失败、会话创建与失效等事件，以方便后续审计和分析。
+
+---
+
+/speckit.clarify 1. 移除现有的/console/signin和/console/signout页面，使用当前规划的新页面取代。2. 修改auth.ts以及其它认证代码，整个网站生产环境完全由 Calieo 登录取代 - 完全移除 Cloudflare Zero Trust 校验路径，生产环境身份识别只走 Calieo 登录会话。3. 模拟登录与 Calieo 登录共用同一套会话表 + 用户表，不做两套并行实现
+
+---
+
+/speckit.clarify 1. 移除现有的/console/signin和/console/signout页面，使用当前规划的新页面取代。2. 修改auth.ts以及其它认证代码，整个网站生产环境完全由 Calieo 登录取代 - 完全移除 Cloudflare Zero Trust 校验路径，生产环境身份识别只走 Calieo 登录会话。3. 模拟登录与 Calieo 登录共用同一套会话表 + 用户表，不做两套并行实现
+
+---
+
+/speckit.plan
+
+---
+
+/speckit.plan
+
+---
+
+/speckit.tasks
+
+---
+
+/speckit.tasks
+
+---
+
+/speckit.implement
+
+---
+
+/speckit.implement
+
+---
+
+Continue: "Continue to iterate?"
+
+---
+
+Continue: "Continue to iterate?"
+
+---
+
+/speckit.specify 完整移除德语、日语、葡萄牙语、繁体中文相关的多语言文本和功能入口，仅保留英语、法语、西班牙语和简体中文内容。
+
+---
+
+/speckit.specify 完整移除德语、日语、葡萄牙语、繁体中文相关的多语言文本和功能入口，仅保留英语、法语、西班牙语和简体中文内容。
+
+---
+
+/speckit.plan
+
+---
+
+/speckit.plan
+
+---
+
+/speckit.tasks
+
+---
+
+/speckit.tasks
+
+---
+
+/speckit.implement
+
+---
+
+/speckit.implement
+
+---
+
+[Terminal a967246e-eb4e-41cc-bc00-7d253ed518ca notification: command completed. The terminal has been cleaned up.]
+Terminal output:
+
+---
+
+[Terminal a967246e-eb4e-41cc-bc00-7d253ed518ca notification: command completed. The terminal has been cleaned up.]
+Terminal output:
+
+---
+
+[Terminal 9c044439-2f4a-4871-8c2f-6ebdc8136e7e notification: command completed. The terminal has been cleaned up.]
+Terminal output:
+ git status --porcelain migrations/ && echo --- && git diff --stat migrations/
+  ~/Projects/github/calieo   main !9 ?12                          17:54:05
+❯  git status --porcelain migrations/ && echo --- && git diff --stat migrations/ 
+ M migrations/meta/_journal.json
+?? migrations/0003_moaning_doorman.sql
+?? migrations/meta/0003_snapshot.json
+---
+ migrations/meta/_journal.json | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+  ~/Projects/github/calieo   main !9 ?12                          17:54:05
+❯  rm migrations/0003_moaning_doorman.sql migrations/meta/0003_snapshot.json && git checkout -- migrations/meta/_journal.json && git status --porcelain migrations/
+
+  ~/Projects/github/calieo   main !8 ?10                          17:54:53
+❯  rm -f .data/calieo.db && pnpm db:migrate
+
+> calieo@0.1.0 db:migrate /Users/Larry/Projects/github/calieo
+> tsx src/db/migrate.ts
+
+✅ Migrations applied successfully.
+
+  ~/Projects/github/calieo   main !9 ?11                          18:00:28
+❯  sqlite3 .data/calieo.db ".schema sessions" ".schema files"
+CREATE TABLE `sessions` (
+        `id` text PRIMARY KEY NOT NULL,
+        `user_id` text NOT NULL,
+        `created_at` integer NOT NULL,
+        `expires_at` integer NOT NULL,
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+CREATE TABLE IF NOT EXISTS "files" (
+        `id` text PRIMARY KEY NOT NULL,
+        `user_id` text NOT NULL,
+        `title` text NOT NULL,
+        `description` text DEFAULT '' NOT NULL,
+        `filename` text NOT NULL,
+        `mime_type` text NOT NULL,
+        `size` integer NOT NULL,
+        `is_published` integer DEFAULT false NOT NULL,
+        `created_at` integer NOT NULL,
+        `updated_at` integer NOT NULL, `parent_id` text REFERENCES `files`(`id`) ON DELETE set null,
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+
+  ~/Projects/github/calieo   main !9 ?11                          18:00:40
+❯  for f in src/locales/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "OK: $f" || echo "FAIL: $f"; done
+OK: src/locales/de-DE.json
+OK: src/locales/en.json
+OK: src/locales/es.json
+OK: src/locales/fr.json
+OK: src/locales/ja.json
+OK: src/locales/pt-PT.json
+OK: src/locales/zh-TW.json
+OK: src/locales/zh.json
+
+  ~/Projects/github/calieo   main !19 ?12                         18:04:07
+❯  find node_modules/oauth4webapi -maxdepth 3 -type f | head -50
+
+  ~/Projects/github/calieo   main !19 ?12                         18:04:35
+❯  find . -path ./node_modules -prune -o -path '*/node_modules/.pnpm*oauth4webapi*' -print 2>/dev/null | head -5; find / -maxdepth 6 -iname 'oauth4webapi*' -not -path '*/Library/*' 2>/dev/null | head -10
+
+  ~/Projects/github/calieo   main !19 ?12                   31s  18:05:16
+❯  ls node_modules/.pnpm | grep -i oauth4webapi
+oauth4webapi@3.8.7
+
+  ~/Projects/github/calieo   main !19 ?12                         18:05:25
+❯  ls node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/
+build        LICENSE.md   package.json README.md
+
+  ~/Projects/github/calieo   main !19 ?12                         18:05:34
+❯  ls node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/build/ && grep -n "^export (declare )\?function\|^export declare function\|^export function" node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/build/index.d.ts | head -80
+index.d.ts   index.js     index.js.map
+1127:export declare function discoveryRequest(issuerIdentifier: URL, options?: DiscoveryRequestOptions): Promise<Response>;
+1145:export declare function processDiscoveryResponse(expectedIssuerIdentifier: URL, response: Response): Promise<AuthorizationServer>;
+1156:export declare function generateRandomCodeVerifier(): string;
+1164:export declare function generateRandomState(): string;
+1172:export declare function generateRandomNonce(): string;
+1185:export declare function calculatePKCECodeChallenge(codeVerifier: string): Promise<string>;
+1230:export declare function ClientSecretPost(clientSecret: string): ClientAuth;
+1251:export declare function ClientSecretBasic(clientSecret: string): ClientAuth;
+1282:export declare function PrivateKeyJwt(clientPrivateKey: CryptoKey | PrivateKey, options?: ModifyAssertionOptions): ClientAuth;
+1303:export declare function ClientSecretJwt(clientSecret: string, options?: ModifyAssertionOptions): ClientAuth;
+1316:export declare function None(): ClientAuth;
+1330:export declare function TlsClientAuth(): ClientAuth;
+1344:export declare function issueRequestObject(as: AuthorizationServer, client: Client, parameters: URLSearchParams | Record<string, string> | string[][], privateKey: CryptoKey | PrivateKey, options?: ModifyAssertionOptions): Promise<string>;
+1348:export declare function checkProtocol(url: URL, enforceHttps: boolean | undefined): void;
+1368:export declare function pushedAuthorizationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: PushedAuthorizationRequestOptions): Promise<Response>;
+1386:export declare function isDPoPNonceError(err: unknown): boolean;
+1411:export declare function DPoP(client: Pick<Client, typeof clockSkew>, keyPair: CryptoKeyPair, options?: ModifyAssertionOptions): DPoPHandle;
+1634:export declare function processPushedAuthorizationResponse(as: AuthorizationServer, client: Client, response: Response): Promise<PushedAuthorizationResponse>;
+1663:export declare function protectedResourceRequest(accessToken: string, method: string, url: URL, headers?: Headers, body?: ProtectedResourceRequestBody, options?: ProtectedResourceRequestOptions): Promise<Response>;
+1689:export declare function userInfoRequest(as: AuthorizationServer, client: Client, accessToken: string, options?: UserInfoRequestOptions): Promise<Response>;
+1836:export declare function processUserInfoResponse(as: AuthorizationServer, client: Client, expectedSubject: string | typeof skipSubjectCheck, response: Response, options?: JWEDecryptOptions): Promise<UserInfoResponse>;
+1864:export declare function refreshTokenGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, refreshToken: string, options?: TokenEndpointRequestOptions): Promise<Response>;
+1878:export declare function getValidatedIdTokenClaims(ref: TokenEndpointResponse): IDToken | undefined;
+1911:export declare function validateApplicationLevelSignature(as: AuthorizationServer, ref: Response, options?: ValidateSignatureOptions): Promise<void>;
+1931:export declare function processRefreshTokenResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+1973:export declare function authorizationCodeGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, callbackParameters: URLSearchParams, redirectUri: string, codeVerifier: string | typeof nopkce, options?: TokenEndpointRequestOptions): Promise<Response>;
+2081:export declare function processAuthorizationCodeResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessAuthorizationCodeResponseOptions): Promise<TokenEndpointResponse>;
+2259:export declare function clientCredentialsGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: ClientCredentialsGrantRequestOptions): Promise<Response>;
+2282:export declare function genericTokenEndpointRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, grantType: string, parameters: URLSearchParams | Record<string, string> | string[][], options?: Omit<TokenEndpointRequestOptions, 'additionalParameters'>): Promise<Response>;
+2301:export declare function processGenericTokenEndpointResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2320:export declare function processClientCredentialsResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2348:export declare function revocationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, token: string, options?: RevocationRequestOptions): Promise<Response>;
+2364:export declare function processRevocationResponse(response: Response): Promise<undefined>;
+2403:export declare function introspectionRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, token: string, options?: IntrospectionRequestOptions): Promise<Response>;
+2452:export declare function processIntrospectionResponse(as: AuthorizationServer, client: Client, response: Response, options?: JWEDecryptOptions): Promise<IntrospectionResponse>;
+2482:export declare function validateJwtAuthResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL, expectedState?: string | typeof expectNoState | typeof skipStateCheck, options?: ValidateSignatureOptions & JWEDecryptOptions): Promise<URLSearchParams>;
+2505:export declare function validateDetachedSignatureResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL | Request, expectedNonce: string, expectedState?: string | typeof expectNoState, maxAge?: number | typeof skipAuthTimeCheck, options?: ValidateSignatureOptions & JWEDecryptOptions): Promise<URLSearchParams>;
+2529:export declare function validateCodeIdTokenResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL | Request, expectedNonce: string, expectedState?: string | typeof expectNoState, maxAge?: number | typeof skipAuthTimeCheck, options?: ValidateSignatureOptions & JWEDecryptOptions): Promise<URLSearchParams>;
+2572:export declare function validateAuthResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL, expectedState?: string | typeof expectNoState | typeof skipStateCheck): URLSearchParams;
+2596:export declare function deviceAuthorizationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: DeviceAuthorizationRequestOptions): Promise<Response>;
+2648:export declare function processDeviceAuthorizationResponse(as: AuthorizationServer, client: Client, response: Response): Promise<DeviceAuthorizationResponse>;
+2668:export declare function deviceCodeGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, deviceCode: string, options?: TokenEndpointRequestOptions): Promise<Response>;
+2687:export declare function processDeviceCodeResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2709:export declare function generateKeyPair(alg: string, options?: GenerateKeyPairOptions): Promise<CryptoKeyPair>;
+2777:export declare function validateJwtAccessToken(as: AuthorizationServer, request: Request, expectedAudience: string, options?: ValidateJWTAccessTokenOptions): Promise<JWTAccessTokenClaims>;
+2801:export declare function backchannelAuthenticationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: BackchannelAuthenticationRequestOptions): Promise<Response>;
+2839:export declare function processBackchannelAuthenticationResponse(as: AuthorizationServer, client: Client, response: Response): Promise<BackchannelAuthenticationResponse>;
+2860:export declare function backchannelAuthenticationGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, authReqId: string, options?: TokenEndpointRequestOptions): Promise<Response>;
+2879:export declare function processBackchannelAuthenticationGrantResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2916:export declare function dynamicClientRegistrationRequest(as: AuthorizationServer, metadata: Partial<OmitSymbolProperties<Client>>, options?: DynamicClientRegistrationRequestOptions): Promise<Response>;
+2934:export declare function processDynamicClientRegistrationResponse(response: Response): Promise<OmitSymbolProperties<Client>>;
+3028:export declare function resourceDiscoveryRequest(resourceIdentifier: URL, options?: HttpRequestOptions<'GET'>): Promise<Response>;
+3045:export declare function processResourceDiscoveryResponse(expectedResourceIdentifier: URL, response: Response): Promise<ResourceServer>;
+
+  ~/Projects/github/calieo   main !19 ?12                         18:05:44
+❯  grep -n "^export declare class\|^export declare const\|^export interface Client \|^export interface AuthorizationServer\|OAuth2Error\|WWWAuthenticateChallengeError\|AuthorizationResponseError\|ResponseBodyError" node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/build/index.d.ts | head -60
+225:export declare const allowInsecureRequests: unique symbol;
+256:export declare const clockSkew: unique symbol;
+274:export declare const clockTolerance: unique symbol;
+405:export declare const customFetch: unique symbol;
+441:export declare const modifyAssertion: unique symbol;
+488:export declare const jweDecrypt: unique symbol;
+545:export declare const jwksCache: unique symbol;
+553:export interface AuthorizationServer {
+883:export interface Client {
+997:export declare class UnsupportedOperationError extends Error {
+1011:export declare class OperationProcessingError extends Error {
+1423:export interface OAuth2Error {
+1449:export declare class ResponseBodyError extends Error {
+1470:     * body is available in {@link ResponseBodyError.cause}
+1477:        cause: OAuth2Error;
+1493:export declare class AuthorizationResponseError extends Error {
+1529:export declare class WWWAuthenticateChallengeError extends Error {
+1627: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+1628: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+1656: *   rejected with {@link WWWAuthenticateChallengeError}.
+1750:export declare const skipSubjectCheck: unique symbol;
+1828: *   HTTP Header challenges are rejected with {@link WWWAuthenticateChallengeError}.
+1923: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+1924: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+1948:export declare const nopkce: unique symbol;
+2034:export declare const expectNoNonce: unique symbol;
+2040:export declare const skipAuthTimeCheck: unique symbol;
+2072: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+2073: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+2085: * Assigned to {@link WWWAuthenticateChallengeError.code}.
+2089:export declare const WWW_AUTHENTICATE_CHALLENGE = "OAUTH_WWW_AUTHENTICATE_CHALLENGE";
+2093: * Assigned to {@link ResponseBodyError.code}.
+2097:export declare const RESPONSE_BODY_ERROR = "OAUTH_RESPONSE_BODY_ERROR";
+2105:export declare const UNSUPPORTED_OPERATION = "OAUTH_UNSUPPORTED_OPERATION";
+2109: * Assigned to {@link AuthorizationResponseError.code}.
+2113:export declare const AUTHORIZATION_RESPONSE_ERROR = "OAUTH_AUTHORIZATION_RESPONSE_ERROR";
+2121:export declare const JWT_USERINFO_EXPECTED = "OAUTH_JWT_USERINFO_EXPECTED";
+2136:export declare const PARSE_ERROR = "OAUTH_PARSE_ERROR";
+2144:export declare const INVALID_RESPONSE = "OAUTH_INVALID_RESPONSE";
+2152:export declare const INVALID_REQUEST = "OAUTH_INVALID_REQUEST";
+2160:export declare const RESPONSE_IS_NOT_JSON = "OAUTH_RESPONSE_IS_NOT_JSON";
+2168:export declare const RESPONSE_IS_NOT_CONFORM = "OAUTH_RESPONSE_IS_NOT_CONFORM";
+2176:export declare const HTTP_REQUEST_FORBIDDEN = "OAUTH_HTTP_REQUEST_FORBIDDEN";
+2184:export declare const REQUEST_PROTOCOL_FORBIDDEN = "OAUTH_REQUEST_PROTOCOL_FORBIDDEN";
+2194:export declare const JWT_TIMESTAMP_CHECK = "OAUTH_JWT_TIMESTAMP_CHECK_FAILED";
+2204:export declare const JWT_CLAIM_COMPARISON = "OAUTH_JWT_CLAIM_COMPARISON_FAILED";
+2212:export declare const JSON_ATTRIBUTE_COMPARISON = "OAUTH_JSON_ATTRIBUTE_COMPARISON_FAILED";
+2220:export declare const KEY_SELECTION = "OAUTH_KEY_SELECTION_FAILED";
+2228:export declare const MISSING_SERVER_METADATA = "OAUTH_MISSING_SERVER_METADATA";
+2236:export declare const INVALID_SERVER_METADATA = "OAUTH_INVALID_SERVER_METADATA";
+2313: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+2314: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+2444: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+2445: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+2472: *   using {@link AuthorizationResponseError}.
+2499: *   using {@link AuthorizationResponseError}.
+2522: *   using {@link AuthorizationResponseError}.
+2543:export declare const skipStateCheck: unique symbol;
+2550:export declare const expectNoState: unique symbol;
+2563: *   {@link AuthorizationResponseError}.
+
+  ~/Projects/github/calieo   main !19 ?12                         18:06:05
+❯  rm -rf "src/app/[lang]/console/signin" "src/app/[lang]/console/signout"
+
+  ~/Projects/github/calieo   main !21 ?16                         18:11:16
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1 | tail -100
+src/components/ChannelSearch.test.tsx(39,57): error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+src/components/FileDeleteSection.test.tsx(17,13): error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+vitest.config.ts(8,9): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+  ~/Projects/github/calieo   main !22 ?16            ✔ 2|0  17s  18:11:59
+❯  pnpm test 2>&1 | tail -150
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+
+ Test Files  17 passed (17)
+      Tests  173 passed (173)
+   Start at  18:12:13
+   Duration  9.25s (transform 1.14s, setup 0ms, import 11.73s, tests 1.33s, environment 58.07s)
+
+
+  ~/Projects/github/calieo   main !22 ?16                   12s  18:12:22
+❯  curl -s -o /dev/null -w "%{http_code}\n" http://localhost:7300/en/account/signin
+200
+
+  ~/Projects/github/calieo   main !22 ?16                         18:13:36
+❯  curl -s http://localhost:7300/en/account/signin | grep -o 'devSignIn\|Sign in with Calieo\|Sign In\|通过 Calieo\|calieo/start' | sort -u
+calieo/start
+Sign In
+Sign in with Calieo
+
+  ~/Projects/github/calieo   main !22 ?16                         18:14:29
+❯  rm -f /tmp/calieo_cookies.txt
+curl -s -i http://localhost:7300/en/account/signin | head -40
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/chunks/src_app_globals_0p2ml0n.css>; rel=preload; as="style"
+Cache-Control: no-cache, must-revalidate
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+X-Powered-By: Next.js
+Content-Type: text/html; charset=utf-8
+Date: Tue, 01 Sep 2026 10:14:48 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+<!DOCTYPE html><html lang="en" class="h-full"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/src_app_globals_0p2ml0n.css" data-precedence="next_static/chunks/src_app_globals_0p2ml0n.css"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0uuwyg3._.js"/><script src="/_next/static/chunks/04bf_next_dist_compiled_next-devtools_index_0iyndr7.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_compiled_react-dom_11is1yp._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_compiled_react-server-dom-turbopack_0ygkra_._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_compiled_0odupje._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_client_0-o~zgc._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_0gmr1xi._.js" async=""></script><script src="/_next/static/chunks/0i4a_%40swc_helpers_cjs_0hvz.20._.js" async=""></script><script src="/_next/static/chunks/_0rqeker._.js" async=""></script><script src="/_next/static/chunks/turbopack-_0_hu_o0._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_06c8~ey._.js" async=""></script><script src="/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_client_components_builtin_global-error_0nhdkyl.js" async=""></script><script src="/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js" async=""></script><script src="/_next/static/chunks/_0vwfyh_._.js" async=""></script><script src="/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js" async=""></script><title>Calieo — Free Online Developer Tools</title><meta name="description" content="A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing."/><meta property="og:title" content="Calieo — Free Online Developer Tools"/><meta property="og:description" content="A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing."/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Calieo — Free Online Developer Tools"/><meta name="twitter:description" content="A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing."/><link rel="icon" href="/favicon.ico?favicon.0x3dzn~oxb6tn.ico" sizes="256x256" type="image/x-icon"/><script src="/_next/static/chunks/04bf_next_dist_build_polyfills_polyfill-nomodule.js" noModule=""></script></head><body class="min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased"><div hidden=""><!--$--><!--/$--></div><header class="w-full border-b border-gray-200 bg-white"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"><a class="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors" href="/en">Calieo</a><nav class="flex items-center gap-4 flex-1 ml-6"><a class="text-sm text-gray-600 hover:text-gray-900 transition-colors" href="/en">Home</a><a class="text-sm text-gray-600 hover:text-gray-900 transition-colors" href="/en/channels">Channels</a></nav><div class="flex items-center gap-3"><select class="text-sm border border-gray-200 rounded-md px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"><option value="en" selected="">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de-DE">Deutsch</option><option value="pt-PT">Português</option><option value="ja">日本語</option><option value="zh">简体中文</option><option value="zh-TW">繁體中文</option></select><a title="Console" class="text-gray-500 hover:text-gray-900 transition-colors" href="/en/console"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="22" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M6 22h13a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h1zm6-17.001c1.647 0 3 1.351 3 3C15 9.647 13.647 11 12 11S9 9.647 9 7.999c0-1.649 1.353-3 3-3zM6 17.25c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18H6v-.75z"></path></svg></a><a title="All Tools" class="text-gray-500 hover:text-gray-900 transition-colors" href="/en/apps"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><rect width="112" height="112" x="48" y="48" rx="8" ry="8"></rect><rect width="112" height="112" x="200" y="48" rx="8" ry="8"></rect><rect width="112" height="112" x="352" y="48" rx="8" ry="8"></rect><rect width="112" height="112" x="48" y="200" rx="8" ry="8"></rect><rect width="112" height="112" x="200" y="200" rx="8" ry="8"></rect><rect width="112" height="112" x="352" y="200" rx="8" ry="8"></rect><rect width="112" height="112" x="48" y="352" rx="8" ry="8"></rect><rect width="112" height="112" x="200" y="352" rx="8" ry="8"></rect><rect width="112" height="112" x="352" y="352" rx="8" ry="8"></rect></svg></a></div></div></header><main class="flex-1 w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12"><h1 class="text-xl font-bold text-gray-900 mb-6">Sign In</h1><div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-4 text-sm text-amber-800">Sign In — Development</div><form class="space-y-4 mb-8" action="" encType="multipart/form-data" method="POST"><input type="hidden" name="$ACTION_REF_1"/><input type="hidden" name="$ACTION_1:0" value="{&quot;id&quot;:&quot;6098cf9c2cb36e8b57d627b2dce79b629941acf38f&quot;,&quot;bound&quot;:&quot;$@1&quot;}"/><input type="hidden" name="$ACTION_1:1" value="[&quot;$@2&quot;]"/><input type="hidden" name="$ACTION_1:2" value="&quot;2spg7IrN97ANcrq82u2wv/REDACTED&quot;"/><input type="hidden" name="return_to" value="/en/console"/><div><label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label><input id="email" type="email" required="" autoComplete="email" placeholder="you@example.com" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" name="email"/></div><div><label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username (optional)</label><input id="username" type="text" autoComplete="nickname" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" name="username"/></div><button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">Sign In</button></form><a class="block w-full text-center rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors" href="/api/auth/calieo/start?lang=en&amp;return_to=%2Fen%2Fconsole">Sign in with Calieo</a><p class="mt-6 text-center text-sm"><a class="text-gray-500 hover:text-gray-700 underline" href="/en/account/signout">Sign Out</a></p></main><footer class="w-full border-t border-gray-200 bg-white mt-auto"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"><p class="text-sm text-gray-400">© <!-- -->2026<!-- --> <!-- -->Calieo</p><a class="text-sm text-gray-400 hover:text-gray-600 transition-colors" href="/en/privacy">Privacy Policy</a></div></footer><!--$--><!--/$--><script id="_R_">self.__next_r="BBK1aDJo6W8OVInFeAMQT"</script><script src="/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0uuwyg3._.js" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"7:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/next-devtools/userspace/app/segment-explorer-node.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"SegmentViewNode\"]\n9:\"$Sreact.fragment\"\n19:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/components/layout-router.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"default\"]\n1b:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/components/render-from-template-context.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"default\"]\n4d:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"OutletBoundary\"]\n4f:\"$Sreact.suspense\"\n5d:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"ViewportBoundary\"]\n67:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"MetadataBoundary\"]\n6d:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/components/builtin/global-error.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"/_next/static/chunks/04bf_next_dist_client_components_builtin_global-error_0nhdkyl.js\"],\"default\",1]\n88:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/metadata/generate/icon-mark.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"IconMark\"]\n:HL[\"/_next/static/chunks/src_app_globals_0p2ml0n.css\",\"style\"]\n1:D\"$4\"\n1:D\"$2\"\n1:D\"$5\"\n1:null\nc:D\"$16\"\nc:D\"$d\"\nc:D\"$18\"\n1d:D\"$1f\"\n1d:D\"$1e\"\n1d:D\"$21\"\n1d:D\"$20\"\n1d:D\"$22\"\n1d:[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"},\"$20\",\"$23\",1],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}},\"$20\",\"$26\",1],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404},\"$20\",\"$27\",1],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"f"])</script><script>self.__next_f.push([1,"ontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"},\"$20\",\"$29\",1]},\"$20\",\"$28\",1]]},\"$20\",\"$25\",1]},\"$20\",\"$24\",1]]\nc:[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$1a\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"$L7\",\"c-not-found\",{\"type\":\"not-found\",\"pagePath\":\"__next_builtin__not-found.js\",\"children\":[\"$1d\",[]]},null,\"$1c\",0],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[[\"$\",\"$L7\",null,{\"type\":\"boundary:not-found\",\"pagePath\":\"__next_builtin__not-found.js@boundary\"},null,\"$2a\",1],\"$undefined\",\"$undefined\",[\"$\",\"$L7\",null,{\"type\":\"boundary:global-error\",\"pagePath\":\"__next_builtin__global-error.js\"},null,\"$2b\",1]]},null,\"$17\",1]\n30:D\"$38\"\n30:D\"$31\"\n41:D\"$45\"\n41:D\"$42\"\n48:D\"$4a\"\n48:D\"$49\"\n48:D\"$4c\"\n48:[\"$\",\"$L4d\",null,{\"children\":[\"$\",\"$4f\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@50\"},\"$49\",\"$4e\",1]},\"$49\",\"$4b\",1]\n53:D\"$56\"\n53:D\"$54\"\n53:D\"$57\"\n53:null\n58:D\"$5a\"\n58:D\"$59\"\n58:D\"$5c\"\n5e:D\"$60\"\n5e:D\"$5f\"\n58:[\"$\",\"$L5d\",null,{\"children\":\"$L5e\"},\"$59\",\"$5b\",1]\n61:D\"$63\"\n61:D\"$62\"\n61:D\"$65\"\n69:D\"$6b\"\n69:D\"$6a\"\n61:[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$L67\",null,{\"children\":[\"$\",\"$4f\",null,{\"name\":\"Next.Metadata\",\"children\":\"$L69\"},\"$62\",\"$68\",1]},\"$62\",\"$66\",1]},\"$62\",\"$64\",1]\n6c:[]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":\"$1\",\"c\":[\"\",\"en\",\"account\",\"signin\"],\"q\":\"\",\"i\":true,\"f\":[[[\"\",{\"children\":[[\"lang\",\"en\",\"d\",null],{\"children\":[\"account\",{\"children\":[\"signin\",{\"children\":[\"__PAGE__\",{}]}]}]}]},\"$undefined\",\"$undefined\",16],[[\"$\",\"$L7\",\"layout\",{\"type\":\"layout\",\"pagePath\":\"layout.tsx\",\"children\":[\"$\",\"$9\",\"c\",{\"children\":[[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$a\",0],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$b\",0]],\"$c\"]},null,\"$8\",1]},null,\"$6\",0],{\"children\":[[\"$\",\"$L7\",\"layout\",{\"type\":\"layout\",\"pagePath\":\"[lang]/layout.tsx\",\"children\":[\"$\",\"$9\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/src_app_globals_0p2ml0n.css\",\"precedence\":\"next_static/chunks/src_app_globals_0p2ml0n.css\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"},null,\"$2e\",0],[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$2f\",0]],\"$L30\"]},null,\"$2d\",1]},null,\"$2c\",0],{\"children\":[[\"$\",\"$9\",\"c\",{\"children\":[null,[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$3b\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[\"$undefined\",\"$undefined\",\"$undefined\",\"$undefined\"]},null,\"$3a\",1]]},null,\"$39\",0],{\"children\":[[\"$\",\"$9\",\"c\",{\"children\":[null,[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$3e\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[\"$undefined\",\"$undefined\",\"$undefined\",\"$undefined\"]},null,\"$3d\",1]]},null,\"$3c\",0],{\"children\":[[\"$\",\"$9\",\"c\",{\"children\":[[\"$\",\"$L7\",\"c-page\",{\"type\":\"page\",\"pagePath\":\"[lang]/account/signin/page.tsx\",\"children\":\"$L41\"},null,\"$40\",1],[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/_0vwfyh_._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$46\",0],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$47\",0]],\"$48\"]},null,\"$3f\",0],{},null,false,null]},null,false,\"$@51\"]},null,false,\"$@51\"]},null,false,null]},null,false,null],[\"$\",\"$9\",\"h\",{\"children\":[\"$53\",\"$58\",\"$61\",null]},null,\"$52\",0],false]],\"m\":\"$W6c\",\"G\":[\"$6d\",[\"$\",\"$L7\",\"ge-svn\",{\"type\":\"global-error\",\"pagePath\":\"__next_builtin__global-error.js\",\"children\":[]},null,\"$6e\",0]],\"S\":false,\"h\":null,\"s\":\"$undefined\",\"l\":\"$undefined\",\"p\":\"$undefined\",\"d\":\"$undefined\",\"b\":\"development\"}\n"])</script><script>self.__next_f.push([1,"6f:[]\n51:D\"$70\"\n51:\"$W6f\"\n30:D\"$72\"\n30:[\"$\",\"html\",null,{\"lang\":\"en\",\"className\":\"h-full\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"},\"$31\",\"$74\",1],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"},\"$31\",\"$75\",1]]},\"$31\",\"$73\",1],[\"$\",\"body\",null,{\"className\":\"min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased\",\"children\":[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$78\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[\"$undefined\",\"$undefined\",\"$undefined\",\"$undefined\"]},null,\"$77\",1]},\"$31\",\"$76\",1]]},\"$31\",\"$71\",1]\n5e:D\"$79\"\n5e:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"},\"$49\",\"$7a\",0],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"},\"$49\",\"$7b\",0]]\n50:D\"$7c\"\n50:null\n69:D\"$7d\"\n69:[[\"$\",\"title\",\"0\",{\"children\":\"Calieo — Free Online Developer Tools\"},\"$49\",\"$7e\",0],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.\"},\"$49\",\"$7f\",0],[\"$\",\"meta\",\"2\",{\"property\":\"og:title\",\"content\":\"Calieo — Free Online Developer Tools\"},\"$49\",\"$80\",0],[\"$\",\"meta\",\"3\",{\"property\":\"og:description\",\"content\":\"A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.\"},\"$49\",\"$81\",0],[\"$\",\"meta\",\"4\",{\"property\":\"og:type\",\"content\":\"website\"},\"$49\",\"$82\",0],[\"$\",\"meta\",\"5\",{\"name\":\"twitter:card\",\"content\":\"summary\"},\"$49\",\"$83\",0],[\"$\",\"meta\",\"6\",{\"name\":\"twitter:title\",\"content\":\"Calieo — Free Online Developer Tools\"},\"$49\",\"$84\",0],[\"$\",\"meta\",\"7\",{\"name\":\"twitter:description\",\"content\":\"A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.\"},\"$49\",\"$85\",0],[\"$\",\"link\",\"8\",{\"rel\":\"icon\",\"href\":\"/favicon.ico?favicon.0x3dzn~oxb6tn.ico\",\"sizes\":\"256x256\",\"type\":\"image/x-icon\"},\"$49\",\"$86\",0],[\"$\",\"$L88\",\"9\",{},\"$49\",\"$87\",0]]\n"])</script><script>self.__next_f.push([1,"a3:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js\",\"/_next/static/chunks/_0vwfyh_._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js\"],\"\"]\nb1:I[\"[project]/src/components/LanguageSelector.tsx [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js\",\"/_next/static/chunks/_0vwfyh_._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js\"],\"default\"]\n41:D\"$8c\"\n41:D\"$8e\"\n41:D\"$8f\"\n41:D\"$93\"\n41:D\"$95\"\n41:D\"$96\"\n41:D\"$97\"\n98:D\"$9a\"\n98:D\"$99\"\n98:D\"$9c\"\n9e:D\"$a0\"\n9e:D\"$9f\"\n9e:D\"$a2\"\n9e:[\"$\",\"$La3\",null,{\"href\":\"/en/\",\"className\":\"text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors\",\"children\":\"Calieo\"},\"$9f\",\"$a1\",1]\na5:D\"$a7\"\na5:D\"$a6\"\na5:D\"$a9\"\na5:[\"$\",\"$La3\",null,{\"href\":\"/en/\",\"className\":\"text-sm text-gray-600 hover:text-gray-900 transition-colors\",\"children\":\"Home\"},\"$a6\",\"$a8\",1]\naa:D\"$ac\"\naa:D\"$ab\"\naa:D\"$ae\"\naa:[\"$\",\"$La3\",null,{\"href\":\"/en/channels\",\"className\":\"text-sm text-gray-600 hover:text-gray-900 transition-colors\",\"children\":\"Channels\"},\"$ab\",\"$ad\",1]\nb2:D\"$b7\"\nb2:D\"$b3\"\nb2:D\"$b9\"\nba:D\"$bc\"\nba:D\"$bb\"\nba:D\"$c0\"\nba:D\"$bd\"\nba:D\"$c2\"\nba:[\"$\",\"svg\",null,{\"stroke\":\"currentColor\",\"fill\":\"currentColor\",\"strokeWidth\":\"0\",\"viewBox\":\"0 0 24 24\",\"children\":[\"$undefined\",[[\"$\",\"path\",\"0\",{\"d\":\"M6 22h13a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h1zm6-17.001c1.647 0 3 1.351 3 3C15 9.647 13.647 11 12 11S9 9.647 9 7.999c0-1.649 1.353-3 3-3zM6 17.25c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18H6v-.75z\",\"children\":[]},\"$bb\",\"$c3\",0]]],\"className\":\"$undefined\",\"style\":{\"color\":\"$undefined\"},\"height\":22,\"width\":22,\"xmlns\":\"http://www.w3.org/2000/svg\"},\"$bd\",\"$c1\",1]\nb2:[\"$\",\"$La3\",null,{\"href\":\"/en/console\",\"title\":\"Console\",\"className\":\"text-gray-500 hover:text-gray-900 transition-colors\",\"children\":\"$ba\"},\"$b3\",\"$b8\",1]\nc4:D\"$c9\"\nc4:D\"$c5\"\nc4:D\"$cb\"\ncc:D\"$ce\"\ncc:D\"$cd\"\ncc:D\"$d2\"\ncc:D\"$cf\"\ncc:D\"$d4\"\ncc:[\"$\",\"svg\",null,{\"stroke\":\"currentColor\",\"fill\":\"currentColor\",\"strokeWidth\":\"0\",\"viewBox\":\"0 0 512 512\",\"children\":[\"$undefined\",[[\"$\",\"rect\",\"0\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"48\",\"y\":\"48\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d5\",0],[\"$\",\"rect\",\"1\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"200\",\"y\":\"48\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d6\",0],[\"$\",\"rect\",\"2\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"352\",\"y\":\"48\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d7\",0],[\"$\",\"rect\",\"3\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"48\",\"y\":\"200\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d8\",0],[\"$\",\"rect\",\"4\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"200\",\"y\":\"200\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d9\",0],[\"$\",\"rect\",\"5\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"352\",\"y\":\"200\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$da\",0],[\"$\",\"rect\",\"6\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"48\",\"y\":\"352\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$db\",0],[\"$\",\"rect\",\"7\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"200\",\"y\":\"352\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$dc\",0],[\"$\",\"rect\",\"8\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"352\",\"y\":\"352\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$dd\",0]]],\"className\":\"$undefined\",\"style\":{\"color\":\"$undefined\"},\"height\":20,\"width\":20,\"xmlns\":\"http://www.w3.org/2000/svg\"},\"$cf\",\"$d3\",1]\nc4:[\"$\",\"$La3\",null,{\"href\":\"/en/apps\",\"title\":\"All Tools\",\"className\":\"text-gray-500 hover:text-gray-900 transition-colors\",\"children\":\"$cc\"},\"$c5\",\"$ca\",1]\n98:[\"$\",\"header\",null,{\"className\":\"w-full border-b border-gray-200 bg-white\",\"children\":[\"$\",\"div\",null,{\"className\":\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4\",\"children\":[\"$9e\",[\"$\",\"nav\",null,{\"className\":\"flex items-ce"])</script><script>self.__next_f.push([1,"nter gap-4 flex-1 ml-6\",\"children\":[\"$a5\",\"$aa\"]},\"$99\",\"$a4\",1],[\"$\",\"div\",null,{\"className\":\"flex items-center gap-3\",\"children\":[[\"$\",\"$Lb1\",null,{\"currentLang\":\"en\",\"pathSuffix\":\"\"},\"$99\",\"$b0\",1],\"$b2\",\"$c4\"]},\"$99\",\"$af\",1]]},\"$99\",\"$9d\",1]},\"$99\",\"$9b\",1]\ne2:{\"id\":\"6098cf9c2cb36e8b57d627b2dce79b629941acf38f\",\"bound\":\"$@e3\",\"name\":\"bound handleDevSignIn\",\"env\":\"Server\",\"location\":[\"module evaluation\",\"/Users/Larry/Projects/github/calieo/.next/dev/server/chunks/ssr/[root-of-the-server]__0ou7tau._.js\",734,439]}\nec:D\"$ee\"\nec:D\"$ed\"\nec:D\"$f0\"\nec:[\"$\",\"$La3\",null,{\"href\":\"/api/auth/calieo/start?lang=en\u0026return_to=%2Fen%2Fconsole\",\"className\":\"block w-full text-center rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors\",\"children\":\"Sign in with Calieo\"},\"$ed\",\"$ef\",1]\nf2:D\"$f4\"\nf2:D\"$f3\"\nf2:D\"$f6\"\nf2:[\"$\",\"$La3\",null,{\"href\":\"/en/account/signout\",\"className\":\"text-gray-500 hover:text-gray-700 underline\",\"children\":\"Sign Out\"},\"$f3\",\"$f5\",1]\nf7:D\"$f9\"\nf7:D\"$f8\"\nf7:D\"$fb\"\nfe:D\"$100\"\nfe:D\"$ff\"\nfe:D\"$102\"\nfe:[\"$\",\"$La3\",null,{\"href\":\"/en/privacy/\",\"className\":\"text-sm text-gray-400 hover:text-gray-600 transition-colors\",\"children\":\"Privacy Policy\"},\"$ff\",\"$101\",1]\nf7:[\"$\",\"footer\",null,{\"className\":\"w-full border-t border-gray-200 bg-white mt-auto\",\"children\":[\"$\",\"div\",null,{\"className\":\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4\",\"children\":[[\"$\",\"p\",null,{\"className\":\"text-sm text-gray-400\",\"children\":[\"© \",2026,\" \",\"Calieo\"]},\"$f8\",\"$fd\",1],\"$fe\"]},\"$f8\",\"$fc\",1]},\"$f8\",\"$fa\",1]\n"])</script><script>self.__next_f.push([1,"41:[\"$98\",[\"$\",\"main\",null,{\"className\":\"flex-1 w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-xl font-bold text-gray-900 mb-6\",\"children\":\"Sign In\"},\"$42\",\"$df\",1],false,null,[[\"$\",\"div\",null,{\"className\":\"bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-4 text-sm text-amber-800\",\"children\":\"Sign In — Development\"},\"$42\",\"$e0\",1],[\"$\",\"form\",null,{\"action\":\"$he2\",\"className\":\"space-y-4 mb-8\",\"children\":[[\"$\",\"input\",null,{\"type\":\"hidden\",\"name\":\"return_to\",\"value\":\"/en/console\"},\"$42\",\"$e4\",1],[\"$\",\"div\",null,{\"children\":[[\"$\",\"label\",null,{\"htmlFor\":\"email\",\"className\":\"block text-sm font-medium text-gray-700 mb-1\",\"children\":\"Email Address\"},\"$42\",\"$e6\",1],[\"$\",\"input\",null,{\"id\":\"email\",\"type\":\"email\",\"name\":\"email\",\"required\":true,\"autoComplete\":\"email\",\"placeholder\":\"you@example.com\",\"className\":\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500\"},\"$42\",\"$e7\",1]]},\"$42\",\"$e5\",1],[\"$\",\"div\",null,{\"children\":[[\"$\",\"label\",null,{\"htmlFor\":\"username\",\"className\":\"block text-sm font-medium text-gray-700 mb-1\",\"children\":\"Username (optional)\"},\"$42\",\"$e9\",1],[\"$\",\"input\",null,{\"id\":\"username\",\"type\":\"text\",\"name\":\"username\",\"autoComplete\":\"nickname\",\"className\":\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500\"},\"$42\",\"$ea\",1]]},\"$42\",\"$e8\",1],[\"$\",\"button\",null,{\"type\":\"submit\",\"className\":\"w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors\",\"children\":\"Sign In\"},\"$42\",\"$eb\",1]]},\"$42\",\"$e1\",1]],\"$ec\",[\"$\",\"p\",null,{\"className\":\"mt-6 text-center text-sm\",\"children\":\"$f2\"},\"$42\",\"$f1\",1]]},\"$42\",\"$de\",1],\"$f7\"]\n"])</script><script>self.__next_f.push([1,"e3:D\"$103\"\ne3:[\"$@104\"]\n"])</script><script>self.__next_f.push([1,"104:D\"$108\"\n104:D\"$109\"\n104:D\"$10a\"\n104:D\"$10b\"\n104:\"2spg7IrN97ANcrq82u2wv/REDACTED\"\n"])</script></body></html>%                                                 
+
+  ~/Projects/github/calieo   main !22 ?16                         18:14:48
+❯  lsof -ti tcp:7300 | xargs -r kill -9; sleep 1; pnpm db:migrate
+
+> calieo@0.1.0 db:migrate /Users/Larry/Projects/github/calieo
+> tsx src/db/migrate.ts
+
+✅ Migrations applied successfully.
+
+  ~/Projects/github/calieo   main !22 ?17                         18:18:06
+❯  sqlite3 .data/calieo.db "select count(*) as session_rows from sessions;" "select id,name,email from users;"
+0
+CecYoZwapj4NuJ72f11GF|SmokeTest|smoketest@example.com
+
+  ~/Projects/github/calieo   main !22 ?17                         18:19:14
+❯  curl -sS -o /dev/null -w "http_code=%{http_code} redirect=%{redirect_url}\n" "http://localhost:7300/api/auth/calieo/start?lang=en&return_to=%2Fen%2Fconsole"
+http_code=500 redirect=
+
+  ~/Projects/github/calieo   main !22 ?17                         18:19:44
+❯  git status --porcelain | grep -v '^??.*specs/002' | head -50
+ M .specify/feature.json
+ M .specify/memory/constitution.md
+ M .specify/scripts/python/__pycache__/common.cpython-314.pyc
+ M README.md
+ M calieo.code-workspace
+ M migrations/meta/_journal.json
+ M package.json
+ M pnpm-lock.yaml
+ M src/app/[lang]/console/layout.tsx
+ D src/app/[lang]/console/signin/page.tsx
+ D src/app/[lang]/console/signout/page.tsx
+ M src/app/[lang]/layout.tsx
+ M src/db/schema.ts
+ M src/lib/auth.ts
+ M src/locales/de-DE.json
+ M src/locales/en.json
+ M src/locales/es.json
+ M src/locales/fr.json
+ M src/locales/ja.json
+ M src/locales/pt-PT.json
+ M src/locales/zh-TW.json
+ M src/locales/zh.json
+?? .github/agents/speckit.bug.assess.agent.md
+?? .github/agents/speckit.bug.fix.agent.md
+?? .github/agents/speckit.bug.test.agent.md
+?? .github/prompts/speckit.bug.assess.prompt.md
+?? .github/prompts/speckit.bug.fix.prompt.md
+?? .github/prompts/speckit.bug.test.prompt.md
+?? .kilo/
+?? .playwright-mcp/
+?? .specify/extensions.yml
+?? .specify/extensions/
+?? migrations/0004_sessions_table.sql
+?? src/app/[lang]/account/
+?? src/app/api/auth/
+?? src/lib/oidc.ts
+?? src/lib/session.ts
+
+  ~/Projects/github/calieo   main !22 ?17                         18:21:16
+❯  git diff --stat "src/app/[lang]/layout.tsx" calieo.code-workspace
+ calieo.code-workspace     | 20 ++++++++++++++++++--
+ src/app/[lang]/layout.tsx |  2 +-
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+  ~/Projects/github/calieo   main !22 ?17                         18:21:31
+❯  git check-ignore -v .playwright-mcp 2>&1; rm -rf .playwright-mcp
+
+  ~/Projects/github/calieo   main !22 ?16                         18:21:54
+❯  pnpm test 2>&1 | tail -30
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+
+ Test Files  17 passed (17)
+      Tests  173 passed (173)
+   Start at  18:22:07
+   Duration  5.93s (transform 1.64s, setup 0ms, import 8.19s, tests 1.67s, environment 30.82s)
+
+
+  ~/Projects/github/calieo   main !22 ?16                    7s  18:22:13
+❯  pnpm test:e2e 2>&1 | tail -60
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/home-Homepage-—-en-site-footer-is-visible-chromium/error-context.md
+
+  23) [chromium] › e2e/home.spec.ts:186:9 › Homepage — /en/ › footer contains the current year ─────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/Larry/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     pnpm exec playwright install                           ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/home-Homepage-—-en-footer-contains-the-current-year-chromium/error-context.md
+
+  24) [chromium] › e2e/home.spec.ts:191:9 › Homepage — /en/ › footer contains a Privacy Policy link 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/Larry/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     pnpm exec playwright install                           ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/home-Homepage-—-en-footer-contains-a-Privacy-Policy-link-chromium/error-context.md
+
+  24 failed
+    [chromium] › e2e/home.spec.ts:21:9 › Homepage — /en/ › root / redirects to a supported language path 
+    [chromium] › e2e/home.spec.ts:30:9 › Homepage — /en/ › page has a non-empty <title> ────────────
+    [chromium] › e2e/home.spec.ts:35:9 › Homepage — /en/ › page title contains the site name ───────
+    [chromium] › e2e/home.spec.ts:42:9 › Homepage — /en/ › site header is visible ──────────────────
+    [chromium] › e2e/home.spec.ts:46:9 › Homepage — /en/ › header contains the site name link ──────
+    [chromium] › e2e/home.spec.ts:51:9 › Homepage — /en/ › header 'Home' navigation link is present 
+    [chromium] › e2e/home.spec.ts:56:9 › Homepage — /en/ › header 'Channels' navigation link is present 
+    [chromium] › e2e/home.spec.ts:61:9 › Homepage — /en/ › header contains a language selector <select> 
+    [chromium] › e2e/home.spec.ts:72:9 › Homepage — /en/ › <main> element is present ───────────────
+    [chromium] › e2e/home.spec.ts:76:9 › Homepage — /en/ › page heading 'Public Files' is visible ──
+    [chromium] › e2e/home.spec.ts:80:9 › Homepage — /en/ › search form is visible ──────────────────
+    [chromium] › e2e/home.spec.ts:85:9 › Homepage — /en/ › search input is present inside the form ─
+    [chromium] › e2e/home.spec.ts:90:9 › Homepage — /en/ › search submit button is present ─────────
+    [chromium] › e2e/home.spec.ts:98:9 › Homepage — /en/ › shows either a file list or 'No results found' message 
+    [chromium] › e2e/home.spec.ts:110:9 › Homepage — /en/ › when files exist, each row links to a file detail page 
+    [chromium] › e2e/home.spec.ts:122:9 › Homepage — /en/ › when files exist, each row shows a file title 
+    [chromium] › e2e/home.spec.ts:131:9 › Homepage — /en/ › when files exist, each row shows a file size 
+    [chromium] › e2e/home.spec.ts:141:9 › Homepage — /en/ › pagination is hidden when there is only one page 
+    [chromium] › e2e/home.spec.ts:157:9 › Homepage — /en/ › navigating to /?q=<term> shows the term in the search input 
+    [chromium] › e2e/home.spec.ts:164:9 › Homepage — /en/ › submitting an empty search clears the ?q= param from the URL 
+    [chromium] › e2e/home.spec.ts:173:9 › Homepage — /en/ › search field is pre-filled from the ?q= URL parameter 
+    [chromium] › e2e/home.spec.ts:182:9 › Homepage — /en/ › site footer is visible ─────────────────
+    [chromium] › e2e/home.spec.ts:186:9 › Homepage — /en/ › footer contains the current year ───────
+    [chromium] › e2e/home.spec.ts:191:9 › Homepage — /en/ › footer contains a Privacy Policy link ──
+ ELIFECYCLE  Command failed with exit code 1.
+
+  ~/Projects/github/calieo   main !22 ?16            ✔ 1|0  10s  18:22:34
+❯  git check-ignore -v .data 2>&1 || echo "NOT IGNORED"
+.gitignore:46:.data/    .data
+
+  ~/Projects/github/calieo   main !22 ?16                         18:23:06
+❯  mkdir -p specs/003-trim-supported-languages/checklists
+
+  ~/Projects/github/calieo   main !23 ?16                         18:28:08
+❯  python3 .specify/scripts/python/setup_plan.py --json
+Copied plan template to /Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages/plan.md
+{"FEATURE_SPEC":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages/spec.md","IMPL_PLAN":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages/plan.md","SPECS_DIR":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages","BRANCH":"003-trim-supported-languages"}
+
+  ~/Projects/github/calieo   main !23 ?17                         18:29:58
+❯  wc -l src/data/tools.ts src/data/privacy.ts src/locales/*.json src/lib/i18n.test.ts
+     718 src/data/tools.ts
+     304 src/data/privacy.ts
+     118 src/locales/de-DE.json
+     118 src/locales/en.json
+     118 src/locales/es.json
+     118 src/locales/fr.json
+     118 src/locales/ja.json
+     118 src/locales/pt-PT.json
+     118 src/locales/zh-TW.json
+     118 src/locales/zh.json
+      43 src/lib/i18n.test.ts
+    2009 total
+
+  ~/Projects/github/calieo   main !23 ?17                         18:30:35
+❯  python3 .specify/scripts/python/setup_tasks.py --json
+{"FEATURE_DIR":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages","AVAILABLE_DOCS":["research.md","data-model.md","quickstart.md"],"TASKS_TEMPLATE":"/Users/Larry/Projects/github/calieo/.specify/templates/tasks-template.md"}
+
+  ~/Projects/github/calieo   main !23 ?17                         18:34:51
+❯  python3 .specify/scripts/python/check_prerequisites.py --json --require-tasks --include-tasks
+{"FEATURE_DIR":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages","AVAILABLE_DOCS":["research.md","data-model.md","quickstart.md","tasks.md"]}
+
+  ~/Projects/github/calieo   main !23 ?17                         18:38:02
+❯  rm src/locales/de-DE.json src/locales/ja.json src/locales/pt-PT.json src/locales/zh-TW.json
+
+  ~/Projects/github/calieo   main !24 ?17                         18:39:01
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1 | tee /tmp/tsc_errors.txt | head -100
+src/components/ChannelSearch.test.tsx(39,57): error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+src/components/FileDeleteSection.test.tsx(17,13): error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+src/components/SiteFooter.test.tsx(21,50): error TS2322: Type '"de-DE"' is not assignable to type 'LangKey'.
+src/components/ToolCard.test.tsx(21,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/components/ToolCard.test.tsx(31,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/components/ToolCard.test.tsx(41,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/components/ToolCard.test.tsx(51,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/privacy.ts(124,5): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'Record<LangKey, PrivacyContent>'.
+src/data/tools.ts(27,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(37,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(74,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(129,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(145,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(155,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(177,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(207,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(223,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(233,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(279,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(349,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(365,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(375,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(406,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(451,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(467,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(477,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(514,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(569,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(585,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(595,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(641,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(711,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/lib/i18n.test.ts(26,26): error TS2345: Argument of type '"de-DE"' is not assignable to parameter of type 'LangKey'.
+vitest.config.ts(8,9): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+  ~/Projects/github/calieo   main !25 ?17          ✔ 2|0|0  12s  18:39:56
+❯  cp src/data/tools.ts /tmp/tools.ts.bak && cp src/data/privacy.ts /tmp/privacy.ts.bak
+node /tmp/strip-langs.cjs src/data/tools.ts src/data/privacy.ts
+src/data/tools.ts: removed 96 blocks/lines
+src/data/privacy.ts: removed 4 blocks/lines
+
+  ~/Projects/github/calieo   main !27 ?17                         18:41:08
+❯  grep -n '"de-DE"\|"pt-PT"\|"zh-TW"\|  ja:' src/data/tools.ts src/data/privacy.ts | head -20; echo "---"; diff <(grep -c "^" /tmp/tools.ts.bak) <(grep -c "^" src/data/tools.ts); wc -l src/data/tools.ts src/data/privacy.ts
+---
+1c1
+< 718
+---
+> 410
+     410 src/data/tools.ts
+     160 src/data/privacy.ts
+     570 total
+
+  ~/Projects/github/calieo   main !27 ?17                         18:41:49
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1
+src/components/ChannelSearch.test.tsx:39:57 - error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+
+39         mockSearchParamsGet.mockImplementation((key) => key === "q" ? "initial" : null);
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/@vitest+spy@4.1.9/node_modules/@vitest/spy/dist/index.d.ts:156:28
+    156 }) : T extends Procedure ? (...args: Parameters<T>) => ReturnType<T> : never;
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    The expected type comes from the return type of this signature.
+
+src/components/FileDeleteSection.test.tsx:17:13 - error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+
+17             labels={labels}
+               ~~~~~~
+
+  src/components/FileDeleteSection.tsx:12:9
+    12         deleteDirectoryHasChildren: string;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    'deleteDirectoryHasChildren' is declared here.
+  src/components/FileDeleteSection.tsx:9:5
+    9     labels: {
+          ~~~~~~
+    The expected type comes from property 'labels' which is declared here on type 'IntrinsicAttributes & Props'
+
+src/components/SiteFooter.test.tsx:21:50 - error TS2322: Type '"de-DE"' is not assignable to type 'LangKey'.
+
+21         const { container } = render(<SiteFooter lang="de-DE" />);
+                                                    ~~~~
+
+  src/components/SiteFooter.tsx:5:16
+    5 type Props = { lang: LangKey };
+                     ~~~~
+    The expected type comes from property 'lang' which is declared here on type 'IntrinsicAttributes & Props'
+
+src/components/ToolCard.test.tsx:21:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+
+21         "de-DE": "BaseX",
+           ~~~~~~~
+
+  src/data/tools.ts:10:3
+    10   name: LangMap;
+         ~~~~
+    The expected type comes from property 'name' which is declared here on type 'ToolData'
+
+src/components/ToolCard.test.tsx:31:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+
+31         "de-DE": "Base-Kodierungswerkzeug.",
+           ~~~~~~~
+
+  src/data/tools.ts:11:3
+    11   description: LangMap;
+         ~~~~~~~~~~~
+    The expected type comes from property 'description' which is declared here on type 'ToolData'
+
+src/components/ToolCard.test.tsx:41:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+
+41         "de-DE": ["Base64", "Base32"],
+           ~~~~~~~
+
+  src/data/tools.ts:12:3
+    12   features: LangMapArray;
+         ~~~~~~~~
+    The expected type comes from property 'features' which is declared here on type 'ToolData'
+
+src/components/ToolCard.test.tsx:51:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+
+51         "de-DE": "Details zu BaseX.",
+           ~~~~~~~
+
+  src/data/tools.ts:13:3
+    13   detail: LangMap;
+         ~~~~~~
+    The expected type comes from property 'detail' which is declared here on type 'ToolData'
+
+src/lib/i18n.test.ts:26:26 - error TS2345: Argument of type '"de-DE"' is not assignable to parameter of type 'LangKey'.
+
+26         const result = t("de-DE", "siteTagline");
+                            ~~~~~~~
+
+vitest.config.ts:8:9 - error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+8         environmentMatchGlobs: [
+          ~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/vitest@4.1.9_@types+node@20.19.39_@vitest+coverage-v8@4.1.9_jsdom@29.1.1_@noble+hashes@_0b80febc185f7c3fb27fbeb1173a0f33/node_modules/vitest/dist/config.d.ts:98:18
+    98 declare function defineConfig(config: ViteUserConfigExport): ViteUserConfigExport;
+                        ~~~~~~~~~~~~
+    The last overload is declared here.
+
+
+Found 9 errors in 6 files.
+
+Errors  Files
+     1  src/components/ChannelSearch.test.tsx:39
+     1  src/components/FileDeleteSection.test.tsx:17
+     1  src/components/SiteFooter.test.tsx:21
+     4  src/components/ToolCard.test.tsx:21
+     1  src/lib/i18n.test.ts:26
+     1  vitest.config.ts:8
+
+  ~/Projects/github/calieo   main !27 ?17                    4s  18:43:20
+❯  grep -n "German footer" src/components/__snapshots__/SiteFooter.test.tsx.snap; wc -l src/components/__snapshots__/SiteFooter.test.tsx.snap
+53:exports[`SiteFooter > renders German footer snapshot 1`] = `
+      76 src/components/__snapshots__/SiteFooter.test.tsx.snap
+
+  ~/Projects/github/calieo   main !29 ?17                         18:44:15
+❯  sed -i '' '52,76d' src/components/__snapshots__/SiteFooter.test.tsx.snap
+tail -5 src/components/__snapshots__/SiteFooter.test.tsx.snap
+wc -l src/components/__snapshots__/SiteFooter.test.tsx.snap
+      Privacy Policy
+    </a>
+  </div>
+</footer>
+`;
+      51 src/components/__snapshots__/SiteFooter.test.tsx.snap
+
+  ~/Projects/github/calieo   main !30 ?17                         18:44:30
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1
+src/components/ChannelSearch.test.tsx:39:57 - error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+
+39         mockSearchParamsGet.mockImplementation((key) => key === "q" ? "initial" : null);
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/@vitest+spy@4.1.9/node_modules/@vitest/spy/dist/index.d.ts:156:28
+    156 }) : T extends Procedure ? (...args: Parameters<T>) => ReturnType<T> : never;
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    The expected type comes from the return type of this signature.
+
+src/components/FileDeleteSection.test.tsx:17:13 - error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+
+17             labels={labels}
+               ~~~~~~
+
+  src/components/FileDeleteSection.tsx:12:9
+    12         deleteDirectoryHasChildren: string;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    'deleteDirectoryHasChildren' is declared here.
+  src/components/FileDeleteSection.tsx:9:5
+    9     labels: {
+          ~~~~~~
+    The expected type comes from property 'labels' which is declared here on type 'IntrinsicAttributes & Props'
+
+vitest.config.ts:8:9 - error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+8         environmentMatchGlobs: [
+          ~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/vitest@4.1.9_@types+node@20.19.39_@vitest+coverage-v8@4.1.9_jsdom@29.1.1_@noble+hashes@_0b80febc185f7c3fb27fbeb1173a0f33/node_modules/vitest/dist/config.d.ts:98:18
+    98 declare function defineConfig(config: ViteUserConfigExport): ViteUserConfigExport;
+                        ~~~~~~~~~~~~
+    The last overload is declared here.
+
+
+Found 3 errors in 3 files.
+
+Errors  Files
+     1  src/components/ChannelSearch.test.tsx:39
+     1  src/components/FileDeleteSection.test.tsx:17
+     1  vitest.config.ts:8
+
+  ~/Projects/github/calieo   main !33 ?17                    3s  18:45:12
+❯  pnpm test 2>&1 | tail -80
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+ ❯ src/components/LanguageSelector.test.tsx (9 tests | 1 failed) 42ms
+     × uses an empty pathSuffix by default (results in trailing slash) 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/LanguageSelector.test.tsx > LanguageSelector > uses an empty pathSuffix by default (results in trailing slash)
+AssertionError: expected "vi.fn()" to be called with arguments: [ '/de-DE/' ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   "/de-DE/",
++   "//",
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/components/LanguageSelector.test.tsx:72:26
+     70|         const select = container.querySelector("select")!;
+     71|         fireEvent.change(select, { target: { value: "de-DE" } });
+     72|         expect(mockPush).toHaveBeenCalledWith("/de-DE/");
+       |                          ^
+     73|     });
+     74|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 16 passed (17)
+      Tests  1 failed | 171 passed (172)
+   Start at  18:45:22
+   Duration  4.37s (transform 980ms, setup 0ms, import 6.48s, tests 1.23s, environment 24.30s)
+
+ ELIFECYCLE  Test failed. See above for more details.
+
+  ~/Projects/github/calieo   main !33 ?17             ✔ 1|0  6s  18:45:27
+❯  pnpm test 2>&1 | tail -30
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+
+ Test Files  17 passed (17)
+      Tests  172 passed (172)
+   Start at  18:45:46
+   Duration  2.51s (transform 1.00s, setup 0ms, import 3.57s, tests 1.28s, environment 10.94s)
+
+
+  ~/Projects/github/calieo   main !33 ?17                    3s  18:45:49
+❯  pnpm build 2>&1 | tail -60
+
+> calieo@0.1.0 build /Users/Larry/Projects/github/calieo
+> next build
+
+▲ Next.js 16.2.4 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.6s
+  Running TypeScript ...
+Failed to type check.
+
+./vitest.config.ts:8:9
+Type error: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+   6 |         environment: "node",
+   7 |         globals: true,
+>  8 |         environmentMatchGlobs: [
+     |         ^
+   9 |             ["src/components/**/*.test.tsx", "jsdom"],
+  10 |         ],
+  11 |         include: ["src/**/*.test.{ts,tsx}"],
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.
+
+  ~/Projects/github/calieo   main !33 ?17            ✔ 1|0  11s  18:46:09
+❯  echo "-- en/es/fr/zh homepage status --"
+for l in en es fr zh; do curl -s -o /dev/null -w "$l: %{http_code}\n" http://localhost:7300/$l/\; done
+echo "-- removed languages status (expect 404) --"
+for l in de-DE ja pt-PT zh-TW; do curl -s -o /dev/null -w "$l: %{http_code}\n" http://localhost:7300/$l/\; done
+echo "-- removed language tool/privacy subpaths (expect 404) --"
+curl -s -o /dev/null -w "ja/tools/basex: %{http_code}\n" http://localhost:7300/ja/tools/basex
+curl -s -o /dev/null -w "pt-PT/privacy: %{http_code}\n" http://localhost:7300/pt-PT/privacy
+for for>  curl -s -o /dev/null -w "en=%{http_code} " http://localhost:7300/en/ ; curl -s -o /dev/null -w "es=%{http_code} " http://localhost:7300/es/ ; curl -s -o /dev/null -w "fr=%{http_code} " http://localhost:7300/fr/ ; curl -s -o /dev/null -w "zh=%{http_code}\n" http://localhost:7300/zh/
+for for>  done
+for> done
+-- en/es/fr/zh homepage status --
+en: 404
+en: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+es: 404
+es: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+fr: 404
+fr: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh: 404
+zh: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+
+---
+
+[Terminal 9c044439-2f4a-4871-8c2f-6ebdc8136e7e notification: command completed. The terminal has been cleaned up.]
+Terminal output:
+ git status --porcelain migrations/ && echo --- && git diff --stat migrations/
+  ~/Projects/github/calieo   main !9 ?12                          17:54:05
+❯  git status --porcelain migrations/ && echo --- && git diff --stat migrations/ 
+ M migrations/meta/_journal.json
+?? migrations/0003_moaning_doorman.sql
+?? migrations/meta/0003_snapshot.json
+---
+ migrations/meta/_journal.json | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+  ~/Projects/github/calieo   main !9 ?12                          17:54:05
+❯  rm migrations/0003_moaning_doorman.sql migrations/meta/0003_snapshot.json && git checkout -- migrations/meta/_journal.json && git status --porcelain migrations/
+
+  ~/Projects/github/calieo   main !8 ?10                          17:54:53
+❯  rm -f .data/calieo.db && pnpm db:migrate
+
+> calieo@0.1.0 db:migrate /Users/Larry/Projects/github/calieo
+> tsx src/db/migrate.ts
+
+✅ Migrations applied successfully.
+
+  ~/Projects/github/calieo   main !9 ?11                          18:00:28
+❯  sqlite3 .data/calieo.db ".schema sessions" ".schema files"
+CREATE TABLE `sessions` (
+        `id` text PRIMARY KEY NOT NULL,
+        `user_id` text NOT NULL,
+        `created_at` integer NOT NULL,
+        `expires_at` integer NOT NULL,
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+CREATE TABLE IF NOT EXISTS "files" (
+        `id` text PRIMARY KEY NOT NULL,
+        `user_id` text NOT NULL,
+        `title` text NOT NULL,
+        `description` text DEFAULT '' NOT NULL,
+        `filename` text NOT NULL,
+        `mime_type` text NOT NULL,
+        `size` integer NOT NULL,
+        `is_published` integer DEFAULT false NOT NULL,
+        `created_at` integer NOT NULL,
+        `updated_at` integer NOT NULL, `parent_id` text REFERENCES `files`(`id`) ON DELETE set null,
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+
+  ~/Projects/github/calieo   main !9 ?11                          18:00:40
+❯  for f in src/locales/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "OK: $f" || echo "FAIL: $f"; done
+OK: src/locales/de-DE.json
+OK: src/locales/en.json
+OK: src/locales/es.json
+OK: src/locales/fr.json
+OK: src/locales/ja.json
+OK: src/locales/pt-PT.json
+OK: src/locales/zh-TW.json
+OK: src/locales/zh.json
+
+  ~/Projects/github/calieo   main !19 ?12                         18:04:07
+❯  find node_modules/oauth4webapi -maxdepth 3 -type f | head -50
+
+  ~/Projects/github/calieo   main !19 ?12                         18:04:35
+❯  find . -path ./node_modules -prune -o -path '*/node_modules/.pnpm*oauth4webapi*' -print 2>/dev/null | head -5; find / -maxdepth 6 -iname 'oauth4webapi*' -not -path '*/Library/*' 2>/dev/null | head -10
+
+  ~/Projects/github/calieo   main !19 ?12                   31s  18:05:16
+❯  ls node_modules/.pnpm | grep -i oauth4webapi
+oauth4webapi@3.8.7
+
+  ~/Projects/github/calieo   main !19 ?12                         18:05:25
+❯  ls node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/
+build        LICENSE.md   package.json README.md
+
+  ~/Projects/github/calieo   main !19 ?12                         18:05:34
+❯  ls node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/build/ && grep -n "^export (declare )\?function\|^export declare function\|^export function" node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/build/index.d.ts | head -80
+index.d.ts   index.js     index.js.map
+1127:export declare function discoveryRequest(issuerIdentifier: URL, options?: DiscoveryRequestOptions): Promise<Response>;
+1145:export declare function processDiscoveryResponse(expectedIssuerIdentifier: URL, response: Response): Promise<AuthorizationServer>;
+1156:export declare function generateRandomCodeVerifier(): string;
+1164:export declare function generateRandomState(): string;
+1172:export declare function generateRandomNonce(): string;
+1185:export declare function calculatePKCECodeChallenge(codeVerifier: string): Promise<string>;
+1230:export declare function ClientSecretPost(clientSecret: string): ClientAuth;
+1251:export declare function ClientSecretBasic(clientSecret: string): ClientAuth;
+1282:export declare function PrivateKeyJwt(clientPrivateKey: CryptoKey | PrivateKey, options?: ModifyAssertionOptions): ClientAuth;
+1303:export declare function ClientSecretJwt(clientSecret: string, options?: ModifyAssertionOptions): ClientAuth;
+1316:export declare function None(): ClientAuth;
+1330:export declare function TlsClientAuth(): ClientAuth;
+1344:export declare function issueRequestObject(as: AuthorizationServer, client: Client, parameters: URLSearchParams | Record<string, string> | string[][], privateKey: CryptoKey | PrivateKey, options?: ModifyAssertionOptions): Promise<string>;
+1348:export declare function checkProtocol(url: URL, enforceHttps: boolean | undefined): void;
+1368:export declare function pushedAuthorizationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: PushedAuthorizationRequestOptions): Promise<Response>;
+1386:export declare function isDPoPNonceError(err: unknown): boolean;
+1411:export declare function DPoP(client: Pick<Client, typeof clockSkew>, keyPair: CryptoKeyPair, options?: ModifyAssertionOptions): DPoPHandle;
+1634:export declare function processPushedAuthorizationResponse(as: AuthorizationServer, client: Client, response: Response): Promise<PushedAuthorizationResponse>;
+1663:export declare function protectedResourceRequest(accessToken: string, method: string, url: URL, headers?: Headers, body?: ProtectedResourceRequestBody, options?: ProtectedResourceRequestOptions): Promise<Response>;
+1689:export declare function userInfoRequest(as: AuthorizationServer, client: Client, accessToken: string, options?: UserInfoRequestOptions): Promise<Response>;
+1836:export declare function processUserInfoResponse(as: AuthorizationServer, client: Client, expectedSubject: string | typeof skipSubjectCheck, response: Response, options?: JWEDecryptOptions): Promise<UserInfoResponse>;
+1864:export declare function refreshTokenGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, refreshToken: string, options?: TokenEndpointRequestOptions): Promise<Response>;
+1878:export declare function getValidatedIdTokenClaims(ref: TokenEndpointResponse): IDToken | undefined;
+1911:export declare function validateApplicationLevelSignature(as: AuthorizationServer, ref: Response, options?: ValidateSignatureOptions): Promise<void>;
+1931:export declare function processRefreshTokenResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+1973:export declare function authorizationCodeGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, callbackParameters: URLSearchParams, redirectUri: string, codeVerifier: string | typeof nopkce, options?: TokenEndpointRequestOptions): Promise<Response>;
+2081:export declare function processAuthorizationCodeResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessAuthorizationCodeResponseOptions): Promise<TokenEndpointResponse>;
+2259:export declare function clientCredentialsGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: ClientCredentialsGrantRequestOptions): Promise<Response>;
+2282:export declare function genericTokenEndpointRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, grantType: string, parameters: URLSearchParams | Record<string, string> | string[][], options?: Omit<TokenEndpointRequestOptions, 'additionalParameters'>): Promise<Response>;
+2301:export declare function processGenericTokenEndpointResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2320:export declare function processClientCredentialsResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2348:export declare function revocationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, token: string, options?: RevocationRequestOptions): Promise<Response>;
+2364:export declare function processRevocationResponse(response: Response): Promise<undefined>;
+2403:export declare function introspectionRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, token: string, options?: IntrospectionRequestOptions): Promise<Response>;
+2452:export declare function processIntrospectionResponse(as: AuthorizationServer, client: Client, response: Response, options?: JWEDecryptOptions): Promise<IntrospectionResponse>;
+2482:export declare function validateJwtAuthResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL, expectedState?: string | typeof expectNoState | typeof skipStateCheck, options?: ValidateSignatureOptions & JWEDecryptOptions): Promise<URLSearchParams>;
+2505:export declare function validateDetachedSignatureResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL | Request, expectedNonce: string, expectedState?: string | typeof expectNoState, maxAge?: number | typeof skipAuthTimeCheck, options?: ValidateSignatureOptions & JWEDecryptOptions): Promise<URLSearchParams>;
+2529:export declare function validateCodeIdTokenResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL | Request, expectedNonce: string, expectedState?: string | typeof expectNoState, maxAge?: number | typeof skipAuthTimeCheck, options?: ValidateSignatureOptions & JWEDecryptOptions): Promise<URLSearchParams>;
+2572:export declare function validateAuthResponse(as: AuthorizationServer, client: Client, parameters: URLSearchParams | URL, expectedState?: string | typeof expectNoState | typeof skipStateCheck): URLSearchParams;
+2596:export declare function deviceAuthorizationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: DeviceAuthorizationRequestOptions): Promise<Response>;
+2648:export declare function processDeviceAuthorizationResponse(as: AuthorizationServer, client: Client, response: Response): Promise<DeviceAuthorizationResponse>;
+2668:export declare function deviceCodeGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, deviceCode: string, options?: TokenEndpointRequestOptions): Promise<Response>;
+2687:export declare function processDeviceCodeResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2709:export declare function generateKeyPair(alg: string, options?: GenerateKeyPairOptions): Promise<CryptoKeyPair>;
+2777:export declare function validateJwtAccessToken(as: AuthorizationServer, request: Request, expectedAudience: string, options?: ValidateJWTAccessTokenOptions): Promise<JWTAccessTokenClaims>;
+2801:export declare function backchannelAuthenticationRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, parameters: URLSearchParams | Record<string, string> | string[][], options?: BackchannelAuthenticationRequestOptions): Promise<Response>;
+2839:export declare function processBackchannelAuthenticationResponse(as: AuthorizationServer, client: Client, response: Response): Promise<BackchannelAuthenticationResponse>;
+2860:export declare function backchannelAuthenticationGrantRequest(as: AuthorizationServer, client: Client, clientAuthentication: ClientAuth, authReqId: string, options?: TokenEndpointRequestOptions): Promise<Response>;
+2879:export declare function processBackchannelAuthenticationGrantResponse(as: AuthorizationServer, client: Client, response: Response, options?: ProcessTokenResponseOptions): Promise<TokenEndpointResponse>;
+2916:export declare function dynamicClientRegistrationRequest(as: AuthorizationServer, metadata: Partial<OmitSymbolProperties<Client>>, options?: DynamicClientRegistrationRequestOptions): Promise<Response>;
+2934:export declare function processDynamicClientRegistrationResponse(response: Response): Promise<OmitSymbolProperties<Client>>;
+3028:export declare function resourceDiscoveryRequest(resourceIdentifier: URL, options?: HttpRequestOptions<'GET'>): Promise<Response>;
+3045:export declare function processResourceDiscoveryResponse(expectedResourceIdentifier: URL, response: Response): Promise<ResourceServer>;
+
+  ~/Projects/github/calieo   main !19 ?12                         18:05:44
+❯  grep -n "^export declare class\|^export declare const\|^export interface Client \|^export interface AuthorizationServer\|OAuth2Error\|WWWAuthenticateChallengeError\|AuthorizationResponseError\|ResponseBodyError" node_modules/.pnpm/oauth4webapi@3.8.7/node_modules/oauth4webapi/build/index.d.ts | head -60
+225:export declare const allowInsecureRequests: unique symbol;
+256:export declare const clockSkew: unique symbol;
+274:export declare const clockTolerance: unique symbol;
+405:export declare const customFetch: unique symbol;
+441:export declare const modifyAssertion: unique symbol;
+488:export declare const jweDecrypt: unique symbol;
+545:export declare const jwksCache: unique symbol;
+553:export interface AuthorizationServer {
+883:export interface Client {
+997:export declare class UnsupportedOperationError extends Error {
+1011:export declare class OperationProcessingError extends Error {
+1423:export interface OAuth2Error {
+1449:export declare class ResponseBodyError extends Error {
+1470:     * body is available in {@link ResponseBodyError.cause}
+1477:        cause: OAuth2Error;
+1493:export declare class AuthorizationResponseError extends Error {
+1529:export declare class WWWAuthenticateChallengeError extends Error {
+1627: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+1628: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+1656: *   rejected with {@link WWWAuthenticateChallengeError}.
+1750:export declare const skipSubjectCheck: unique symbol;
+1828: *   HTTP Header challenges are rejected with {@link WWWAuthenticateChallengeError}.
+1923: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+1924: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+1948:export declare const nopkce: unique symbol;
+2034:export declare const expectNoNonce: unique symbol;
+2040:export declare const skipAuthTimeCheck: unique symbol;
+2072: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+2073: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+2085: * Assigned to {@link WWWAuthenticateChallengeError.code}.
+2089:export declare const WWW_AUTHENTICATE_CHALLENGE = "OAUTH_WWW_AUTHENTICATE_CHALLENGE";
+2093: * Assigned to {@link ResponseBodyError.code}.
+2097:export declare const RESPONSE_BODY_ERROR = "OAUTH_RESPONSE_BODY_ERROR";
+2105:export declare const UNSUPPORTED_OPERATION = "OAUTH_UNSUPPORTED_OPERATION";
+2109: * Assigned to {@link AuthorizationResponseError.code}.
+2113:export declare const AUTHORIZATION_RESPONSE_ERROR = "OAUTH_AUTHORIZATION_RESPONSE_ERROR";
+2121:export declare const JWT_USERINFO_EXPECTED = "OAUTH_JWT_USERINFO_EXPECTED";
+2136:export declare const PARSE_ERROR = "OAUTH_PARSE_ERROR";
+2144:export declare const INVALID_RESPONSE = "OAUTH_INVALID_RESPONSE";
+2152:export declare const INVALID_REQUEST = "OAUTH_INVALID_REQUEST";
+2160:export declare const RESPONSE_IS_NOT_JSON = "OAUTH_RESPONSE_IS_NOT_JSON";
+2168:export declare const RESPONSE_IS_NOT_CONFORM = "OAUTH_RESPONSE_IS_NOT_CONFORM";
+2176:export declare const HTTP_REQUEST_FORBIDDEN = "OAUTH_HTTP_REQUEST_FORBIDDEN";
+2184:export declare const REQUEST_PROTOCOL_FORBIDDEN = "OAUTH_REQUEST_PROTOCOL_FORBIDDEN";
+2194:export declare const JWT_TIMESTAMP_CHECK = "OAUTH_JWT_TIMESTAMP_CHECK_FAILED";
+2204:export declare const JWT_CLAIM_COMPARISON = "OAUTH_JWT_CLAIM_COMPARISON_FAILED";
+2212:export declare const JSON_ATTRIBUTE_COMPARISON = "OAUTH_JSON_ATTRIBUTE_COMPARISON_FAILED";
+2220:export declare const KEY_SELECTION = "OAUTH_KEY_SELECTION_FAILED";
+2228:export declare const MISSING_SERVER_METADATA = "OAUTH_MISSING_SERVER_METADATA";
+2236:export declare const INVALID_SERVER_METADATA = "OAUTH_INVALID_SERVER_METADATA";
+2313: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+2314: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+2444: *   style errors are rejected using {@link ResponseBodyError}. WWW-Authenticate HTTP Header
+2445: *   challenges are rejected with {@link WWWAuthenticateChallengeError}.
+2472: *   using {@link AuthorizationResponseError}.
+2499: *   using {@link AuthorizationResponseError}.
+2522: *   using {@link AuthorizationResponseError}.
+2543:export declare const skipStateCheck: unique symbol;
+2550:export declare const expectNoState: unique symbol;
+2563: *   {@link AuthorizationResponseError}.
+
+  ~/Projects/github/calieo   main !19 ?12                         18:06:05
+❯  rm -rf "src/app/[lang]/console/signin" "src/app/[lang]/console/signout"
+
+  ~/Projects/github/calieo   main !21 ?16                         18:11:16
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1 | tail -100
+src/components/ChannelSearch.test.tsx(39,57): error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+src/components/FileDeleteSection.test.tsx(17,13): error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+vitest.config.ts(8,9): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+  ~/Projects/github/calieo   main !22 ?16            ✔ 2|0  17s  18:11:59
+❯  pnpm test 2>&1 | tail -150
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+
+ Test Files  17 passed (17)
+      Tests  173 passed (173)
+   Start at  18:12:13
+   Duration  9.25s (transform 1.14s, setup 0ms, import 11.73s, tests 1.33s, environment 58.07s)
+
+
+  ~/Projects/github/calieo   main !22 ?16                   12s  18:12:22
+❯  curl -s -o /dev/null -w "%{http_code}\n" http://localhost:7300/en/account/signin
+200
+
+  ~/Projects/github/calieo   main !22 ?16                         18:13:36
+❯  curl -s http://localhost:7300/en/account/signin | grep -o 'devSignIn\|Sign in with Calieo\|Sign In\|通过 Calieo\|calieo/start' | sort -u
+calieo/start
+Sign In
+Sign in with Calieo
+
+  ~/Projects/github/calieo   main !22 ?16                         18:14:29
+❯  rm -f /tmp/calieo_cookies.txt
+curl -s -i http://localhost:7300/en/account/signin | head -40
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+link: </_next/static/chunks/src_app_globals_0p2ml0n.css>; rel=preload; as="style"
+Cache-Control: no-cache, must-revalidate
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+X-Powered-By: Next.js
+Content-Type: text/html; charset=utf-8
+Date: Tue, 01 Sep 2026 10:14:48 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+<!DOCTYPE html><html lang="en" class="h-full"><head><meta charSet="utf-8"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/src_app_globals_0p2ml0n.css" data-precedence="next_static/chunks/src_app_globals_0p2ml0n.css"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0uuwyg3._.js"/><script src="/_next/static/chunks/04bf_next_dist_compiled_next-devtools_index_0iyndr7.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_compiled_react-dom_11is1yp._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_compiled_react-server-dom-turbopack_0ygkra_._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_compiled_0odupje._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_client_0-o~zgc._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_0gmr1xi._.js" async=""></script><script src="/_next/static/chunks/0i4a_%40swc_helpers_cjs_0hvz.20._.js" async=""></script><script src="/_next/static/chunks/_0rqeker._.js" async=""></script><script src="/_next/static/chunks/turbopack-_0_hu_o0._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_06c8~ey._.js" async=""></script><script src="/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js" async=""></script><script src="/_next/static/chunks/04bf_next_dist_client_components_builtin_global-error_0nhdkyl.js" async=""></script><script src="/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js" async=""></script><script src="/_next/static/chunks/_0vwfyh_._.js" async=""></script><script src="/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js" async=""></script><title>Calieo — Free Online Developer Tools</title><meta name="description" content="A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing."/><meta property="og:title" content="Calieo — Free Online Developer Tools"/><meta property="og:description" content="A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing."/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Calieo — Free Online Developer Tools"/><meta name="twitter:description" content="A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing."/><link rel="icon" href="/favicon.ico?favicon.0x3dzn~oxb6tn.ico" sizes="256x256" type="image/x-icon"/><script src="/_next/static/chunks/04bf_next_dist_build_polyfills_polyfill-nomodule.js" noModule=""></script></head><body class="min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased"><div hidden=""><!--$--><!--/$--></div><header class="w-full border-b border-gray-200 bg-white"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"><a class="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors" href="/en">Calieo</a><nav class="flex items-center gap-4 flex-1 ml-6"><a class="text-sm text-gray-600 hover:text-gray-900 transition-colors" href="/en">Home</a><a class="text-sm text-gray-600 hover:text-gray-900 transition-colors" href="/en/channels">Channels</a></nav><div class="flex items-center gap-3"><select class="text-sm border border-gray-200 rounded-md px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"><option value="en" selected="">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de-DE">Deutsch</option><option value="pt-PT">Português</option><option value="ja">日本語</option><option value="zh">简体中文</option><option value="zh-TW">繁體中文</option></select><a title="Console" class="text-gray-500 hover:text-gray-900 transition-colors" href="/en/console"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="22" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M6 22h13a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h1zm6-17.001c1.647 0 3 1.351 3 3C15 9.647 13.647 11 12 11S9 9.647 9 7.999c0-1.649 1.353-3 3-3zM6 17.25c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18H6v-.75z"></path></svg></a><a title="All Tools" class="text-gray-500 hover:text-gray-900 transition-colors" href="/en/apps"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><rect width="112" height="112" x="48" y="48" rx="8" ry="8"></rect><rect width="112" height="112" x="200" y="48" rx="8" ry="8"></rect><rect width="112" height="112" x="352" y="48" rx="8" ry="8"></rect><rect width="112" height="112" x="48" y="200" rx="8" ry="8"></rect><rect width="112" height="112" x="200" y="200" rx="8" ry="8"></rect><rect width="112" height="112" x="352" y="200" rx="8" ry="8"></rect><rect width="112" height="112" x="48" y="352" rx="8" ry="8"></rect><rect width="112" height="112" x="200" y="352" rx="8" ry="8"></rect><rect width="112" height="112" x="352" y="352" rx="8" ry="8"></rect></svg></a></div></div></header><main class="flex-1 w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12"><h1 class="text-xl font-bold text-gray-900 mb-6">Sign In</h1><div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-4 text-sm text-amber-800">Sign In — Development</div><form class="space-y-4 mb-8" action="" encType="multipart/form-data" method="POST"><input type="hidden" name="$ACTION_REF_1"/><input type="hidden" name="$ACTION_1:0" value="{&quot;id&quot;:&quot;6098cf9c2cb36e8b57d627b2dce79b629941acf38f&quot;,&quot;bound&quot;:&quot;$@1&quot;}"/><input type="hidden" name="$ACTION_1:1" value="[&quot;$@2&quot;]"/><input type="hidden" name="$ACTION_1:2" value="&quot;2spg7IrN97ANcrq82u2wv/REDACTED&quot;"/><input type="hidden" name="return_to" value="/en/console"/><div><label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label><input id="email" type="email" required="" autoComplete="email" placeholder="you@example.com" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" name="email"/></div><div><label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username (optional)</label><input id="username" type="text" autoComplete="nickname" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" name="username"/></div><button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">Sign In</button></form><a class="block w-full text-center rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors" href="/api/auth/calieo/start?lang=en&amp;return_to=%2Fen%2Fconsole">Sign in with Calieo</a><p class="mt-6 text-center text-sm"><a class="text-gray-500 hover:text-gray-700 underline" href="/en/account/signout">Sign Out</a></p></main><footer class="w-full border-t border-gray-200 bg-white mt-auto"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4"><p class="text-sm text-gray-400">© <!-- -->2026<!-- --> <!-- -->Calieo</p><a class="text-sm text-gray-400 hover:text-gray-600 transition-colors" href="/en/privacy">Privacy Policy</a></div></footer><!--$--><!--/$--><script id="_R_">self.__next_r="BBK1aDJo6W8OVInFeAMQT"</script><script src="/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0uuwyg3._.js" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"7:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/next-devtools/userspace/app/segment-explorer-node.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"SegmentViewNode\"]\n9:\"$Sreact.fragment\"\n19:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/components/layout-router.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"default\"]\n1b:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/components/render-from-template-context.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"default\"]\n4d:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"OutletBoundary\"]\n4f:\"$Sreact.suspense\"\n5d:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"ViewportBoundary\"]\n67:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"MetadataBoundary\"]\n6d:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/components/builtin/global-error.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"/_next/static/chunks/04bf_next_dist_client_components_builtin_global-error_0nhdkyl.js\"],\"default\",1]\n88:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/lib/metadata/generate/icon-mark.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\"],\"IconMark\"]\n:HL[\"/_next/static/chunks/src_app_globals_0p2ml0n.css\",\"style\"]\n1:D\"$4\"\n1:D\"$2\"\n1:D\"$5\"\n1:null\nc:D\"$16\"\nc:D\"$d\"\nc:D\"$18\"\n1d:D\"$1f\"\n1d:D\"$1e\"\n1d:D\"$21\"\n1d:D\"$20\"\n1d:D\"$22\"\n1d:[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"},\"$20\",\"$23\",1],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}},\"$20\",\"$26\",1],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404},\"$20\",\"$27\",1],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"f"])</script><script>self.__next_f.push([1,"ontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"},\"$20\",\"$29\",1]},\"$20\",\"$28\",1]]},\"$20\",\"$25\",1]},\"$20\",\"$24\",1]]\nc:[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$1a\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"$L7\",\"c-not-found\",{\"type\":\"not-found\",\"pagePath\":\"__next_builtin__not-found.js\",\"children\":[\"$1d\",[]]},null,\"$1c\",0],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[[\"$\",\"$L7\",null,{\"type\":\"boundary:not-found\",\"pagePath\":\"__next_builtin__not-found.js@boundary\"},null,\"$2a\",1],\"$undefined\",\"$undefined\",[\"$\",\"$L7\",null,{\"type\":\"boundary:global-error\",\"pagePath\":\"__next_builtin__global-error.js\"},null,\"$2b\",1]]},null,\"$17\",1]\n30:D\"$38\"\n30:D\"$31\"\n41:D\"$45\"\n41:D\"$42\"\n48:D\"$4a\"\n48:D\"$49\"\n48:D\"$4c\"\n48:[\"$\",\"$L4d\",null,{\"children\":[\"$\",\"$4f\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@50\"},\"$49\",\"$4e\",1]},\"$49\",\"$4b\",1]\n53:D\"$56\"\n53:D\"$54\"\n53:D\"$57\"\n53:null\n58:D\"$5a\"\n58:D\"$59\"\n58:D\"$5c\"\n5e:D\"$60\"\n5e:D\"$5f\"\n58:[\"$\",\"$L5d\",null,{\"children\":\"$L5e\"},\"$59\",\"$5b\",1]\n61:D\"$63\"\n61:D\"$62\"\n61:D\"$65\"\n69:D\"$6b\"\n69:D\"$6a\"\n61:[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$L67\",null,{\"children\":[\"$\",\"$4f\",null,{\"name\":\"Next.Metadata\",\"children\":\"$L69\"},\"$62\",\"$68\",1]},\"$62\",\"$66\",1]},\"$62\",\"$64\",1]\n6c:[]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":\"$1\",\"c\":[\"\",\"en\",\"account\",\"signin\"],\"q\":\"\",\"i\":true,\"f\":[[[\"\",{\"children\":[[\"lang\",\"en\",\"d\",null],{\"children\":[\"account\",{\"children\":[\"signin\",{\"children\":[\"__PAGE__\",{}]}]}]}]},\"$undefined\",\"$undefined\",16],[[\"$\",\"$L7\",\"layout\",{\"type\":\"layout\",\"pagePath\":\"layout.tsx\",\"children\":[\"$\",\"$9\",\"c\",{\"children\":[[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$a\",0],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$b\",0]],\"$c\"]},null,\"$8\",1]},null,\"$6\",0],{\"children\":[[\"$\",\"$L7\",\"layout\",{\"type\":\"layout\",\"pagePath\":\"[lang]/layout.tsx\",\"children\":[\"$\",\"$9\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/src_app_globals_0p2ml0n.css\",\"precedence\":\"next_static/chunks/src_app_globals_0p2ml0n.css\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"},null,\"$2e\",0],[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$2f\",0]],\"$L30\"]},null,\"$2d\",1]},null,\"$2c\",0],{\"children\":[[\"$\",\"$9\",\"c\",{\"children\":[null,[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$3b\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[\"$undefined\",\"$undefined\",\"$undefined\",\"$undefined\"]},null,\"$3a\",1]]},null,\"$39\",0],{\"children\":[[\"$\",\"$9\",\"c\",{\"children\":[null,[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$3e\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[\"$undefined\",\"$undefined\",\"$undefined\",\"$undefined\"]},null,\"$3d\",1]]},null,\"$3c\",0],{\"children\":[[\"$\",\"$9\",\"c\",{\"children\":[[\"$\",\"$L7\",\"c-page\",{\"type\":\"page\",\"pagePath\":\"[lang]/account/signin/page.tsx\",\"children\":\"$L41\"},null,\"$40\",1],[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/_0vwfyh_._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$46\",0],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js\",\"async\":true,\"nonce\":\"$undefined\"},null,\"$47\",0]],\"$48\"]},null,\"$3f\",0],{},null,false,null]},null,false,\"$@51\"]},null,false,\"$@51\"]},null,false,null]},null,false,null],[\"$\",\"$9\",\"h\",{\"children\":[\"$53\",\"$58\",\"$61\",null]},null,\"$52\",0],false]],\"m\":\"$W6c\",\"G\":[\"$6d\",[\"$\",\"$L7\",\"ge-svn\",{\"type\":\"global-error\",\"pagePath\":\"__next_builtin__global-error.js\",\"children\":[]},null,\"$6e\",0]],\"S\":false,\"h\":null,\"s\":\"$undefined\",\"l\":\"$undefined\",\"p\":\"$undefined\",\"d\":\"$undefined\",\"b\":\"development\"}\n"])</script><script>self.__next_f.push([1,"6f:[]\n51:D\"$70\"\n51:\"$W6f\"\n30:D\"$72\"\n30:[\"$\",\"html\",null,{\"lang\":\"en\",\"className\":\"h-full\",\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"meta\",null,{\"charSet\":\"utf-8\"},\"$31\",\"$74\",1],[\"$\",\"meta\",null,{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"},\"$31\",\"$75\",1]]},\"$31\",\"$73\",1],[\"$\",\"body\",null,{\"className\":\"min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased\",\"children\":[\"$\",\"$L19\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L1b\",null,{},null,\"$78\",1],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\",\"segmentViewBoundaries\":[\"$undefined\",\"$undefined\",\"$undefined\",\"$undefined\"]},null,\"$77\",1]},\"$31\",\"$76\",1]]},\"$31\",\"$71\",1]\n5e:D\"$79\"\n5e:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"},\"$49\",\"$7a\",0],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"},\"$49\",\"$7b\",0]]\n50:D\"$7c\"\n50:null\n69:D\"$7d\"\n69:[[\"$\",\"title\",\"0\",{\"children\":\"Calieo — Free Online Developer Tools\"},\"$49\",\"$7e\",0],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.\"},\"$49\",\"$7f\",0],[\"$\",\"meta\",\"2\",{\"property\":\"og:title\",\"content\":\"Calieo — Free Online Developer Tools\"},\"$49\",\"$80\",0],[\"$\",\"meta\",\"3\",{\"property\":\"og:description\",\"content\":\"A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.\"},\"$49\",\"$81\",0],[\"$\",\"meta\",\"4\",{\"property\":\"og:type\",\"content\":\"website\"},\"$49\",\"$82\",0],[\"$\",\"meta\",\"5\",{\"name\":\"twitter:card\",\"content\":\"summary\"},\"$49\",\"$83\",0],[\"$\",\"meta\",\"6\",{\"name\":\"twitter:title\",\"content\":\"Calieo — Free Online Developer Tools\"},\"$49\",\"$84\",0],[\"$\",\"meta\",\"7\",{\"name\":\"twitter:description\",\"content\":\"A curated collection of free online tools: Base encoding, hashing, encryption, random generators, datetime utilities, and JSON processing.\"},\"$49\",\"$85\",0],[\"$\",\"link\",\"8\",{\"rel\":\"icon\",\"href\":\"/favicon.ico?favicon.0x3dzn~oxb6tn.ico\",\"sizes\":\"256x256\",\"type\":\"image/x-icon\"},\"$49\",\"$86\",0],[\"$\",\"$L88\",\"9\",{},\"$49\",\"$87\",0]]\n"])</script><script>self.__next_f.push([1,"a3:I[\"[project]/node_modules/.pnpm/next@16.2.4_@babel+core@7.29.0_@playwright+test@1.61.0_react-dom@19.2.4_react@19.2.4__react@19.2.4/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js\",\"/_next/static/chunks/_0vwfyh_._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js\"],\"\"]\nb1:I[\"[project]/src/components/LanguageSelector.tsx [app-client] (ecmascript)\",[\"/_next/static/chunks/04bf_next_dist_06c8~ey._.js\",\"/_next/static/chunks/src_app_layout_tsx_0kd5cj.._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_layout_tsx_0nhdkyl._.js\",\"/_next/static/chunks/_0vwfyh_._.js\",\"/_next/static/chunks/src_app_%5Blang%5D_account_signin_page_tsx_01hx7bn._.js\"],\"default\"]\n41:D\"$8c\"\n41:D\"$8e\"\n41:D\"$8f\"\n41:D\"$93\"\n41:D\"$95\"\n41:D\"$96\"\n41:D\"$97\"\n98:D\"$9a\"\n98:D\"$99\"\n98:D\"$9c\"\n9e:D\"$a0\"\n9e:D\"$9f\"\n9e:D\"$a2\"\n9e:[\"$\",\"$La3\",null,{\"href\":\"/en/\",\"className\":\"text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors\",\"children\":\"Calieo\"},\"$9f\",\"$a1\",1]\na5:D\"$a7\"\na5:D\"$a6\"\na5:D\"$a9\"\na5:[\"$\",\"$La3\",null,{\"href\":\"/en/\",\"className\":\"text-sm text-gray-600 hover:text-gray-900 transition-colors\",\"children\":\"Home\"},\"$a6\",\"$a8\",1]\naa:D\"$ac\"\naa:D\"$ab\"\naa:D\"$ae\"\naa:[\"$\",\"$La3\",null,{\"href\":\"/en/channels\",\"className\":\"text-sm text-gray-600 hover:text-gray-900 transition-colors\",\"children\":\"Channels\"},\"$ab\",\"$ad\",1]\nb2:D\"$b7\"\nb2:D\"$b3\"\nb2:D\"$b9\"\nba:D\"$bc\"\nba:D\"$bb\"\nba:D\"$c0\"\nba:D\"$bd\"\nba:D\"$c2\"\nba:[\"$\",\"svg\",null,{\"stroke\":\"currentColor\",\"fill\":\"currentColor\",\"strokeWidth\":\"0\",\"viewBox\":\"0 0 24 24\",\"children\":[\"$undefined\",[[\"$\",\"path\",\"0\",{\"d\":\"M6 22h13a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h1zm6-17.001c1.647 0 3 1.351 3 3C15 9.647 13.647 11 12 11S9 9.647 9 7.999c0-1.649 1.353-3 3-3zM6 17.25c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18H6v-.75z\",\"children\":[]},\"$bb\",\"$c3\",0]]],\"className\":\"$undefined\",\"style\":{\"color\":\"$undefined\"},\"height\":22,\"width\":22,\"xmlns\":\"http://www.w3.org/2000/svg\"},\"$bd\",\"$c1\",1]\nb2:[\"$\",\"$La3\",null,{\"href\":\"/en/console\",\"title\":\"Console\",\"className\":\"text-gray-500 hover:text-gray-900 transition-colors\",\"children\":\"$ba\"},\"$b3\",\"$b8\",1]\nc4:D\"$c9\"\nc4:D\"$c5\"\nc4:D\"$cb\"\ncc:D\"$ce\"\ncc:D\"$cd\"\ncc:D\"$d2\"\ncc:D\"$cf\"\ncc:D\"$d4\"\ncc:[\"$\",\"svg\",null,{\"stroke\":\"currentColor\",\"fill\":\"currentColor\",\"strokeWidth\":\"0\",\"viewBox\":\"0 0 512 512\",\"children\":[\"$undefined\",[[\"$\",\"rect\",\"0\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"48\",\"y\":\"48\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d5\",0],[\"$\",\"rect\",\"1\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"200\",\"y\":\"48\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d6\",0],[\"$\",\"rect\",\"2\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"352\",\"y\":\"48\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d7\",0],[\"$\",\"rect\",\"3\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"48\",\"y\":\"200\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d8\",0],[\"$\",\"rect\",\"4\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"200\",\"y\":\"200\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$d9\",0],[\"$\",\"rect\",\"5\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"352\",\"y\":\"200\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$da\",0],[\"$\",\"rect\",\"6\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"48\",\"y\":\"352\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$db\",0],[\"$\",\"rect\",\"7\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"200\",\"y\":\"352\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$dc\",0],[\"$\",\"rect\",\"8\",{\"width\":\"112\",\"height\":\"112\",\"x\":\"352\",\"y\":\"352\",\"rx\":\"8\",\"ry\":\"8\",\"children\":[]},\"$cd\",\"$dd\",0]]],\"className\":\"$undefined\",\"style\":{\"color\":\"$undefined\"},\"height\":20,\"width\":20,\"xmlns\":\"http://www.w3.org/2000/svg\"},\"$cf\",\"$d3\",1]\nc4:[\"$\",\"$La3\",null,{\"href\":\"/en/apps\",\"title\":\"All Tools\",\"className\":\"text-gray-500 hover:text-gray-900 transition-colors\",\"children\":\"$cc\"},\"$c5\",\"$ca\",1]\n98:[\"$\",\"header\",null,{\"className\":\"w-full border-b border-gray-200 bg-white\",\"children\":[\"$\",\"div\",null,{\"className\":\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4\",\"children\":[\"$9e\",[\"$\",\"nav\",null,{\"className\":\"flex items-ce"])</script><script>self.__next_f.push([1,"nter gap-4 flex-1 ml-6\",\"children\":[\"$a5\",\"$aa\"]},\"$99\",\"$a4\",1],[\"$\",\"div\",null,{\"className\":\"flex items-center gap-3\",\"children\":[[\"$\",\"$Lb1\",null,{\"currentLang\":\"en\",\"pathSuffix\":\"\"},\"$99\",\"$b0\",1],\"$b2\",\"$c4\"]},\"$99\",\"$af\",1]]},\"$99\",\"$9d\",1]},\"$99\",\"$9b\",1]\ne2:{\"id\":\"6098cf9c2cb36e8b57d627b2dce79b629941acf38f\",\"bound\":\"$@e3\",\"name\":\"bound handleDevSignIn\",\"env\":\"Server\",\"location\":[\"module evaluation\",\"/Users/Larry/Projects/github/calieo/.next/dev/server/chunks/ssr/[root-of-the-server]__0ou7tau._.js\",734,439]}\nec:D\"$ee\"\nec:D\"$ed\"\nec:D\"$f0\"\nec:[\"$\",\"$La3\",null,{\"href\":\"/api/auth/calieo/start?lang=en\u0026return_to=%2Fen%2Fconsole\",\"className\":\"block w-full text-center rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors\",\"children\":\"Sign in with Calieo\"},\"$ed\",\"$ef\",1]\nf2:D\"$f4\"\nf2:D\"$f3\"\nf2:D\"$f6\"\nf2:[\"$\",\"$La3\",null,{\"href\":\"/en/account/signout\",\"className\":\"text-gray-500 hover:text-gray-700 underline\",\"children\":\"Sign Out\"},\"$f3\",\"$f5\",1]\nf7:D\"$f9\"\nf7:D\"$f8\"\nf7:D\"$fb\"\nfe:D\"$100\"\nfe:D\"$ff\"\nfe:D\"$102\"\nfe:[\"$\",\"$La3\",null,{\"href\":\"/en/privacy/\",\"className\":\"text-sm text-gray-400 hover:text-gray-600 transition-colors\",\"children\":\"Privacy Policy\"},\"$ff\",\"$101\",1]\nf7:[\"$\",\"footer\",null,{\"className\":\"w-full border-t border-gray-200 bg-white mt-auto\",\"children\":[\"$\",\"div\",null,{\"className\":\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4\",\"children\":[[\"$\",\"p\",null,{\"className\":\"text-sm text-gray-400\",\"children\":[\"© \",2026,\" \",\"Calieo\"]},\"$f8\",\"$fd\",1],\"$fe\"]},\"$f8\",\"$fc\",1]},\"$f8\",\"$fa\",1]\n"])</script><script>self.__next_f.push([1,"41:[\"$98\",[\"$\",\"main\",null,{\"className\":\"flex-1 w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-xl font-bold text-gray-900 mb-6\",\"children\":\"Sign In\"},\"$42\",\"$df\",1],false,null,[[\"$\",\"div\",null,{\"className\":\"bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-4 text-sm text-amber-800\",\"children\":\"Sign In — Development\"},\"$42\",\"$e0\",1],[\"$\",\"form\",null,{\"action\":\"$he2\",\"className\":\"space-y-4 mb-8\",\"children\":[[\"$\",\"input\",null,{\"type\":\"hidden\",\"name\":\"return_to\",\"value\":\"/en/console\"},\"$42\",\"$e4\",1],[\"$\",\"div\",null,{\"children\":[[\"$\",\"label\",null,{\"htmlFor\":\"email\",\"className\":\"block text-sm font-medium text-gray-700 mb-1\",\"children\":\"Email Address\"},\"$42\",\"$e6\",1],[\"$\",\"input\",null,{\"id\":\"email\",\"type\":\"email\",\"name\":\"email\",\"required\":true,\"autoComplete\":\"email\",\"placeholder\":\"you@example.com\",\"className\":\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500\"},\"$42\",\"$e7\",1]]},\"$42\",\"$e5\",1],[\"$\",\"div\",null,{\"children\":[[\"$\",\"label\",null,{\"htmlFor\":\"username\",\"className\":\"block text-sm font-medium text-gray-700 mb-1\",\"children\":\"Username (optional)\"},\"$42\",\"$e9\",1],[\"$\",\"input\",null,{\"id\":\"username\",\"type\":\"text\",\"name\":\"username\",\"autoComplete\":\"nickname\",\"className\":\"w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500\"},\"$42\",\"$ea\",1]]},\"$42\",\"$e8\",1],[\"$\",\"button\",null,{\"type\":\"submit\",\"className\":\"w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors\",\"children\":\"Sign In\"},\"$42\",\"$eb\",1]]},\"$42\",\"$e1\",1]],\"$ec\",[\"$\",\"p\",null,{\"className\":\"mt-6 text-center text-sm\",\"children\":\"$f2\"},\"$42\",\"$f1\",1]]},\"$42\",\"$de\",1],\"$f7\"]\n"])</script><script>self.__next_f.push([1,"e3:D\"$103\"\ne3:[\"$@104\"]\n"])</script><script>self.__next_f.push([1,"104:D\"$108\"\n104:D\"$109\"\n104:D\"$10a\"\n104:D\"$10b\"\n104:\"2spg7IrN97ANcrq82u2wv/REDACTED\"\n"])</script></body></html>%                                                 
+
+  ~/Projects/github/calieo   main !22 ?16                         18:14:48
+❯  lsof -ti tcp:7300 | xargs -r kill -9; sleep 1; pnpm db:migrate
+
+> calieo@0.1.0 db:migrate /Users/Larry/Projects/github/calieo
+> tsx src/db/migrate.ts
+
+✅ Migrations applied successfully.
+
+  ~/Projects/github/calieo   main !22 ?17                         18:18:06
+❯  sqlite3 .data/calieo.db "select count(*) as session_rows from sessions;" "select id,name,email from users;"
+0
+CecYoZwapj4NuJ72f11GF|SmokeTest|smoketest@example.com
+
+  ~/Projects/github/calieo   main !22 ?17                         18:19:14
+❯  curl -sS -o /dev/null -w "http_code=%{http_code} redirect=%{redirect_url}\n" "http://localhost:7300/api/auth/calieo/start?lang=en&return_to=%2Fen%2Fconsole"
+http_code=500 redirect=
+
+  ~/Projects/github/calieo   main !22 ?17                         18:19:44
+❯  git status --porcelain | grep -v '^??.*specs/002' | head -50
+ M .specify/feature.json
+ M .specify/memory/constitution.md
+ M .specify/scripts/python/__pycache__/common.cpython-314.pyc
+ M README.md
+ M calieo.code-workspace
+ M migrations/meta/_journal.json
+ M package.json
+ M pnpm-lock.yaml
+ M src/app/[lang]/console/layout.tsx
+ D src/app/[lang]/console/signin/page.tsx
+ D src/app/[lang]/console/signout/page.tsx
+ M src/app/[lang]/layout.tsx
+ M src/db/schema.ts
+ M src/lib/auth.ts
+ M src/locales/de-DE.json
+ M src/locales/en.json
+ M src/locales/es.json
+ M src/locales/fr.json
+ M src/locales/ja.json
+ M src/locales/pt-PT.json
+ M src/locales/zh-TW.json
+ M src/locales/zh.json
+?? .github/agents/speckit.bug.assess.agent.md
+?? .github/agents/speckit.bug.fix.agent.md
+?? .github/agents/speckit.bug.test.agent.md
+?? .github/prompts/speckit.bug.assess.prompt.md
+?? .github/prompts/speckit.bug.fix.prompt.md
+?? .github/prompts/speckit.bug.test.prompt.md
+?? .kilo/
+?? .playwright-mcp/
+?? .specify/extensions.yml
+?? .specify/extensions/
+?? migrations/0004_sessions_table.sql
+?? src/app/[lang]/account/
+?? src/app/api/auth/
+?? src/lib/oidc.ts
+?? src/lib/session.ts
+
+  ~/Projects/github/calieo   main !22 ?17                         18:21:16
+❯  git diff --stat "src/app/[lang]/layout.tsx" calieo.code-workspace
+ calieo.code-workspace     | 20 ++++++++++++++++++--
+ src/app/[lang]/layout.tsx |  2 +-
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+  ~/Projects/github/calieo   main !22 ?17                         18:21:31
+❯  git check-ignore -v .playwright-mcp 2>&1; rm -rf .playwright-mcp
+
+  ~/Projects/github/calieo   main !22 ?16                         18:21:54
+❯  pnpm test 2>&1 | tail -30
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+
+ Test Files  17 passed (17)
+      Tests  173 passed (173)
+   Start at  18:22:07
+   Duration  5.93s (transform 1.64s, setup 0ms, import 8.19s, tests 1.67s, environment 30.82s)
+
+
+  ~/Projects/github/calieo   main !22 ?16                    7s  18:22:13
+❯  pnpm test:e2e 2>&1 | tail -60
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/home-Homepage-—-en-site-footer-is-visible-chromium/error-context.md
+
+  23) [chromium] › e2e/home.spec.ts:186:9 › Homepage — /en/ › footer contains the current year ─────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/Larry/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     pnpm exec playwright install                           ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/home-Homepage-—-en-footer-contains-the-current-year-chromium/error-context.md
+
+  24) [chromium] › e2e/home.spec.ts:191:9 › Homepage — /en/ › footer contains a Privacy Policy link 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/Larry/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     pnpm exec playwright install                           ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/home-Homepage-—-en-footer-contains-a-Privacy-Policy-link-chromium/error-context.md
+
+  24 failed
+    [chromium] › e2e/home.spec.ts:21:9 › Homepage — /en/ › root / redirects to a supported language path 
+    [chromium] › e2e/home.spec.ts:30:9 › Homepage — /en/ › page has a non-empty <title> ────────────
+    [chromium] › e2e/home.spec.ts:35:9 › Homepage — /en/ › page title contains the site name ───────
+    [chromium] › e2e/home.spec.ts:42:9 › Homepage — /en/ › site header is visible ──────────────────
+    [chromium] › e2e/home.spec.ts:46:9 › Homepage — /en/ › header contains the site name link ──────
+    [chromium] › e2e/home.spec.ts:51:9 › Homepage — /en/ › header 'Home' navigation link is present 
+    [chromium] › e2e/home.spec.ts:56:9 › Homepage — /en/ › header 'Channels' navigation link is present 
+    [chromium] › e2e/home.spec.ts:61:9 › Homepage — /en/ › header contains a language selector <select> 
+    [chromium] › e2e/home.spec.ts:72:9 › Homepage — /en/ › <main> element is present ───────────────
+    [chromium] › e2e/home.spec.ts:76:9 › Homepage — /en/ › page heading 'Public Files' is visible ──
+    [chromium] › e2e/home.spec.ts:80:9 › Homepage — /en/ › search form is visible ──────────────────
+    [chromium] › e2e/home.spec.ts:85:9 › Homepage — /en/ › search input is present inside the form ─
+    [chromium] › e2e/home.spec.ts:90:9 › Homepage — /en/ › search submit button is present ─────────
+    [chromium] › e2e/home.spec.ts:98:9 › Homepage — /en/ › shows either a file list or 'No results found' message 
+    [chromium] › e2e/home.spec.ts:110:9 › Homepage — /en/ › when files exist, each row links to a file detail page 
+    [chromium] › e2e/home.spec.ts:122:9 › Homepage — /en/ › when files exist, each row shows a file title 
+    [chromium] › e2e/home.spec.ts:131:9 › Homepage — /en/ › when files exist, each row shows a file size 
+    [chromium] › e2e/home.spec.ts:141:9 › Homepage — /en/ › pagination is hidden when there is only one page 
+    [chromium] › e2e/home.spec.ts:157:9 › Homepage — /en/ › navigating to /?q=<term> shows the term in the search input 
+    [chromium] › e2e/home.spec.ts:164:9 › Homepage — /en/ › submitting an empty search clears the ?q= param from the URL 
+    [chromium] › e2e/home.spec.ts:173:9 › Homepage — /en/ › search field is pre-filled from the ?q= URL parameter 
+    [chromium] › e2e/home.spec.ts:182:9 › Homepage — /en/ › site footer is visible ─────────────────
+    [chromium] › e2e/home.spec.ts:186:9 › Homepage — /en/ › footer contains the current year ───────
+    [chromium] › e2e/home.spec.ts:191:9 › Homepage — /en/ › footer contains a Privacy Policy link ──
+ ELIFECYCLE  Command failed with exit code 1.
+
+  ~/Projects/github/calieo   main !22 ?16            ✔ 1|0  10s  18:22:34
+❯  git check-ignore -v .data 2>&1 || echo "NOT IGNORED"
+.gitignore:46:.data/    .data
+
+  ~/Projects/github/calieo   main !22 ?16                         18:23:06
+❯  mkdir -p specs/003-trim-supported-languages/checklists
+
+  ~/Projects/github/calieo   main !23 ?16                         18:28:08
+❯  python3 .specify/scripts/python/setup_plan.py --json
+Copied plan template to /Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages/plan.md
+{"FEATURE_SPEC":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages/spec.md","IMPL_PLAN":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages/plan.md","SPECS_DIR":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages","BRANCH":"003-trim-supported-languages"}
+
+  ~/Projects/github/calieo   main !23 ?17                         18:29:58
+❯  wc -l src/data/tools.ts src/data/privacy.ts src/locales/*.json src/lib/i18n.test.ts
+     718 src/data/tools.ts
+     304 src/data/privacy.ts
+     118 src/locales/de-DE.json
+     118 src/locales/en.json
+     118 src/locales/es.json
+     118 src/locales/fr.json
+     118 src/locales/ja.json
+     118 src/locales/pt-PT.json
+     118 src/locales/zh-TW.json
+     118 src/locales/zh.json
+      43 src/lib/i18n.test.ts
+    2009 total
+
+  ~/Projects/github/calieo   main !23 ?17                         18:30:35
+❯  python3 .specify/scripts/python/setup_tasks.py --json
+{"FEATURE_DIR":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages","AVAILABLE_DOCS":["research.md","data-model.md","quickstart.md"],"TASKS_TEMPLATE":"/Users/Larry/Projects/github/calieo/.specify/templates/tasks-template.md"}
+
+  ~/Projects/github/calieo   main !23 ?17                         18:34:51
+❯  python3 .specify/scripts/python/check_prerequisites.py --json --require-tasks --include-tasks
+{"FEATURE_DIR":"/Users/Larry/Projects/github/calieo/specs/003-trim-supported-languages","AVAILABLE_DOCS":["research.md","data-model.md","quickstart.md","tasks.md"]}
+
+  ~/Projects/github/calieo   main !23 ?17                         18:38:02
+❯  rm src/locales/de-DE.json src/locales/ja.json src/locales/pt-PT.json src/locales/zh-TW.json
+
+  ~/Projects/github/calieo   main !24 ?17                         18:39:01
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1 | tee /tmp/tsc_errors.txt | head -100
+src/components/ChannelSearch.test.tsx(39,57): error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+src/components/FileDeleteSection.test.tsx(17,13): error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+src/components/SiteFooter.test.tsx(21,50): error TS2322: Type '"de-DE"' is not assignable to type 'LangKey'.
+src/components/ToolCard.test.tsx(21,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/components/ToolCard.test.tsx(31,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/components/ToolCard.test.tsx(41,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/components/ToolCard.test.tsx(51,9): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/privacy.ts(124,5): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'Record<LangKey, PrivacyContent>'.
+src/data/tools.ts(27,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(37,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(74,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(129,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(145,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(155,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(177,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(207,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(223,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(233,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(279,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(349,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(365,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(375,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(406,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(451,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(467,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(477,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(514,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(569,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(585,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(595,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/data/tools.ts(641,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+src/data/tools.ts(711,7): error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+src/lib/i18n.test.ts(26,26): error TS2345: Argument of type '"de-DE"' is not assignable to parameter of type 'LangKey'.
+vitest.config.ts(8,9): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+  ~/Projects/github/calieo   main !25 ?17          ✔ 2|0|0  12s  18:39:56
+❯  cp src/data/tools.ts /tmp/tools.ts.bak && cp src/data/privacy.ts /tmp/privacy.ts.bak
+node /tmp/strip-langs.cjs src/data/tools.ts src/data/privacy.ts
+src/data/tools.ts: removed 96 blocks/lines
+src/data/privacy.ts: removed 4 blocks/lines
+
+  ~/Projects/github/calieo   main !27 ?17                         18:41:08
+❯  grep -n '"de-DE"\|"pt-PT"\|"zh-TW"\|  ja:' src/data/tools.ts src/data/privacy.ts | head -20; echo "---"; diff <(grep -c "^" /tmp/tools.ts.bak) <(grep -c "^" src/data/tools.ts); wc -l src/data/tools.ts src/data/privacy.ts
+---
+1c1
+< 718
+---
+> 410
+     410 src/data/tools.ts
+     160 src/data/privacy.ts
+     570 total
+
+  ~/Projects/github/calieo   main !27 ?17                         18:41:49
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1
+src/components/ChannelSearch.test.tsx:39:57 - error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+
+39         mockSearchParamsGet.mockImplementation((key) => key === "q" ? "initial" : null);
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/@vitest+spy@4.1.9/node_modules/@vitest/spy/dist/index.d.ts:156:28
+    156 }) : T extends Procedure ? (...args: Parameters<T>) => ReturnType<T> : never;
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    The expected type comes from the return type of this signature.
+
+src/components/FileDeleteSection.test.tsx:17:13 - error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+
+17             labels={labels}
+               ~~~~~~
+
+  src/components/FileDeleteSection.tsx:12:9
+    12         deleteDirectoryHasChildren: string;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    'deleteDirectoryHasChildren' is declared here.
+  src/components/FileDeleteSection.tsx:9:5
+    9     labels: {
+          ~~~~~~
+    The expected type comes from property 'labels' which is declared here on type 'IntrinsicAttributes & Props'
+
+src/components/SiteFooter.test.tsx:21:50 - error TS2322: Type '"de-DE"' is not assignable to type 'LangKey'.
+
+21         const { container } = render(<SiteFooter lang="de-DE" />);
+                                                    ~~~~
+
+  src/components/SiteFooter.tsx:5:16
+    5 type Props = { lang: LangKey };
+                     ~~~~
+    The expected type comes from property 'lang' which is declared here on type 'IntrinsicAttributes & Props'
+
+src/components/ToolCard.test.tsx:21:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+
+21         "de-DE": "BaseX",
+           ~~~~~~~
+
+  src/data/tools.ts:10:3
+    10   name: LangMap;
+         ~~~~
+    The expected type comes from property 'name' which is declared here on type 'ToolData'
+
+src/components/ToolCard.test.tsx:31:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+
+31         "de-DE": "Base-Kodierungswerkzeug.",
+           ~~~~~~~
+
+  src/data/tools.ts:11:3
+    11   description: LangMap;
+         ~~~~~~~~~~~
+    The expected type comes from property 'description' which is declared here on type 'ToolData'
+
+src/components/ToolCard.test.tsx:41:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMapArray'.
+
+41         "de-DE": ["Base64", "Base32"],
+           ~~~~~~~
+
+  src/data/tools.ts:12:3
+    12   features: LangMapArray;
+         ~~~~~~~~
+    The expected type comes from property 'features' which is declared here on type 'ToolData'
+
+src/components/ToolCard.test.tsx:51:9 - error TS2353: Object literal may only specify known properties, and '"de-DE"' does not exist in type 'LangMap'.
+
+51         "de-DE": "Details zu BaseX.",
+           ~~~~~~~
+
+  src/data/tools.ts:13:3
+    13   detail: LangMap;
+         ~~~~~~
+    The expected type comes from property 'detail' which is declared here on type 'ToolData'
+
+src/lib/i18n.test.ts:26:26 - error TS2345: Argument of type '"de-DE"' is not assignable to parameter of type 'LangKey'.
+
+26         const result = t("de-DE", "siteTagline");
+                            ~~~~~~~
+
+vitest.config.ts:8:9 - error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+8         environmentMatchGlobs: [
+          ~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/vitest@4.1.9_@types+node@20.19.39_@vitest+coverage-v8@4.1.9_jsdom@29.1.1_@noble+hashes@_0b80febc185f7c3fb27fbeb1173a0f33/node_modules/vitest/dist/config.d.ts:98:18
+    98 declare function defineConfig(config: ViteUserConfigExport): ViteUserConfigExport;
+                        ~~~~~~~~~~~~
+    The last overload is declared here.
+
+
+Found 9 errors in 6 files.
+
+Errors  Files
+     1  src/components/ChannelSearch.test.tsx:39
+     1  src/components/FileDeleteSection.test.tsx:17
+     1  src/components/SiteFooter.test.tsx:21
+     4  src/components/ToolCard.test.tsx:21
+     1  src/lib/i18n.test.ts:26
+     1  vitest.config.ts:8
+
+  ~/Projects/github/calieo   main !27 ?17                    4s  18:43:20
+❯  grep -n "German footer" src/components/__snapshots__/SiteFooter.test.tsx.snap; wc -l src/components/__snapshots__/SiteFooter.test.tsx.snap
+53:exports[`SiteFooter > renders German footer snapshot 1`] = `
+      76 src/components/__snapshots__/SiteFooter.test.tsx.snap
+
+  ~/Projects/github/calieo   main !29 ?17                         18:44:15
+❯  sed -i '' '52,76d' src/components/__snapshots__/SiteFooter.test.tsx.snap
+tail -5 src/components/__snapshots__/SiteFooter.test.tsx.snap
+wc -l src/components/__snapshots__/SiteFooter.test.tsx.snap
+      Privacy Policy
+    </a>
+  </div>
+</footer>
+`;
+      51 src/components/__snapshots__/SiteFooter.test.tsx.snap
+
+  ~/Projects/github/calieo   main !30 ?17                         18:44:30
+❯  pnpm exec tsc --noEmit -p tsconfig.json 2>&1
+src/components/ChannelSearch.test.tsx:39:57 - error TS2322: Type '"initial" | null' is not assignable to type 'null'.
+  Type '"initial"' is not assignable to type 'null'.
+
+39         mockSearchParamsGet.mockImplementation((key) => key === "q" ? "initial" : null);
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/@vitest+spy@4.1.9/node_modules/@vitest/spy/dist/index.d.ts:156:28
+    156 }) : T extends Procedure ? (...args: Parameters<T>) => ReturnType<T> : never;
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    The expected type comes from the return type of this signature.
+
+src/components/FileDeleteSection.test.tsx:17:13 - error TS2741: Property 'deleteDirectoryHasChildren' is missing in type '{ deleteFile: string; deleteFileConfirm: string; }' but required in type '{ deleteFile: string; deleteFileConfirm: string; deleteDirectoryHasChildren: string; }'.
+
+17             labels={labels}
+               ~~~~~~
+
+  src/components/FileDeleteSection.tsx:12:9
+    12         deleteDirectoryHasChildren: string;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    'deleteDirectoryHasChildren' is declared here.
+  src/components/FileDeleteSection.tsx:9:5
+    9     labels: {
+          ~~~~~~
+    The expected type comes from property 'labels' which is declared here on type 'IntrinsicAttributes & Props'
+
+vitest.config.ts:8:9 - error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+8         environmentMatchGlobs: [
+          ~~~~~~~~~~~~~~~~~~~~~
+
+  node_modules/.pnpm/vitest@4.1.9_@types+node@20.19.39_@vitest+coverage-v8@4.1.9_jsdom@29.1.1_@noble+hashes@_0b80febc185f7c3fb27fbeb1173a0f33/node_modules/vitest/dist/config.d.ts:98:18
+    98 declare function defineConfig(config: ViteUserConfigExport): ViteUserConfigExport;
+                        ~~~~~~~~~~~~
+    The last overload is declared here.
+
+
+Found 3 errors in 3 files.
+
+Errors  Files
+     1  src/components/ChannelSearch.test.tsx:39
+     1  src/components/FileDeleteSection.test.tsx:17
+     1  vitest.config.ts:8
+
+  ~/Projects/github/calieo   main !33 ?17                    3s  18:45:12
+❯  pnpm test 2>&1 | tail -80
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+ ❯ src/components/LanguageSelector.test.tsx (9 tests | 1 failed) 42ms
+     × uses an empty pathSuffix by default (results in trailing slash) 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/LanguageSelector.test.tsx > LanguageSelector > uses an empty pathSuffix by default (results in trailing slash)
+AssertionError: expected "vi.fn()" to be called with arguments: [ '/de-DE/' ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   "/de-DE/",
++   "//",
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/components/LanguageSelector.test.tsx:72:26
+     70|         const select = container.querySelector("select")!;
+     71|         fireEvent.change(select, { target: { value: "de-DE" } });
+     72|         expect(mockPush).toHaveBeenCalledWith("/de-DE/");
+       |                          ^
+     73|     });
+     74|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 16 passed (17)
+      Tests  1 failed | 171 passed (172)
+   Start at  18:45:22
+   Duration  4.37s (transform 980ms, setup 0ms, import 6.48s, tests 1.23s, environment 24.30s)
+
+ ELIFECYCLE  Test failed. See above for more details.
+
+  ~/Projects/github/calieo   main !33 ?17             ✔ 1|0  6s  18:45:27
+❯  pnpm test 2>&1 | tail -30
+
+> calieo@0.1.0 test /Users/Larry/Projects/github/calieo
+> vitest run
+
+
+ RUN  v4.1.9 /Users/Larry/Projects/github/calieo
+
+
+ Test Files  17 passed (17)
+      Tests  172 passed (172)
+   Start at  18:45:46
+   Duration  2.51s (transform 1.00s, setup 0ms, import 3.57s, tests 1.28s, environment 10.94s)
+
+
+  ~/Projects/github/calieo   main !33 ?17                    3s  18:45:49
+❯  pnpm build 2>&1 | tail -60
+
+> calieo@0.1.0 build /Users/Larry/Projects/github/calieo
+> next build
+
+▲ Next.js 16.2.4 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.6s
+  Running TypeScript ...
+Failed to type check.
+
+./vitest.config.ts:8:9
+Type error: No overload matches this call.
+  The last overload gave the following error.
+    Object literal may only specify known properties, and 'environmentMatchGlobs' does not exist in type 'InlineConfig'.
+
+   6 |         environment: "node",
+   7 |         globals: true,
+>  8 |         environmentMatchGlobs: [
+     |         ^
+   9 |             ["src/components/**/*.test.tsx", "jsdom"],
+  10 |         ],
+  11 |         include: ["src/**/*.test.{ts,tsx}"],
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.
+
+  ~/Projects/github/calieo   main !33 ?17            ✔ 1|0  11s  18:46:09
+❯  echo "-- en/es/fr/zh homepage status --"
+for l in en es fr zh; do curl -s -o /dev/null -w "$l: %{http_code}\n" http://localhost:7300/$l/\; done
+echo "-- removed languages status (expect 404) --"
+for l in de-DE ja pt-PT zh-TW; do curl -s -o /dev/null -w "$l: %{http_code}\n" http://localhost:7300/$l/\; done
+echo "-- removed language tool/privacy subpaths (expect 404) --"
+curl -s -o /dev/null -w "ja/tools/basex: %{http_code}\n" http://localhost:7300/ja/tools/basex
+curl -s -o /dev/null -w "pt-PT/privacy: %{http_code}\n" http://localhost:7300/pt-PT/privacy
+for for>  curl -s -o /dev/null -w "en=%{http_code} " http://localhost:7300/en/ ; curl -s -o /dev/null -w "es=%{http_code} " http://localhost:7300/es/ ; curl -s -o /dev/null -w "fr=%{http_code} " http://localhost:7300/fr/ ; curl -s -o /dev/null -w "zh=%{http_code}\n" http://localhost:7300/zh/
+for for>  done
+for> done
+-- en/es/fr/zh homepage status --
+en: 404
+en: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+es: 404
+es: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+fr: 404
+fr: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh: 404
+zh: 000
+-- removed languages status (expect 404) --
+de-DE: 404
+de-DE: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+ja: 404
+ja: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+pt-PT: 404
+pt-PT: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+zh-TW: 404
+zh-TW: 000
+-- removed language tool/privacy subpaths (expect 404) --
+ja/tools/basex: 404
+pt-PT/privacy: 404
+en=308 es=308 fr=308 zh=308
+
+---
+
+/speckit.constitution 将项目的国际化语言支持移除德语、日语、葡萄牙语、繁体中文相关的内容，仅保留英语、法语、西班牙语和简体中文内容。
+
+---
+
+/speckit.constitution 将项目的国际化语言支持移除德语、日语、葡萄牙语、繁体中文相关的内容，仅保留英语、法语、西班牙语和简体中文内容。
