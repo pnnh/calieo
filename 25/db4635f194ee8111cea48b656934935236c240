@@ -1,0 +1,164 @@
+specs/002-account-signin-signout/checklists/requirements.md
+  s_1a97d6b881709c::t_352f2dcb1a2ab0 1-34
+  s_1a97d6b881709c::t_f5362d9e34eb82 35
+.gitignore
+  h_6465a203f88bd5 53-55
+  s_1a97d6b881709c::t_8cfcdd82274ce3 52
+.specify/memory/constitution.md
+  s_1a97d6b881709c::t_786d387ff11d3c 14,18-40,42,44-46,48,50,52-54,56,58,60-75,77-85,89-94
+  s_1a97d6b881709c::t_e31de116ce86c8 3-10,76,96
+  s_1a97d6b881709c::t_2049e258c31ae8 1-2,11-13
+src/data/tools.ts
+  h_6465a203f88bd5 43,53,63,73,78-81,124-127,232,256,260,263,292,302,312,322,361,374,387,400,404-407
+  s_1a97d6b881709c::t_0b6eb730349437 240,248
+specs/002-account-signin-signout/plan.md
+  s_1a97d6b881709c::t_556b5dc75a61e1 1,3,5,9-16,20,22-23,25-26,28,30,32,34,36-37,39-40,46-61,68-75,82-91,93-108,111-113,117
+  s_1a97d6b881709c::t_8ed3742c56b648 2,4,6-8,17-19,21,24,27,29,31,33,35,38,41-45,62-67,76-81,92,109-110,114-116
+src/lib/i18n.test.ts
+  s_1a97d6b881709c::t_10c8f1ccfaf2ae 25-26
+specs/003-trim-supported-languages/plan.md
+  s_1a97d6b881709c::t_64313d300e1fc2 1,3,5,9-14,18,20-21,23,25-26,28,30,32,34-35,37-38,44-63,70-75,77-79,85-102,105-106,110-111
+  s_1a97d6b881709c::t_92130fe210f358 2,4,6-8,15-17,19,22,24,27,29,31,33,36,39-43,64-69,76,80-84,103-104,107-109
+src/lib/oidc.ts
+  s_1a97d6b881709c::t_ab93cabd0aee8d 1-4,10-162
+  s_1a97d6b881709c::t_adbd8a4b6847c2 5-9
+specs/003-trim-supported-languages/tasks.md
+  h_6465a203f88bd5 32,35,37,54,57,75,77,79,81,84,86,88,105,119,122-125
+  s_1a97d6b881709c::t_ea22808cb2c6ef 1-31,33-34,36,38-53,55-56,58-74,76,78,80,82-83,85,87,89-104,106-118,120-121,126-196
+src/components/LanguageSelector.test.tsx
+  s_1a97d6b881709c::t_9a0dbd13e337d9 71-72
+  s_1a97d6b881709c::t_8387bf21de0794 64-65
+src/lib/language.ts
+  s_1a97d6b881709c::t_ae86f1f06a6ce4 12
+specs/002-account-signin-signout/data-model.md
+  h_6465a203f88bd5 16,36
+  s_1a97d6b881709c::t_9a38182afecfa0 1-15,17-35,37-67
+package.json
+  s_1a97d6b881709c::t_4e119d9c6f2c5e 28
+src/locales/fr.json
+  s_1a97d6b881709c::t_68a82eea73a93a 105-109
+calieo.code-workspace
+  h_6465a203f88bd5 21-37
+  s_1a97d6b881709c::t_9137c4565a51a6 44
+src/app/api/auth/calieo/callback/route.ts
+  s_1a97d6b881709c::t_9e8f50e4ec58f6 2-63
+  s_1a97d6b881709c::t_cf6dd9293e17cd 1
+specs/002-account-signin-signout/spec.md
+  s_1a97d6b881709c::t_731a9b8a00c16e 94
+  s_1a97d6b881709c::t_4c4f5ac42a36b2 11-18,97-99,119
+  s_1a97d6b881709c::t_49bd028a77873e 1-8,10,19-93,95-96,100-118,120-123
+  h_6465a203f88bd5 9
+src/app/[lang]/account/signin/page.tsx
+  s_1a97d6b881709c::t_797a7fd0742bfe 1-139
+specs/002-account-signin-signout/tasks.md
+  s_1a97d6b881709c::t_b9d8f34724adaf 1-29,31-39,41-43,45,47-54,56-57,59-65,67-71,73-88,90-95,97-98,100-105,107-108,110-124,126-127,129-147,149-151,153-164,166-167,169-170,172,174-242
+  h_6465a203f88bd5 89,96,99,106,109,125,128,148,152
+  s_1a97d6b881709c::t_fbfabefb7838b5 30,40,44,46,55,58,66,72
+  s_1a97d6b881709c::t_cace408e3e926e 165,168,171,173
+src/locales/es.json
+  s_1a97d6b881709c::t_68a82eea73a93a 105-109
+src/app/[lang]/console/layout.tsx
+  s_1a97d6b881709c::t_e62be66fca53ea 1,16-20
+src/locales/zh.json
+  s_1a97d6b881709c::t_68a82eea73a93a 105-109
+src/app/[lang]/account/signout/page.tsx
+  h_6465a203f88bd5 1-93
+src/lib/language.test.ts
+  s_1a97d6b881709c::t_7bb834dab6ed82 55,59-60,72-73
+.specify/feature.json
+  s_1a97d6b881709c::t_8aac2b37eebbb8 2
+  s_1a97d6b881709c::t_d83f6533ec408f 3
+src/db/schema.ts
+  s_1a97d6b881709c::t_1c187d9d7fd233 74-84,88
+  s_1a97d6b881709c::t_7cf4f8456283e5 117-123
+src/lib/session.ts
+  s_1a97d6b881709c::t_cc2033a5bb09ae 1-94
+src/lib/auth.ts
+  s_1a97d6b881709c::t_d97ce6963fdaac 14-22
+  s_1a97d6b881709c::t_9d755f2cd44977 4,23-35,68-71,74-79,82,86-87,89,94-96,100,104-106,109-113,116
+specs/002-account-signin-signout/quickstart.md
+  s_1a97d6b881709c::t_8e2cda1de72777 1-7,9-64
+  h_6465a203f88bd5 8
+README.md
+  s_1a97d6b881709c::t_feae39bf41016b 28-37
+  s_1a97d6b881709c::t_05ef6327de14ce 7,9,11
+specs/003-trim-supported-languages/checklists/requirements.md
+  s_1a97d6b881709c::t_64ef388d682392 1-38
+specs/003-trim-supported-languages/data-model.md
+  s_1a97d6b881709c::t_b6f2b9f58cf370 1-40
+migrations/meta/_journal.json
+  s_1a97d6b881709c::t_86d21df1c81d02 25-31
+specs/003-trim-supported-languages/research.md
+  s_1a97d6b881709c::t_f247f58bc7fe2c 1-9,11-20,22-28,30-39,41-52,54-86
+  h_6465a203f88bd5 10,21,29,40,53
+specs/003-trim-supported-languages/quickstart.md
+  s_1a97d6b881709c::t_31e46859835217 1-45
+src/locales/en.json
+  s_1a97d6b881709c::t_68a82eea73a93a 105-109
+src/app/[lang]/layout.tsx
+  h_6465a203f88bd5 45
+specs/002-account-signin-signout/contracts/auth-api.md
+  s_1a97d6b881709c::t_3c6435803c1f12 1-68
+src/app/api/auth/calieo/start/route.ts
+  s_1a97d6b881709c::t_d97ce6963fdaac 4
+  s_1a97d6b881709c::t_adbd8a4b6847c2 2,22
+  s_1a97d6b881709c::t_1c5074451dd35b 1,3,5-21,23-25
+specs/003-trim-supported-languages/spec.md
+  s_1a97d6b881709c::t_462e1c4c95b31f 1-101
+migrations/0004_sessions_table.sql
+  s_1a97d6b881709c::t_dab0d7083f4c2a 1-7
+specs/002-account-signin-signout/research.md
+  s_1a97d6b881709c::t_7ec7fffcaab005 1-8,10-19,21-31,33-41,43-51,53-59,61-74,76-91,93-114
+  h_6465a203f88bd5 9,20,32,42,52,60,75,92
+pnpm-lock.yaml
+  s_1a97d6b881709c::t_ae3ce07ff6fd47 44-46,4115-4117,9655-9656
+.github/agents/speckit.bug.assess.agent.md
+  h_6465a203f88bd5 1-177
+.github/agents/speckit.bug.fix.agent.md
+  h_6465a203f88bd5 1-115
+.github/agents/speckit.bug.test.agent.md
+  h_6465a203f88bd5 1-121
+.github/prompts/speckit.bug.assess.prompt.md
+  h_6465a203f88bd5 1-3
+.github/prompts/speckit.bug.fix.prompt.md
+  h_6465a203f88bd5 1-3
+.github/prompts/speckit.bug.test.prompt.md
+  h_6465a203f88bd5 1-3
+.kilo/kilo.jsonc
+  h_6465a203f88bd5 1-3
+.specify/extensions.yml
+  h_6465a203f88bd5 1-5
+.specify/extensions/.registry
+  h_6465a203f88bd5 1-21
+.specify/extensions/bug/README.md
+  h_6465a203f88bd5 1-80
+.specify/extensions/bug/commands/speckit.bug.assess.md
+  h_6465a203f88bd5 1-173
+.specify/extensions/bug/commands/speckit.bug.fix.md
+  h_6465a203f88bd5 1-112
+.specify/extensions/bug/commands/speckit.bug.test.md
+  h_6465a203f88bd5 1-117
+.specify/extensions/bug/extension.yml
+  h_6465a203f88bd5 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "25db4635f194ee8111cea48b656934935236c240",
+  "prompts": {},
+  "humans": {
+    "h_6465a203f88bd5": {
+      "author": "larry <xspanni@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_1a97d6b881709c": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "34d1b01d-96cf-4f28-ad9b-f96a1665bd0d",
+        "model": "copilot/claude-sonnet-5"
+      },
+      "human_author": "larry <xspanni@gmail.com>"
+    }
+  }
+}
