@@ -40,7 +40,7 @@ Required for the "Sign in with Calieo" OIDC flow (`/api/auth/calieo/*`):
 Deployed to Cloudflare Workers via `wrangler` + OpenNext adapter:
 
 ```bash
-pnpm adapter      # outputs to .open-next/
+pnpm opennextjs-cloudflare build     # outputs to .open-next/
 wrangler deploy   # or `wrangler publish`
 ```
 

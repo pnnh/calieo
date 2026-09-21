@@ -7,8 +7,7 @@
 	"settings": {
 		"git.openRepositoryInParentFolders": "never",
 		"files.exclude": {
-			"**/.git": true,
-			"node_modules": true,
+			"**/.git": true
 		},
 		"chat.tools.terminal.autoApprove": {
 			"rtk": true,
@@ -47,6 +46,8 @@
 			"**/.next/**": true,
 			"**/.beads/**": true,
 			"**/.idea/**": true,
+			"**/.open-next/**": true,
+			"**/.kilo/**": true
 		}
 	}
 }

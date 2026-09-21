@@ -6,6 +6,7 @@ import FileDeleteSection from "@/components/FileDeleteSection";
 const labels = {
     deleteFile: "Delete File",
     deleteFileConfirm: "Are you sure you want to delete?",
+    deleteDirectoryHasChildren: "Directory is not empty.",
 };
 
 function setup() {

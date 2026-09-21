@@ -3,8 +3,10 @@
 	"name": "calieo",
 	"compatibility_date": "2026-05-09",
 	"main": ".open-next/worker.js",
+	"upload_source_maps": true,
 	"observability": {
-		"enabled": true
+		"enabled": true,
+		"logs": { "enabled": true }
 	},
 	"compatibility_flags": [
 		"nodejs_compat"
@@ -21,6 +23,13 @@
 			"remote": true
 		}
 	],
+	"vars": {
+		"CALIEO_OIDC_CLIENT_ID": "prism_munRwBbfnENuBx1MIEfghQ",
+		"CALIEO_OIDC_CLIENT_SECRET": "your_client_secret_here",
+		"CALIEO_OIDC_ISSUER": "https://portal.calieo.xyz",
+		"CALIEO_OIDC_REDIRECT_URI": "https://calieo.xyz/api/auth/calieo/callback",
+		"SESSION_TTL_DAYS": "7"
+	},
 	"r2_buckets": [
 		{
 			"binding": "FILES_BUCKET",

@@ -4,7 +4,7 @@ import { render, fireEvent } from "@testing-library/react";
 
 const mockPush = vi.hoisted(() => vi.fn());
 const mockPathname = vi.hoisted(() => vi.fn(() => "/en/console/channels"));
-const mockSearchParamsGet = vi.hoisted(() => vi.fn((_key: string) => null));
+const mockSearchParamsGet = vi.hoisted(() => vi.fn((_key: string): string | null => null));
 
 vi.mock("next/navigation", () => ({
     useRouter: () => ({ push: mockPush }),
