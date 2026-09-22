@@ -4,9 +4,19 @@
 	"compatibility_date": "2026-05-09",
 	"main": ".open-next/worker.js",
 	"upload_source_maps": true,
+	"workers_dev": false,
+	"routes": [
+		{
+			"pattern": "calieo.xyz",
+			"zone_name": "calieo.xyz",
+			"custom_domain": true
+		}
+	],
 	"observability": {
 		"enabled": true,
-		"logs": { "enabled": true }
+		"logs": {
+			"enabled": true
+		}
 	},
 	"compatibility_flags": [
 		"nodejs_compat"
@@ -36,8 +46,8 @@
 			"bucket_name": "calieo-files"
 		},
 		{
-		"bucket_name": "calieo-files",
-		"binding": "NEXT_INC_CACHE_R2_BUCKET"
+			"bucket_name": "calieo-files",
+			"binding": "NEXT_INC_CACHE_R2_BUCKET"
 		}
 	]
 }
